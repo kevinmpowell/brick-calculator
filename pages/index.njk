@@ -1,0 +1,44 @@
+<html>
+    <head>
+        <title>Brick Calculator</title>
+        <meta name="viewport" content="width=device-width, minimum-scale=1.0" />
+        <link rel="stylesheet" href="/styles/brick-calculator.css">
+    </head>
+    <body>
+        <div id="bc-lookup">
+          <h1>Find Set</h1>
+          <form action="" class="bc-value-lookup-form" id="bc-value-lookup-form">
+            <label for="bc-value-lookup-form__set-number-input">Set Number</label>
+            <input name="setNumber" id="bc-value-lookup-form__set-number-input" type="number">
+
+            <label for="bc-value-lookup-form__purchase-price-input">Purchase Price</label>
+            <input type="text" id="bc-value-lookup-form__purchase-price-input" name="purchasePrice">
+
+            <button type="submit">Get Value</button>
+          </form>
+        </div>
+        <hr>
+        <div id="bc-results">
+          <h1>Set Value</h1>
+          <input type="text" id="bc-results__set-title" readonly="true">
+
+          <div class="bc-portlet">
+            <h2 class="bc-portlet__title">eBay</h2>
+            <label for="ebay-avg">6 mo. avg. (new)</label>
+            <input type="text" id="ebay-avg" readonly="true">
+
+            <label for="ebay-selling-fees">Selling Fees</label>
+            <input type="text" id="ebay-selling-fees" readonly="true">
+
+            <label for="ebay-purchase-price">Purchase Price</label>
+            <input type="text" id="ebay-purchase-price" readonly="true">
+
+            <label for="ebay-profit">Profit</label>
+            <input type="text" id="ebay-profit" readonly="true">
+          </div>
+        </div>
+
+
+        <script type="text/javascript" src="/scripts/brick-calculator.js"></script>
+    </body>
+</html>

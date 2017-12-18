@@ -1,0 +1,6 @@
+{
+    "docsPath": "pages",   
+    "webroot": "docs",     
+    "versionedDocs": false,
+    "latestVersionPath": ""
+}

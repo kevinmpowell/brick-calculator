@@ -1,0 +1,23 @@
+{
+  "name": "brick-calculator",
+  "version": "0.1.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "prepack": "npm install && gulp build:all"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kevinmpowell/brick-calculator.git"
+  },
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/kevinmpowell/brick-calculator/issues"
+  },
+  "homepage": "https://github.com/kevinmpowell/brick-calculator#readme",
+  "devDependencies": {
+    "esds-build": "^0.28.0"
+  }
+}
