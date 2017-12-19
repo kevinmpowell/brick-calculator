@@ -50,33 +50,63 @@ BC.Values = function() {
         ebayAvgFieldId = "ebay-avg",
         ebaySellingFeesFieldId = "ebay-selling-fees",
         ebayPurchasePriceFieldId = "ebay-purchase-price",
-        ebayProfitFieldId = "ebay-profit";
+        ebayProfitFieldId = "ebay-profit",
+        showLookupFormClass = "bc-show-lookup-form";
+
+  function formatCurrency(number) {
+    return number.toLocaleString('en-US', { style: 'currency', currency: 'USD' });
+  }
 
   function calculate(setNumber, purchasePrice) {
     const setData = setDB[setNumber];
 
     if (setData) {
-      console.log(setDB[setNumber]);
-      
       const setTitleField = document.getElementById(setTitleFieldId),
             ebayAvgField = document.getElementById(ebayAvgFieldId),
             ebaySellingFeesField = document.getElementById(ebaySellingFeesFieldId),
             ebayPurchasePriceField = document.getElementById(ebayPurchasePriceFieldId),
             ebayProfitField = document.getElementById(ebayProfitFieldId);
       
-
+      console.log(typeof purchasePrice);
       setTitleField.value = setData.title;
-      ebayAvgField.value = setData.ebAN;
-      ebaySellingFeesField.value = setData.ebAN * ebaySellingFeePercentage;
-      ebayPurchasePriceField.value = purchasePrice;
-      ebayProfitField.value = ebayAvgField.value - ebaySellingFeesField.value - ebayPurchasePriceField.value;
+      ebayAvgField.value = formatCurrency(setData.ebAN);
+      ebaySellingFeesField.value = formatCurrency(setData.ebAN * ebaySellingFeePercentage);
+      ebayPurchasePriceField.value = formatCurrency(parseFloat(purchasePrice));
+      ebayProfitField.value = formatCurrency(setData.ebAN - (setData.ebAN * ebaySellingFeePercentage) - parseFloat(purchasePrice));
+      showValues();
     } else {
       alert("Set Number Not Found")
     }
   }
 
+  function showValues() {
+    document.body.classList.add("bc--show-values");
+  }
+
+  function hideValues() {
+    document.body.classList.remove("bc--show-values");
+  }
+
+  function handleShowLookupFormClick(e) {
+    e.preventDefault();
+    hideValues();
+  }
+
+  function addEventListeners() {
+    const showLookupFormTriggers = Array.from(document.querySelectorAll(`.${showLookupFormClass}`));
+
+    showLookupFormTriggers.forEach(function(t){
+      t.addEventListener("click", handleShowLookupFormClick);
+    });
+  }
+
+  function initialize() {
+    addEventListeners();
+  }
+
   return {
-    calculate: calculate
+    calculate: calculate,
+    initialize: initialize
   }
 }();
 
@@ -120,4 +150,5 @@ function ready(fn) {
 ready(function(){
   BC.SetDatabase.initialize();
   BC.Form.initialize();
+  BC.Values.initialize();
 });

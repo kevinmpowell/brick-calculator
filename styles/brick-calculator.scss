@@ -1,4 +1,36 @@
+body {
+  font-family: "Hiragino Sans", "Helvetica", sans-serif;
+}
+
 label,
 input {
   display: block;
+}
+
+input,
+button {
+  font-size: 24px;
+  margin-bottom: 24px;
+  width: 100%;
+}
+
+#bc-results {
+  display: none;
+}
+
+.bc--show-values {
+  #bc-results {
+    display: block;
+  }
+
+  #bc-lookup {
+    display: none;
+  }
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    /* display: none; <- Crashes Chrome on hover */
+    -webkit-appearance: none;
+    margin: 0; /* <-- Apparently some margin are still there even though it's hidden */
 }
