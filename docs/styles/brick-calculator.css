@@ -1,5 +1,26 @@
+.bc-autocomplete {
+  background: white;
+  border: solid 1px lightgray;
+  display: none;
+  left: 0;
+  position: absolute;
+  top: 100%;
+  width: 100%; }
+
+.bc-autocomplete--visible {
+  display: block; }
+
+.bc-autocomplete__item-link {
+  display: block; }
+
 body {
-  font-family: "Hiragino Sans", "Helvetica", sans-serif; }
+  font-family: "Hiragino Sans", "Helvetica", sans-serif;
+  margin: 0;
+  padding: 0; }
+
+* {
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box; }
 
 label,
 input {
@@ -26,3 +47,12 @@ input::-webkit-inner-spin-button {
   -webkit-appearance: none;
   margin: 0;
   /* <-- Apparently some margin are still there even though it's hidden */ }
+
+.bc-field-group {
+  position: relative; }
+
+#bc-results__set-title {
+  border: 0;
+  background: transparent;
+  font-size: 16px;
+  padding: 0 8px; }

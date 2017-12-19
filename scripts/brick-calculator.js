@@ -6,13 +6,14 @@ const ebaySellingFeePercentage = .13, // TODO: Get this from a lookup
       oneMinute = 60000; // in milliseconds
 
 BC.SetDatabase = function() {
-  let initialize = function initialize() {
+  const initialize = function initialize() {
     setDB = localStorage.getItem("BCSetDB");
     if (setDB === null || (Date.now() - JSON.parse(setDB).dataUpdated) > oneMinute ) { // If it's been more than a minute get fresh data
       // retrieve the setDB from the API, for now manually set some values here
       setDB = {
         dataUpdated: Date.now(),
         41591: {
+          number: 41591,
           title: "Black Widow BrickHeadz",
           MSRP: 9.99,
           ebAN: 7,
@@ -23,6 +24,7 @@ BC.SetDatabase = function() {
           blHN: 20 
         },
         75192: {
+          number: 75192,
           title: "UCS Millenium Falcon (2nd Edition)",
           MSRP: 799.99,
           ebAN: 1249,

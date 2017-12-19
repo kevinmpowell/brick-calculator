@@ -1,5 +1,13 @@
+@import '../components/autocomplete/autocomplete';
+
 body {
   font-family: "Hiragino Sans", "Helvetica", sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+* {
+  box-sizing: border-box;
 }
 
 label,
@@ -33,4 +41,15 @@ input::-webkit-inner-spin-button {
     /* display: none; <- Crashes Chrome on hover */
     -webkit-appearance: none;
     margin: 0; /* <-- Apparently some margin are still there even though it's hidden */
+}
+
+.bc-field-group {
+  position: relative;
+}
+
+#bc-results__set-title {
+  border: 0;
+  background: transparent;
+  font-size: 16px;
+  padding: 0 8px;
 }

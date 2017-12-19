@@ -1,0 +1,17 @@
+.bc-autocomplete {
+  background: white;
+  border: solid 1px lightgray;
+  display: none;
+  left: 0;
+  position: absolute;
+  top: 100%;
+  width: 100%;
+}
+
+.bc-autocomplete--visible {
+  display: block;
+}
+
+.bc-autocomplete__item-link {
+  display: block;
+}

@@ -1,15 +1,36 @@
+
+<!doctype html>
 <html>
     <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>Brick Calculator WIP - POC</title>
-        <meta name="viewport" content="width=device-width, minimum-scale=1.0" />
         <link rel="stylesheet" href="styles/brick-calculator.css">
+        
     </head>
     <body>
+        
         <div id="bc-lookup">
           <h1>Find Set</h1>
           <form action="" class="bc-value-lookup-form" id="bc-value-lookup-form">
-            <label for="bc-value-lookup-form__set-number-input">Set Number</label>
-            <input autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" name="setNumber" id="bc-value-lookup-form__set-number-input" type="number">
+            <div class="bc-field-group">
+              <label for="bc-value-lookup-form__set-number-input">Set Number</label>
+              <input autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" name="setNumber" id="bc-value-lookup-form__set-number-input" type="number">
+              
+  <div class="bc-autocomplete">
+    <li class="bc-autocomplete__item bc-autocomplete__item--template">
+      <a href="" class="bc-autocomplete__item-link">
+        <span class="bc-autocomplete__item-link-text">
+          Suggest Something Here
+        </span>
+        <small class="bc-autocomplete__item-metadata">And something smaller here</small>
+      </a>
+    </li>
+  </div>
+
+            </div>
 
             <label for="bc-value-lookup-form__purchase-price-input">Purchase Price</label>
             <input autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" type="number" id="bc-value-lookup-form__purchase-price-input" name="purchasePrice">
@@ -40,5 +61,7 @@
 
 
         <script type="text/javascript" src="scripts/brick-calculator.js"></script>
+  
+        
     </body>
 </html>
