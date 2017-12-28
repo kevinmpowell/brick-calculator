@@ -1,5 +1,5 @@
 {
-  "name": "brick-calculator",
+  "name": "brickulator",
   "version": "0.1.0",
   "description": "",
   "main": "index.js",
@@ -9,14 +9,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/kevinmpowell/brick-calculator.git"
+    "url": "git+https://github.com/kevinmpowell/brickulator.git"
   },
-  "author": "",
+  "author": "Kevin Powell",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/kevinmpowell/brick-calculator/issues"
+    "url": "https://github.com/kevinmpowell/brickulator/issues"
   },
-  "homepage": "https://github.com/kevinmpowell/brick-calculator#readme",
+  "homepage": "https://github.com/kevinmpowell/brickulator#readme",
   "devDependencies": {
     "esds-build": "^0.28.0"
   }
