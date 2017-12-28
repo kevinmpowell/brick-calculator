@@ -7,37 +7,70 @@ const ebaySellingFeePercentage = .13, // TODO: Get this from a lookup
       oneMinute = 60000; // in milliseconds
 
 BC.SetDatabase = function() {
+  function saveSetDBToLocalStorage() {
+    localStorage.setItem("BCSetDB", JSON.stringify(setDB));
+  }
+
+  function retrieveFreshSetData() {
+    var request = new XMLHttpRequest();
+    request.open('GET', 'http://localhost:3000/lego_sets', true);
+
+    request.onload = function() {
+      if (request.status >= 200 && request.status < 400) {
+        alert("SUCCESS!");
+        // Success!
+        var data = JSON.parse(request.responseText);
+        setDB = data;
+        setDB.dataUpdated = Date.now();
+        saveSetDBToLocalStorage();
+        BC.Autocomplete.updateDataset(setDB);
+      } else {
+        // We reached our target server, but it returned an error
+        alert("Could not retrieve new sets - connection successful, but data failed");
+      }
+    };
+
+    request.onerror = function() {
+      // There was a connection error of some sort
+      alert("Could not retrieve new sets - connection error");
+    };
+
+    request.send();
+  }
+
   const initialize = function initialize() {
     setDB = localStorage.getItem("BCSetDB");
-    if (setDB === null || (Date.now() - JSON.parse(setDB).dataUpdated) > oneMinute ) { // If it's been more than a minute get fresh data
-      // retrieve the setDB from the API, for now manually set some values here
-      setDB = {
-        dataUpdated: Date.now(),
-        41591: {
-          number: 41591,
-          title: "Black Widow BrickHeadz",
-          MSRP: 9.99,
-          ebAN: 7,
-          ebLN: 2,
-          ebHN: 16,
-          blAN: 7,
-          blLN: 3,
-          blHN: 20 
-        },
-        75192: {
-          number: 75192,
-          title: "UCS Millenium Falcon (2nd Edition)",
-          MSRP: 799.99,
-          ebAN: 1249,
-          ebLN: 905.3,
-          ebHN: 2349.99,
-          blAN: 1050,
-          blLN: 855,
-          blHN: 1600 
-        }
-      };
+    if (1 === 1) {
+    // if (setDB === null || (Date.now() - JSON.parse(setDB).dataUpdated) > oneMinute ) { // If it's been more than a minute get fresh data
+      // retrieve the setDB from the API
+      retrieveFreshSetData();
+      // setDB = {
+      //   dataUpdated: Date.now(),
+      //   41591: {
+      //     number: 41591,
+      //     title: "Black Widow BrickHeadz",
+      //     MSRP: 9.99,
+      //     ebAN: 7,
+      //     ebLN: 2,
+      //     ebHN: 16,
+      //     blAN: 7,
+      //     blLN: 3,
+      //     blHN: 20 
+      //   },
+      //   75192: {
+      //     number: 75192,
+      //     title: "UCS Millenium Falcon (2nd Edition)",
+      //     MSRP: 799.99,
+      //     ebAN: 1249,
+      //     ebLN: 905.3,
+      //     ebHN: 2349.99,
+      //     blAN: 1050,
+      //     blLN: 855,
+      //     blHN: 1600 
+      //   }
+      // };
 
-      localStorage.setItem("BCSetDB", JSON.stringify(setDB));
+      saveSetDBToLocalStorage();
     } else {
       setDB = JSON.parse(setDB);
     }
@@ -70,12 +103,15 @@ BC.Values = function() {
             ebayPurchasePriceField = document.getElementById(ebayPurchasePriceFieldId),
             ebayProfitField = document.getElementById(ebayProfitFieldId);
       
-      console.log(typeof purchasePrice);
       setTitleField.value = setData.title;
-      ebayAvgField.value = formatCurrency(setData.ebAN);
-      ebaySellingFeesField.value = formatCurrency(setData.ebAN * ebaySellingFeePercentage);
       ebayPurchasePriceField.value = formatCurrency(parseFloat(purchasePrice));
-      ebayProfitField.value = formatCurrency(setData.ebAN - (setData.ebAN * ebaySellingFeePercentage) - parseFloat(purchasePrice));
+  
+      if (setData.ebAN) {
+        ebayAvgField.value = formatCurrency(setData.ebAN);
+        ebaySellingFeesField.value = formatCurrency(setData.ebAN * ebaySellingFeePercentage);
+        ebayProfitField.value = formatCurrency(setData.ebAN - (setData.ebAN * ebaySellingFeePercentage) - parseFloat(purchasePrice));
+      }
+
       showValues();
     } else {
       alert("Set Number Not Found")
@@ -161,12 +197,14 @@ BC.Autocomplete = function() {
   const autocompleteSelector = ".bc-autocomplete",
         autocompleteVisibleClass = "bc-autocomplete--visible",
         autocompleteItemTemplateClass = "bc-autocomplete__item--template",
+        itemLinkClass = "bc-autocomplete__item-link",
         itemLinkTextClass = "bc-autocomplete__item-link-text",
         itemMetadataClass = "bc-autocomplete__item-metadata";
   let dataset,
       keys,
       autocomplete,
-      itemTemplate;
+      itemTemplate,
+      triggerInput;
 
   function showAutocomplete() {
     autocomplete.classList.add(autocompleteVisibleClass);
@@ -187,7 +225,6 @@ BC.Autocomplete = function() {
 
     clearAutocompleteResults();
     results.forEach(function(r) {
-      console.log(r);
       const result = itemTemplate.cloneNode(true),
             setNumber = result.querySelector(`.${itemLinkTextClass}`),
             setTitle = result.querySelector(`.${itemMetadataClass}`);
@@ -204,6 +241,7 @@ BC.Autocomplete = function() {
       return search.exec(key);
     });
 
+    console.log(matches)
     return matches.sort();
   }
 
@@ -223,22 +261,43 @@ BC.Autocomplete = function() {
     }
   }
 
+  function autofillInput(text) {
+    triggerInput.value = text;
+  }
 
-  const initialize = function initialize(targetSelector, data) {
-    const target = document.querySelector(targetSelector);
+  function handleAutocompleteClick(e) {
+    e.preventDefault();
+    let link;
+    if (e.target.classList.contains(itemLinkClass)) {
+      link = e.target;
+    } else if (e.target.closest('.' + itemLinkClass) !== null) {
+      link = e.target.closest('.' + itemLinkClass);
+    }
+    const setNumber = link.querySelector('.' + itemLinkTextClass).textContent;
+    autofillInput(setNumber);
+    hideAutocomplete();
+  }
+
+  const updateDataset = function updateDataset(data) {
     dataset = data;
     keys = Object.keys(dataset);
-    target.addEventListener('keyup', triggerAutocomplete);
-    console.log(target);
-    autocomplete = target.parentNode.querySelector(autocompleteSelector);
+  }
+
+
+  const initialize = function initialize(targetSelector, data) {
+    triggerInput = document.querySelector(targetSelector);
+    updateDataset(data);
+    triggerInput.addEventListener('keyup', triggerAutocomplete);
+    autocomplete = triggerInput.parentNode.querySelector(autocompleteSelector);
+    autocomplete.addEventListener('click', handleAutocompleteClick);
     itemTemplate = autocomplete.querySelector(`.${autocompleteItemTemplateClass}`);
     itemTemplate.classList.remove(autocompleteItemTemplateClass);
-    console.log(itemTemplate);
     itemTemplate.parentNode.removeChild(itemTemplate);
   }
 
   return {
-    initialize: initialize
+    initialize: initialize,
+    updateDataset: updateDataset
   }
 }();
 

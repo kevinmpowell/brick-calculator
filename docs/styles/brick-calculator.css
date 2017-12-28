@@ -14,6 +14,7 @@
   display: block; }
 
 body {
+  background: #A95500;
   font-family: "Hiragino Sans", "Helvetica", sans-serif;
   margin: 0;
   padding: 0; }
@@ -21,6 +22,11 @@ body {
 * {
   -webkit-box-sizing: border-box;
           box-sizing: border-box; }
+
+#bc-lookup,
+#bc-results {
+  max-width: 500px;
+  margin: 0 auto; }
 
 label,
 input {

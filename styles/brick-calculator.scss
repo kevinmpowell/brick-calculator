@@ -1,6 +1,10 @@
 @import '../components/autocomplete/autocomplete';
 
+$color-lego-bright-orange: #FE8A18;
+$color-lego-dark-orange: #A95500;
+
 body {
+  background: $color-lego-dark-orange;
   font-family: "Hiragino Sans", "Helvetica", sans-serif;
   margin: 0;
   padding: 0;
@@ -8,6 +12,12 @@ body {
 
 * {
   box-sizing: border-box;
+}
+
+#bc-lookup,
+#bc-results {
+  max-width: 500px;
+  margin: 0 auto;
 }
 
 label,

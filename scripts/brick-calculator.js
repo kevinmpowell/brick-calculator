@@ -6,37 +6,70 @@ const ebaySellingFeePercentage = .13, // TODO: Get this from a lookup
       oneMinute = 60000; // in milliseconds
 
 BC.SetDatabase = function() {
+  function saveSetDBToLocalStorage() {
+    localStorage.setItem("BCSetDB", JSON.stringify(setDB));
+  }
+
+  function retrieveFreshSetData() {
+    var request = new XMLHttpRequest();
+    request.open('GET', 'http://localhost:3000/lego_sets', true);
+
+    request.onload = function() {
+      if (request.status >= 200 && request.status < 400) {
+        alert("SUCCESS!");
+        // Success!
+        var data = JSON.parse(request.responseText);
+        setDB = data;
+        setDB.dataUpdated = Date.now();
+        saveSetDBToLocalStorage();
+        BC.Autocomplete.updateDataset(setDB);
+      } else {
+        // We reached our target server, but it returned an error
+        alert("Could not retrieve new sets - connection successful, but data failed");
+      }
+    };
+
+    request.onerror = function() {
+      // There was a connection error of some sort
+      alert("Could not retrieve new sets - connection error");
+    };
+
+    request.send();
+  }
+
   const initialize = function initialize() {
     setDB = localStorage.getItem("BCSetDB");
-    if (setDB === null || (Date.now() - JSON.parse(setDB).dataUpdated) > oneMinute ) { // If it's been more than a minute get fresh data
-      // retrieve the setDB from the API, for now manually set some values here
-      setDB = {
-        dataUpdated: Date.now(),
-        41591: {
-          number: 41591,
-          title: "Black Widow BrickHeadz",
-          MSRP: 9.99,
-          ebAN: 7,
-          ebLN: 2,
-          ebHN: 16,
-          blAN: 7,
-          blLN: 3,
-          blHN: 20 
-        },
-        75192: {
-          number: 75192,
-          title: "UCS Millenium Falcon (2nd Edition)",
-          MSRP: 799.99,
-          ebAN: 1249,
-          ebLN: 905.3,
-          ebHN: 2349.99,
-          blAN: 1050,
-          blLN: 855,
-          blHN: 1600 
-        }
-      };
+    if (1 === 1) {
+    // if (setDB === null || (Date.now() - JSON.parse(setDB).dataUpdated) > oneMinute ) { // If it's been more than a minute get fresh data
+      // retrieve the setDB from the API
+      retrieveFreshSetData();
+      // setDB = {
+      //   dataUpdated: Date.now(),
+      //   41591: {
+      //     number: 41591,
+      //     title: "Black Widow BrickHeadz",
+      //     MSRP: 9.99,
+      //     ebAN: 7,
+      //     ebLN: 2,
+      //     ebHN: 16,
+      //     blAN: 7,
+      //     blLN: 3,
+      //     blHN: 20 
+      //   },
+      //   75192: {
+      //     number: 75192,
+      //     title: "UCS Millenium Falcon (2nd Edition)",
+      //     MSRP: 799.99,
+      //     ebAN: 1249,
+      //     ebLN: 905.3,
+      //     ebHN: 2349.99,
+      //     blAN: 1050,
+      //     blLN: 855,
+      //     blHN: 1600 
+      //   }
+      // };
 
-      localStorage.setItem("BCSetDB", JSON.stringify(setDB));
+      saveSetDBToLocalStorage();
     } else {
       setDB = JSON.parse(setDB);
     }
@@ -69,12 +102,15 @@ BC.Values = function() {
             ebayPurchasePriceField = document.getElementById(ebayPurchasePriceFieldId),
             ebayProfitField = document.getElementById(ebayProfitFieldId);
       
-      console.log(typeof purchasePrice);
       setTitleField.value = setData.title;
-      ebayAvgField.value = formatCurrency(setData.ebAN);
-      ebaySellingFeesField.value = formatCurrency(setData.ebAN * ebaySellingFeePercentage);
       ebayPurchasePriceField.value = formatCurrency(parseFloat(purchasePrice));
-      ebayProfitField.value = formatCurrency(setData.ebAN - (setData.ebAN * ebaySellingFeePercentage) - parseFloat(purchasePrice));
+  
+      if (setData.ebAN) {
+        ebayAvgField.value = formatCurrency(setData.ebAN);
+        ebaySellingFeesField.value = formatCurrency(setData.ebAN * ebaySellingFeePercentage);
+        ebayProfitField.value = formatCurrency(setData.ebAN - (setData.ebAN * ebaySellingFeePercentage) - parseFloat(purchasePrice));
+      }
+
       showValues();
     } else {
       alert("Set Number Not Found")
