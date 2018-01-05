@@ -14,10 +14,10 @@
         
         <div id="bc-lookup">
           <h1>Find Set</h1>
-          <form action="" class="bc-value-lookup-form" id="bc-value-lookup-form">
+          <form action="" class="bc-value-lookup-form" id="bc-value-lookup-form" novalidate>
             <div class="bc-field-group">
               <label for="bc-value-lookup-form__set-number-input">Set Number</label>
-              <input autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" name="setNumber" id="bc-value-lookup-form__set-number-input" type="number">
+              <input autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" name="setNumber" id="bc-value-lookup-form__set-number-input" type="text" pattern="[0-9]*">
               
   <div class="bc-autocomplete">
     <li class="bc-autocomplete__item bc-autocomplete__item--template">
@@ -43,6 +43,34 @@
           <a href="#bc-lookup" class="bc-show-lookup-form">Back</a>
           <h1>Set Value</h1>
           <input type="text" id="bc-results__set-title" readonly="true">
+
+          
+  <div class="bc-portlet bc-portlet--brick-owl-part-out">
+      <h2 class="bc-portlet__title">Brick Owl Part Out Value</h2>
+      <label for="bo-po-new">New</label>
+      <input type="text" id="bo-po-new" readonly="true">
+      <label for="bo-po-cost-new">Cost</label>
+      <input type="text" id="bo-po-cost-new" readonly="true">
+      <label for="bo-po-profit-new">Profit</label>
+      <input type="text" id="bo-po-profit-new" readonly="true">
+
+      <label for="bo-po-new">Used</label>
+      <input type="text" id="bo-po-used" readonly="true">
+      <label for="bo-po-cost-used">Cost</label>
+      <input type="text" id="bo-po-cost-used" readonly="true">
+      <label for="bo-po-profit-used">Profit</label>
+      <input type="text" id="bo-po-profit-used" readonly="true">
+  </div>
+
+          
+    <div class="bc-portlet">
+        <h2 class="bc-portlet__title">Price Per Piece</h2>
+        <label for="ppp-msrp">MSRP</label>
+        <input type="text" id="ppp-msrp" readonly="true">
+
+        <label for="ppp-your-price">Your Price</label>
+        <input type="text" id="ppp-your-price" readonly="true">
+    </div>
 
           <div class="bc-portlet">
             <h2 class="bc-portlet__title">eBay</h2>

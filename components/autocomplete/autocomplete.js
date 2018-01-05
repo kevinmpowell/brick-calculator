@@ -29,14 +29,16 @@ BC.Autocomplete = function() {
       return dataset[k];
     });
 
+    console.log(results);
+
     clearAutocompleteResults();
     results.forEach(function(r) {
       const result = itemTemplate.cloneNode(true),
             setNumber = result.querySelector(`.${itemLinkTextClass}`),
             setTitle = result.querySelector(`.${itemMetadataClass}`);
-      setNumber.innerHTML = r.number;
-      setNumber.href = `#${r.number}`;
-      setTitle.innerHTML = r.title;
+      setNumber.innerHTML = r.k;
+      setNumber.href = `#${r.k}`;
+      setTitle.innerHTML = r.t;
       autocomplete.appendChild(result);
     });
   }
@@ -47,7 +49,6 @@ BC.Autocomplete = function() {
       return search.exec(key);
     });
 
-    console.log(matches)
     return matches.sort();
   }
 
@@ -55,7 +56,7 @@ BC.Autocomplete = function() {
     const currentValue = this.value,
           matches = findMatchesInDataset(currentValue);
 
-    if (currentValue.length > 0) {
+    if (currentValue.length > 1) {
       if (matches.length > 0) {
         buildAutocompleteResults(matches);
         showAutocomplete();
@@ -86,7 +87,9 @@ BC.Autocomplete = function() {
 
   const updateDataset = function updateDataset(data) {
     dataset = data;
-    keys = Object.keys(dataset);
+    if (dataset !== null) {
+      keys = Object.keys(dataset);
+    }
   }
 
 

@@ -2,10 +2,10 @@
   {% block body %}
         <div id="bc-lookup">
           <h1>Find Set</h1>
-          <form action="" class="bc-value-lookup-form" id="bc-value-lookup-form">
+          <form action="" class="bc-value-lookup-form" id="bc-value-lookup-form" novalidate>
             <div class="bc-field-group">
               <label for="bc-value-lookup-form__set-number-input">Set Number</label>
-              <input autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" name="setNumber" id="bc-value-lookup-form__set-number-input" type="number">
+              <input autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" name="setNumber" id="bc-value-lookup-form__set-number-input" type="text" pattern="[0-9]*">
               {{ bc.autocomplete() }}
             </div>
 
@@ -21,6 +21,8 @@
           <h1>Set Value</h1>
           <input type="text" id="bc-results__set-title" readonly="true">
 
+          {{ bc.portlet_part_out_brick_owl() }}
+          {{ bc.portlet_price_per_piece() }}
           <div class="bc-portlet">
             <h2 class="bc-portlet__title">eBay</h2>
             <label for="ebay-avg">6 mo. avg. (new)</label>

@@ -3,25 +3,45 @@ var BC = BC || {};
 let setDB;
 
 const ebaySellingFeePercentage = .13, // TODO: Get this from a lookup
-      oneMinute = 60000; // in milliseconds
+      oneMinute = 60000, // in milliseconds
+      oneHour = 3600000; // in milliseconds
 
-BC.SetDatabase = function() {
-  function saveSetDBToLocalStorage() {
-    localStorage.setItem("BCSetDB", JSON.stringify(setDB));
+BC.Utils = function() {
+  const formatCurrency = function formatCurrency(number) {
+    return number.toLocaleString('en-US', { style: 'currency', currency: 'USD' });
   }
 
-  function retrieveFreshSetData() {
+  return {
+    formatCurrency: formatCurrency
+  }
+}();
+
+BC.SetDatabase = function() {
+  const currentDomain = window.location.hostname,
+        apiMapping = {
+          'localhost': 'http://localhost:5000',
+          'kevinmpowell.github.io': 'https://brickulator-api.herokuapp.com'
+        };
+  console.log(currentDomain);
+  function saveSetDBToLocalStorage(rawJSON) {
+    localStorage.clear();
+    localStorage.setItem("BCSetDB", rawJSON);
+  }
+
+  const retrieveFreshSetData = function retrieveFreshSetData() {
     var request = new XMLHttpRequest();
-    request.open('GET', 'http://localhost:3000/lego_sets', true);
+    const apiDomain = apiMapping[currentDomain];
+
+    request.open('GET', apiDomain + '/lego_sets', true);
 
     request.onload = function() {
       if (request.status >= 200 && request.status < 400) {
         alert("SUCCESS!");
         // Success!
         var data = JSON.parse(request.responseText);
+        data.dataUpdate = Date.now();
+        saveSetDBToLocalStorage(JSON.stringify(data));
         setDB = data;
-        setDB.dataUpdated = Date.now();
-        saveSetDBToLocalStorage();
         BC.Autocomplete.updateDataset(setDB);
       } else {
         // We reached our target server, but it returned an error
@@ -39,44 +59,16 @@ BC.SetDatabase = function() {
 
   const initialize = function initialize() {
     setDB = localStorage.getItem("BCSetDB");
-    if (1 === 1) {
-    // if (setDB === null || (Date.now() - JSON.parse(setDB).dataUpdated) > oneMinute ) { // If it's been more than a minute get fresh data
-      // retrieve the setDB from the API
+    setDB = JSON.parse(setDB);
+    // if (1 === 1) {
+    if (setDB === null || (Date.now() - setDB.dataUpdated) > oneHour ) { // If it's been more than a minute get fresh data
       retrieveFreshSetData();
-      // setDB = {
-      //   dataUpdated: Date.now(),
-      //   41591: {
-      //     number: 41591,
-      //     title: "Black Widow BrickHeadz",
-      //     MSRP: 9.99,
-      //     ebAN: 7,
-      //     ebLN: 2,
-      //     ebHN: 16,
-      //     blAN: 7,
-      //     blLN: 3,
-      //     blHN: 20 
-      //   },
-      //   75192: {
-      //     number: 75192,
-      //     title: "UCS Millenium Falcon (2nd Edition)",
-      //     MSRP: 799.99,
-      //     ebAN: 1249,
-      //     ebLN: 905.3,
-      //     ebHN: 2349.99,
-      //     blAN: 1050,
-      //     blLN: 855,
-      //     blHN: 1600 
-      //   }
-      // };
-
-      saveSetDBToLocalStorage();
-    } else {
-      setDB = JSON.parse(setDB);
     }
   }
 
   return {
-    initialize: initialize
+    initialize: initialize,
+    retrieveFreshSetData: retrieveFreshSetData
   };
 }();
 
@@ -88,12 +80,10 @@ BC.Values = function() {
         ebayProfitFieldId = "ebay-profit",
         showLookupFormClass = "bc-show-lookup-form";
 
-  function formatCurrency(number) {
-    return number.toLocaleString('en-US', { style: 'currency', currency: 'USD' });
-  }
-
   function calculate(setNumber, purchasePrice) {
     const setData = setDB[setNumber];
+    BC.PortletPricePerPiece.update(setData, purchasePrice);
+    BC.PortletPartOutBrickOwl.update(setData, purchasePrice);
 
     if (setData) {
       const setTitleField = document.getElementById(setTitleFieldId),
@@ -102,13 +92,13 @@ BC.Values = function() {
             ebayPurchasePriceField = document.getElementById(ebayPurchasePriceFieldId),
             ebayProfitField = document.getElementById(ebayProfitFieldId);
       
-      setTitleField.value = setData.title;
-      ebayPurchasePriceField.value = formatCurrency(parseFloat(purchasePrice));
+      setTitleField.value = setData.t;
+      ebayPurchasePriceField.value = BC.Utils.formatCurrency(parseFloat(purchasePrice));
   
       if (setData.ebAN) {
-        ebayAvgField.value = formatCurrency(setData.ebAN);
-        ebaySellingFeesField.value = formatCurrency(setData.ebAN * ebaySellingFeePercentage);
-        ebayProfitField.value = formatCurrency(setData.ebAN - (setData.ebAN * ebaySellingFeePercentage) - parseFloat(purchasePrice));
+        ebayAvgField.value = BC.Utils.formatCurrency(setData.ebAN);
+        ebaySellingFeesField.value = BC.Utils.formatCurrency(setData.ebAN * ebaySellingFeePercentage);
+        ebayProfitField.value = BC.Utils.formatCurrency(setData.ebAN - (setData.ebAN * ebaySellingFeePercentage) - parseFloat(purchasePrice));
       }
 
       showValues();
