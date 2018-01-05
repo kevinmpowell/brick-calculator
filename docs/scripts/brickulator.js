@@ -34,6 +34,7 @@ BC.SetDatabase = function() {
     const apiDomain = apiMapping[currentDomain];
 
     request.open('GET', apiDomain + '/lego_sets', true);
+    request.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
 
     request.onload = function() {
       if (request.status >= 200 && request.status < 400) {

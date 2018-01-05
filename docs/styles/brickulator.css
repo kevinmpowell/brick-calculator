@@ -26,7 +26,8 @@ body {
 #bc-lookup,
 #bc-results {
   max-width: 500px;
-  margin: 0 auto; }
+  margin: 0 auto;
+  padding: 10px; }
 
 label,
 input {
