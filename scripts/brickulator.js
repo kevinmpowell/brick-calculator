@@ -22,7 +22,6 @@ BC.SetDatabase = function() {
           'localhost': 'http://localhost:5000',
           'kevinmpowell.github.io': 'https://brickulator-api.herokuapp.com'
         };
-  console.log(currentDomain);
   function saveSetDBToLocalStorage(rawJSON) {
     localStorage.clear();
     localStorage.setItem("BCSetDB", rawJSON);
@@ -83,24 +82,25 @@ BC.Values = function() {
 
   function calculate(setNumber, purchasePrice) {
     const setData = setDB[setNumber];
-    BC.PortletPricePerPiece.update(setData, purchasePrice);
-    BC.PortletPartOutBrickOwl.update(setData, purchasePrice);
+    // BC.PortletPricePerPiece.update(setData, purchasePrice);
+    // BC.PortletPartOutBrickOwl.update(setData, purchasePrice);
 
     if (setData) {
-      const setTitleField = document.getElementById(setTitleFieldId),
-            ebayAvgField = document.getElementById(ebayAvgFieldId),
-            ebaySellingFeesField = document.getElementById(ebaySellingFeesFieldId),
-            ebayPurchasePriceField = document.getElementById(ebayPurchasePriceFieldId),
-            ebayProfitField = document.getElementById(ebayProfitFieldId);
+      BC.SetSummary.update(setData);
+      // const setTitleField = document.getElementById(setTitleFieldId),
+      //       ebayAvgField = document.getElementById(ebayAvgFieldId),
+      //       ebaySellingFeesField = document.getElementById(ebaySellingFeesFieldId),
+      //       ebayPurchasePriceField = document.getElementById(ebayPurchasePriceFieldId),
+      //       ebayProfitField = document.getElementById(ebayProfitFieldId);
       
-      setTitleField.value = setData.t;
-      ebayPurchasePriceField.value = BC.Utils.formatCurrency(parseFloat(purchasePrice));
+      // setTitleField.value = setData.t;
+      // ebayPurchasePriceField.value = BC.Utils.formatCurrency(parseFloat(purchasePrice));
   
-      if (setData.ebAN) {
-        ebayAvgField.value = BC.Utils.formatCurrency(setData.ebAN);
-        ebaySellingFeesField.value = BC.Utils.formatCurrency(setData.ebAN * ebaySellingFeePercentage);
-        ebayProfitField.value = BC.Utils.formatCurrency(setData.ebAN - (setData.ebAN * ebaySellingFeePercentage) - parseFloat(purchasePrice));
-      }
+      // if (setData.ebAN) {
+      //   ebayAvgField.value = BC.Utils.formatCurrency(setData.ebAN);
+      //   ebaySellingFeesField.value = BC.Utils.formatCurrency(setData.ebAN * ebaySellingFeePercentage);
+      //   ebayProfitField.value = BC.Utils.formatCurrency(setData.ebAN - (setData.ebAN * ebaySellingFeePercentage) - parseFloat(purchasePrice));
+      // }
 
       showValues();
     } else {
@@ -180,4 +180,5 @@ ready(function(){
   BC.SetDatabase.initialize();
   BC.Form.initialize();
   BC.Values.initialize();
+  BC.SetSummary.initialize();
 });

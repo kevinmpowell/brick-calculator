@@ -24,5 +24,6 @@
 .bc-portlet-section-header__post {
   border-top: $brickulator-border-control;
   height: 1px;
-  width: 100px;
+  flex-grow: 1px;
+  width: 100%;
 }

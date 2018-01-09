@@ -29,7 +29,7 @@ BC.Autocomplete = function() {
       return dataset[k];
     });
 
-    console.log(results);
+    // console.log(results);
 
     clearAutocompleteResults();
     results.forEach(function(r) {

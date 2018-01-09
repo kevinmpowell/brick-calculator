@@ -128,7 +128,10 @@
 .bc-portlet-section-header__post {
   border-top: solid 1px #C6CDCC;
   height: 1px;
-  width: 100px; }
+  -webkit-box-flex: 1px;
+      -ms-flex-positive: 1px;
+          flex-grow: 1px;
+  width: 100%; }
 
 .bc-portlet-grid {
   display: -webkit-box;
@@ -238,10 +241,10 @@ input {
   width: 100%; }
 
 #bc-results {
+  display: none;
   padding-top: 0; }
 
 #bc-lookup {
-  display: none;
   padding: 8px; }
 
 .bc--show-values #bc-results {

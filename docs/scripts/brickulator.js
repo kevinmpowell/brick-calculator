@@ -23,7 +23,6 @@ BC.SetDatabase = function() {
           'localhost': 'http://localhost:5000',
           'kevinmpowell.github.io': 'https://brickulator-api.herokuapp.com'
         };
-  console.log(currentDomain);
   function saveSetDBToLocalStorage(rawJSON) {
     localStorage.clear();
     localStorage.setItem("BCSetDB", rawJSON);
@@ -84,24 +83,25 @@ BC.Values = function() {
 
   function calculate(setNumber, purchasePrice) {
     const setData = setDB[setNumber];
-    BC.PortletPricePerPiece.update(setData, purchasePrice);
-    BC.PortletPartOutBrickOwl.update(setData, purchasePrice);
+    // BC.PortletPricePerPiece.update(setData, purchasePrice);
+    // BC.PortletPartOutBrickOwl.update(setData, purchasePrice);
 
     if (setData) {
-      const setTitleField = document.getElementById(setTitleFieldId),
-            ebayAvgField = document.getElementById(ebayAvgFieldId),
-            ebaySellingFeesField = document.getElementById(ebaySellingFeesFieldId),
-            ebayPurchasePriceField = document.getElementById(ebayPurchasePriceFieldId),
-            ebayProfitField = document.getElementById(ebayProfitFieldId);
+      BC.SetSummary.update(setData);
+      // const setTitleField = document.getElementById(setTitleFieldId),
+      //       ebayAvgField = document.getElementById(ebayAvgFieldId),
+      //       ebaySellingFeesField = document.getElementById(ebaySellingFeesFieldId),
+      //       ebayPurchasePriceField = document.getElementById(ebayPurchasePriceFieldId),
+      //       ebayProfitField = document.getElementById(ebayProfitFieldId);
       
-      setTitleField.value = setData.t;
-      ebayPurchasePriceField.value = BC.Utils.formatCurrency(parseFloat(purchasePrice));
+      // setTitleField.value = setData.t;
+      // ebayPurchasePriceField.value = BC.Utils.formatCurrency(parseFloat(purchasePrice));
   
-      if (setData.ebAN) {
-        ebayAvgField.value = BC.Utils.formatCurrency(setData.ebAN);
-        ebaySellingFeesField.value = BC.Utils.formatCurrency(setData.ebAN * ebaySellingFeePercentage);
-        ebayProfitField.value = BC.Utils.formatCurrency(setData.ebAN - (setData.ebAN * ebaySellingFeePercentage) - parseFloat(purchasePrice));
-      }
+      // if (setData.ebAN) {
+      //   ebayAvgField.value = BC.Utils.formatCurrency(setData.ebAN);
+      //   ebaySellingFeesField.value = BC.Utils.formatCurrency(setData.ebAN * ebaySellingFeePercentage);
+      //   ebayProfitField.value = BC.Utils.formatCurrency(setData.ebAN - (setData.ebAN * ebaySellingFeePercentage) - parseFloat(purchasePrice));
+      // }
 
       showValues();
     } else {
@@ -181,6 +181,7 @@ ready(function(){
   BC.SetDatabase.initialize();
   BC.Form.initialize();
   BC.Values.initialize();
+  BC.SetSummary.initialize();
 });
 
 'use strict';
@@ -214,7 +215,7 @@ BC.Autocomplete = function() {
       return dataset[k];
     });
 
-    console.log(results);
+    // console.log(results);
 
     clearAutocompleteResults();
     results.forEach(function(r) {
@@ -354,30 +355,68 @@ BC.PortletPartOutBrickOwl = function() {
   }
 }();
 
+// 'use strict';
+// BC.PortletPricePerPiece = function() {
+//   const msrpPPPInputId = 'ppp-msrp',
+//         userPPPInputId = 'ppp-your-price';
+
+//   let msrpPPP,
+//       userPPP;
+
+//   const update = function update(setData, purchasePrice) {
+//     msrpPPP = document.getElementById(msrpPPPInputId);
+//     userPPP = document.getElementById(userPPPInputId);
+//     const partCount = setData.pcs;
+//     console.log(setData);
+
+//     if (partCount !== null) {
+//       if (setData.msrp !== null) {
+//         msrpPPP.value = BC.Utils.formatCurrency(setData.msrp / partCount) + " per piece";
+//       }
+
+//       userPPP.value = BC.Utils.formatCurrency(purchasePrice / partCount) + " per piece";
+//     }
+//   }
+
+//   return {
+//     update: update
+//   }
+// }();
+
 'use strict';
-BC.PortletPricePerPiece = function() {
-  const msrpPPPInputId = 'ppp-msrp',
-        userPPPInputId = 'ppp-your-price';
+BC.SetSummary = function() {
+  const numberSelector = '.bc-set-summary__number',
+        yearSelector = '.bc-set-summary__year',
+        titleSelector = '.bc-set-summary__title',
+        pcsSelector = '.bc-set-summary__pcs-count',
+        msrpSelector = '.bc-set-summary__msrp-value';
 
-  let msrpPPP,
-      userPPP;
+  let number,
+      year,
+      title,
+      pcs,
+      msrp;
 
-  const update = function update(setData, purchasePrice) {
-    msrpPPP = document.getElementById(msrpPPPInputId);
-    userPPP = document.getElementById(userPPPInputId);
-    const partCount = setData.pcs;
-    console.log(setData);
+  const initialize = function initialize() {
+    number = document.querySelector(numberSelector);
+    year = document.querySelector(yearSelector);
+    title = document.querySelector(titleSelector);
+    pcs = document.querySelector(pcsSelector);
+    msrp = document.querySelector(msrpSelector);
+  }
 
-    if (partCount !== null) {
-      if (setData.msrp !== null) {
-        msrpPPP.value = BC.Utils.formatCurrency(setData.msrp / partCount) + " per piece";
-      }
-
-      userPPP.value = BC.Utils.formatCurrency(purchasePrice / partCount) + " per piece";
-    }
+  const update = function update(setData) {
+    console.log(setData, number, year, title, setData.t);
+    const setNumber = typeof setData.nv === 'undefined' ? setData.n : setData.n + '-' + setData.nv;
+    number.innerHTML = setNumber;
+    year.innerHTML = setData.y;
+    title.innerHTML = setData.t;
+    pcs.innerHTML = setData.pcs;
+    msrp.innerHTML = setData.msrp;
   }
 
   return {
+    initialize: initialize,
     update: update
   }
 }();
