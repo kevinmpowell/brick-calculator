@@ -193,4 +193,6 @@ ready(function(){
   BC.Form.initialize();
   BC.Values.initialize();
   BC.SetSummary.initialize();
+  BC.PortletLayout.initialize();
+  BC.PortletLayout.buildLayout();
 });

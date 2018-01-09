@@ -1,5 +1,5 @@
-{% macro portlet_section_header(title="Complete Set Values") %}
-  <div class="bc-portlet-section-header">
+{% macro portlet_section_header(title="Complete Set Values", id) %}
+  <div class="bc-portlet-section-header" {% if id %} id="{{ id }}" {% endif %}>
     <span class="bc-portlet-section-header__pre"></span>
     <span class="bc-portlet-section-header__text">
       {{ title }}

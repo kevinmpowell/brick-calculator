@@ -1,5 +1,5 @@
-{% macro portlet_grid() %}
-  <div class="bc-portlet-grid{{ ' ' + class if class }}">
-    {{ caller() }}
+{% macro portlet_grid(id, class) %}
+  <div class="bc-portlet-grid{{ ' ' + class if class }}" {% if id %} id="{{ id }}" {% endif %}>
+    {{ caller() if caller }}
   </div>
 {% endmacro %}
