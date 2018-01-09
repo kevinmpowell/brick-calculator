@@ -2,5 +2,14 @@
     "docsPath": "pages",   
     "webroot": "docs",     
     "versionedDocs": false,
-    "latestVersionPath": ""
+    "latestVersionPath": "",
+    "copyTasks": [
+      {
+        "name": "script-dependencies",
+        "sources": [
+          "node_modules/timeago.js/dist/timeago.min.js"
+        ],
+        "destination": "docs/scripts/dependencies"
+      }
+    ]
 }

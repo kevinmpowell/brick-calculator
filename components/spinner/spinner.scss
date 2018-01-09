@@ -1,0 +1,44 @@
+.bc-spinner {
+  align-items: center;
+  display: none;
+  font-size: $brickulator-font-size-xs;
+ }
+
+.bc-spinner--visible {
+  display: flex;
+}
+
+.bc-spinner__text {
+  @include bc-text-crop-sans-serif;
+  color: $brickulator-color-text-on-light-secondary;
+  margin: $brickulator-space-inline-left-1-half-x;
+}
+
+.bc-spinner__icon {
+  animation: bcSpinnerSpin 1s infinite linear;
+  background: $brickulator-color-brand;
+  height: 2px;
+  position: relative;
+  top: -1px;
+  width: 12px;
+
+  &:before,
+  &:after {
+    background: $brickulator-color-brand;
+    content: '';
+    display: block;
+    position: absolute;
+    height: 100%;
+    transform: rotate(120deg);
+    width: 100%;
+  }
+
+  &:after {
+    transform: rotate(240deg);
+  }
+}
+
+@keyframes bcSpinnerSpin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(180deg); }
+}

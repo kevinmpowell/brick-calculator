@@ -1,10 +1,12 @@
 @import '../tokens/tokens.scss';
+@import 'shared/utils.scss';
 @import '../components/autocomplete/autocomplete';
 @import '../components/button/button';
 @import '../components/set_summary/set_summary';
 @import '../components/portlet_section_header/portlet_section_header';
 @import '../components/portlet_grid/portlet_grid';
 @import '../components/portlet/portlet';
+@import '../components/spinner/spinner';
 
 
 $color-lego-bright-orange: #FE8A18;
@@ -99,8 +101,18 @@ input::-webkit-inner-spin-button {
 }
 
 .bc-value-lookup-form__actions {
+  align-items: center;
   display: flex;
-  justify-content: flex-end;
+  justify-content: space-between;
+}
+
+.bc-lookup-set-data-status-message {
+  color: $brickulator-color-text-on-light-secondary;
+  font-size: $brickulator-font-size-xs;
+}
+
+.bc-lookup-set-data-status-message--hidden {
+  display: none;
 }
 
 // Form styles

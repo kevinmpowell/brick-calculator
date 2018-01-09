@@ -26,11 +26,10 @@
   display: flex;
 }
 
-.bc-set-summary__msrp-prefix {
-  margin: $brickulator-space-inline-left-1-half-x;
-}
-
 .bc-set-summary__msrp-abbr {
   font-size: $brickulator-font-size-xs;
 }
 
+.bc-set-summary__msrp-value {
+  margin: $brickulator-space-inline-left-1-half-x;
+}

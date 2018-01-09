@@ -19,5 +19,8 @@
   "homepage": "https://github.com/kevinmpowell/brickulator#readme",
   "devDependencies": {
     "esds-build": "^0.28.0"
+  },
+  "dependencies": {
+    "timeago.js": "^3.0.2"
   }
 }

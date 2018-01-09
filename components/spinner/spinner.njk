@@ -1,0 +1,19 @@
+{% macro spinner(
+            class,
+            id,
+            text) %}
+  <div
+      {% if id %}
+        id="{{ id }}"
+      {% endif %} 
+      class="bc-spinner{{ ' ' + class if class }}">
+    <span class="bc-spinner__icon">
+      
+    </span>
+    {% if text %}
+      <span class="bc-spinner__text">
+        {{ text | safe }}
+      </span>
+    {% endif %}
+  </div>
+{% endmacro %}

@@ -8,6 +8,13 @@
         <div id="bc-lookup">
           <form action="" class="bc-value-lookup-form" id="bc-value-lookup-form" novalidate>
             <div class="bc-value-lookup-form__actions">
+              <div class="bc-lookup-set-data-status">
+                {{ bc.spinner(text="Loading Set Data...", class="bc-spinner--loading-set-data") }}
+                <div class="bc-lookup-set-data-status-message">
+                  <span class="bc-lookup-set-data-message">Set data cached</span> 
+                  <span class="bc-lookup-set-data-timestamp"></span>
+                </div>
+              </div>
               {{ bc.button(text="Reset Form", type="reset", class="bc-button--size-s") }}
             </div>
             <div class="bc-field-group">
@@ -59,5 +66,9 @@
         </div>
 
 
-        <script type="text/javascript" src="scripts/brickulator.js"></script>
+  {% endblock %}
+
+  {% block closing_body_assets %}
+    <script type="text/javascript" src="scripts/dependencies/timeago.min.js"></script>
+    <script type="text/javascript" src="scripts/brickulator.js"></script>
   {% endblock %}

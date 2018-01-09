@@ -27,7 +27,7 @@ BC.SetSummary = function() {
     year.innerHTML = setData.y;
     title.innerHTML = setData.t;
     pcs.innerHTML = setData.pcs;
-    msrp.innerHTML = setData.msrp;
+    msrp.innerHTML = parseFloat(setData.msrp, 10) > 0 ? "$" + setData.msrp : "Unknown";
   }
 
   return {

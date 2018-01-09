@@ -17,7 +17,11 @@ BC.Utils = function() {
 }();
 
 BC.SetDatabase = function() {
-  const currentDomain = window.location.hostname,
+  const loadingSpinner = document.querySelector(".bc-spinner--loading-set-data"),
+        loadingSpinnerVisibleClass = "bc-spinner--visible",
+        setDataCachedMessage = document.querySelector(".bc-lookup-set-data-status-message"),
+        setDataCachedMessageHiddenClass = "bc-lookup-set-data-status-message--hidden",
+        currentDomain = window.location.hostname,
         apiMapping = {
           'localhost': 'http://localhost:5000',
           'kevinmpowell.github.io': 'https://brickulator-api.herokuapp.com'
@@ -27,42 +31,64 @@ BC.SetDatabase = function() {
     localStorage.setItem("BCSetDB", rawJSON);
   }
 
+  function showLoadingSpinner() {
+    loadingSpinner.classList.add(loadingSpinnerVisibleClass);
+    setDataCachedMessage.classList.add(setDataCachedMessageHiddenClass);
+  }
+
+  function hideLoadingSpinner() {
+    loadingSpinner.classList.remove(loadingSpinnerVisibleClass);
+    setDataCachedMessage.classList.remove(setDataCachedMessageHiddenClass);
+  }
+
   const retrieveFreshSetData = function retrieveFreshSetData() {
     var request = new XMLHttpRequest();
     const apiDomain = apiMapping[currentDomain];
 
+    showLoadingSpinner();
     request.open('GET', apiDomain + '/lego_sets', true);
     request.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
 
     request.onload = function() {
       if (request.status >= 200 && request.status < 400) {
-        alert("SUCCESS!");
         // Success!
         var data = JSON.parse(request.responseText);
-        data.dataUpdate = Date.now();
+        data.dataRetrieved = Date.now();
         saveSetDBToLocalStorage(JSON.stringify(data));
         setDB = data;
         BC.Autocomplete.updateDataset(setDB);
+        hideLoadingSpinner();
+        updateSetDataTimestamp(setDB.dataRetrieved);
       } else {
         // We reached our target server, but it returned an error
-        alert("Could not retrieve new sets - connection successful, but data failed");
+        alert("Could not retrieve set data - connection successful, but data failed");
+        hideLoadingSpinner();
       }
     };
 
     request.onerror = function() {
       // There was a connection error of some sort
-      alert("Could not retrieve new sets - connection error");
+      alert("Could not retrieve set data - connection error");
+      hideLoadingSpinner();
     };
 
     request.send();
+  }
+
+  function updateSetDataTimestamp(timestamp) {
+    document.querySelector(".bc-lookup-set-data-timestamp").setAttribute("datetime", timestamp);
+    timeago().render(document.querySelectorAll('.bc-lookup-set-data-timestamp'));
   }
 
   const initialize = function initialize() {
     setDB = localStorage.getItem("BCSetDB");
     setDB = JSON.parse(setDB);
     // if (1 === 1) {
-    if (setDB === null || (Date.now() - setDB.dataUpdated) > oneHour ) { // If it's been more than a minute get fresh data
+    if (setDB === null || (Date.now() - setDB.dataRetrieved) > oneHour ) { // If it's been more than a minute get fresh data
       retrieveFreshSetData();
+    } else {
+      console.log(setDB.dataRetrieved);
+      updateSetDataTimestamp(setDB.dataRetrieved);
     }
   }
 
@@ -87,20 +113,6 @@ BC.Values = function() {
 
     if (setData) {
       BC.SetSummary.update(setData);
-      // const setTitleField = document.getElementById(setTitleFieldId),
-      //       ebayAvgField = document.getElementById(ebayAvgFieldId),
-      //       ebaySellingFeesField = document.getElementById(ebaySellingFeesFieldId),
-      //       ebayPurchasePriceField = document.getElementById(ebayPurchasePriceFieldId),
-      //       ebayProfitField = document.getElementById(ebayProfitFieldId);
-      
-      // setTitleField.value = setData.t;
-      // ebayPurchasePriceField.value = BC.Utils.formatCurrency(parseFloat(purchasePrice));
-  
-      // if (setData.ebAN) {
-      //   ebayAvgField.value = BC.Utils.formatCurrency(setData.ebAN);
-      //   ebaySellingFeesField.value = BC.Utils.formatCurrency(setData.ebAN * ebaySellingFeePercentage);
-      //   ebayProfitField.value = BC.Utils.formatCurrency(setData.ebAN - (setData.ebAN * ebaySellingFeePercentage) - parseFloat(purchasePrice));
-      // }
 
       showValues();
     } else {
