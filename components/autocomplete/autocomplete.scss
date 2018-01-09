@@ -1,8 +1,12 @@
 .bc-autocomplete {
-  background: white;
-  border: solid 1px lightgray;
+  background: $brickulator-color-background-panel;
+  border: $brickulator-border-control;
+  border-top: 0;
   display: none;
   left: 0;
+  list-style: none;
+  padding: 0;
+  margin: 0;
   position: absolute;
   top: 100%;
   width: 100%;
@@ -13,5 +17,19 @@
 }
 
 .bc-autocomplete__item-link {
-  display: block;
+  align-items: center;
+  color: $brickulator-color-text-on-light-primary;
+  display: flex;
+  padding: $brickulator-space-inset-1-x;
+  text-decoration: none;
+  font-size: $brickulator-font-size-l;
+}
+
+.bc-autocomplete__item-link-text {
+  white-space: nowrap;
+}
+
+.bc-autocomplete__item-metadata {
+  color: $brickulator-color-text-on-light-secondary;
+  margin: $brickulator-space-inline-left-1-half-x;
 }

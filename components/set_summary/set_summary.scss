@@ -1,0 +1,36 @@
+.bc-set-summary {
+  // border-bottom: $brickulator-border-control;
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  padding: $brickulator-space-inset-squish-1-x;
+}
+
+.bc-set-summary__title {
+  flex: 0 0 100%;
+  font-size: $brickulator-font-size-s;
+  padding: $brickulator-space-inset-1-half-x;
+  text-align: center;
+}
+
+.bc-set-summary__number,
+.bc-set-summary__year,
+.bc-set-summary__pcs,
+.bc-set-summary__msrp {
+  color: $brickulator-color-text-on-light-secondary;
+  font-size: $brickulator-font-size-s;
+}
+
+.bc-set-summary__msrp {
+  align-items: center;
+  display: flex;
+}
+
+.bc-set-summary__msrp-prefix {
+  margin: $brickulator-space-inline-left-1-half-x;
+}
+
+.bc-set-summary__msrp-abbr {
+  font-size: $brickulator-font-size-xs;
+}
+

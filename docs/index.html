@@ -12,14 +12,51 @@
     </head>
     <body>
         
-    <h1>BRICKULATOR</h1>
+    <div class="bc-site-header">
+      
+  
+  
+
+  <button
+    
+     type="button" 
+    class="bc-button bc-show-lookup-form bc-button--size-s">
+    Back
+  </button>
+
+      <h1 class="bc-site-header__title">BRICKULATOR</h1>
+      
+  
+  
+
+  <button
+    
+     type="button" 
+    class="bc-button bc-button--size-s">
+    Menu
+  </button>
+
+    </div>
         <div id="bc-lookup">
           <form action="" class="bc-value-lookup-form" id="bc-value-lookup-form" novalidate>
+            <div class="bc-value-lookup-form__actions">
+              
+  
+  
+
+  <button
+    
+     type="reset" 
+    class="bc-button bc-button--size-s">
+    Reset Form
+  </button>
+
+            </div>
             <div class="bc-field-group">
-              <label for="bc-value-lookup-form__set-number-input">Set Number</label>
+              <label class="bc-form-label" for="bc-value-lookup-form__set-number-input">Set Number</label>
               <input autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" name="setNumber" id="bc-value-lookup-form__set-number-input" type="text" pattern="[0-9]*">
               
-  <div class="bc-autocomplete">
+  <ul class="bc-autocomplete">
     <li class="bc-autocomplete__item bc-autocomplete__item--template">
       <a href="" class="bc-autocomplete__item-link">
         <span class="bc-autocomplete__item-link-text">
@@ -28,63 +65,318 @@
         <small class="bc-autocomplete__item-metadata">And something smaller here</small>
       </a>
     </li>
-  </div>
+  </ul>
 
             </div>
 
-            <label for="bc-value-lookup-form__purchase-price-input">Purchase Price</label>
-            <input step="0.01" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" type="number" id="bc-value-lookup-form__purchase-price-input" name="purchasePrice">
+            <label class="bc-form-label" for="bc-value-lookup-form__purchase-price-input">Purchase Price</label>
+            <div class="bc-form-input-wrap">
+              <div class="bc-form-input-prefix">
+                $
+              </div>
+              <input step="0.01" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" type="number" id="bc-value-lookup-form__purchase-price-input" name="purchasePrice">
+            </div>
 
-            <button type="submit">Brickulate!</button>
-            <button type="reset">Reset Form</button>
+            
+  
+  
+
+  <button
+    
+     type="submit" 
+    class="bc-button bc-button--primary">
+    Brickulate!
+  </button>
+
           </form>
         </div>
         <div id="bc-results">
-          <a href="#bc-lookup" class="bc-show-lookup-form">Back</a>
-          <h1>Set Value</h1>
-          <input type="text" id="bc-results__set-title" readonly="true">
-
           
-  <div class="bc-portlet bc-portlet--brick-owl-part-out">
-      <h2 class="bc-portlet__title">Brick Owl Part Out Value</h2>
-      <label for="bo-po-new">New</label>
-      <input type="text" id="bo-po-new" readonly="true">
-      <label for="bo-po-cost-new">Cost</label>
-      <input type="text" id="bo-po-cost-new" readonly="true">
-      <label for="bo-po-profit-new">Profit</label>
-      <input type="text" id="bo-po-profit-new" readonly="true">
-
-      <label for="bo-po-new">Used</label>
-      <input type="text" id="bo-po-used" readonly="true">
-      <label for="bo-po-cost-used">Cost</label>
-      <input type="text" id="bo-po-cost-used" readonly="true">
-      <label for="bo-po-profit-used">Profit</label>
-      <input type="text" id="bo-po-profit-used" readonly="true">
+  <div class="bc-set-summary">
+    <span class="bc-set-summary__number">75150-1</span>
+    <span class="bc-set-summary__year">2016</span>
+    <span id="bc-results__set-title" class="bc-set-summary__title">Vader&#39;s TIE Advanced vs. A-wing Starfighter</span>
+    <span class="bc-set-summary__pcs">
+      <span class="bc-set-summary__pcs-count">
+        702
+      </span>
+      <span class="bc-set-summary__pcs-abb">
+        pcs
+      </span>
+    </span>
+    <span class="bc-set-summary__msrp">
+      <span class="bc-set-summary__msrp-abbr">MSRP</span>
+      <span class="bc-set-summary__msrp-prefix">$</span>
+      <span class="bc-set-summary__msrp-value">
+        89.99
+      </span>
+    </span>
   </div>
 
           
-    <div class="bc-portlet">
-        <h2 class="bc-portlet__title">Price Per Piece</h2>
-        <label for="ppp-msrp">MSRP</label>
-        <input type="text" id="ppp-msrp" readonly="true">
+  <div class="bc-portlet-section-header">
+    <span class="bc-portlet-section-header__pre"></span>
+    <span class="bc-portlet-section-header__text">
+      Complete Set Values
+    </span>
+    <span class="bc-portlet-section-header__post"></span>
+  </div>
+  
+          
+  <div class="bc-portlet-grid">
+            
+            
+  <div class="bc-portlet bc-portlet--brick-owl-part-out">
+      <h2 class="bc-portlet__title">Brick Owl</h2>
+      <div class="bc-portlet__line-item">
+        <label for="bo-po-new" class="bc-portlet__line-item-label">Part Out New</label>
+        <input class="bc-portlet__line-item-input" value="55.00" type="text" id="bo-po-new" readonly="true">
+      </div>
+      <div class="bc-portlet__line-item">
+        <label for="bo-po-fees-new" class="bc-portlet__line-item-label">Fees</label>
+        <input class="bc-portlet__line-item-input" value="5.67" type="text" id="bo-po-fees-new" readonly="true">
+      </div>
+      <div class="bc-portlet__line-item">
+        <label for="bo-po-cost-new" class="bc-portlet__line-item-label">Set Cost</label>
+        <input class="bc-portlet__line-item-input" value="36.00" type="text" id="bo-po-cost-new" readonly="true">
+      </div>
+      <div class="bc-portlet__line-item bc-portlet__line-item--profit">
+        <label for="bo-po-profit-new" class="bc-portlet__line-item-label">Profit</label>
+        <input class="bc-portlet__line-item-input" value="11.33" type="text" id="bo-po-profit-new" readonly="true">
+      </div>
 
-        <label for="ppp-your-price">Your Price</label>
-        <input type="text" id="ppp-your-price" readonly="true">
-    </div>
 
-          <div class="bc-portlet">
-            <h2 class="bc-portlet__title">eBay</h2>
-            <label for="ebay-avg">6 mo. avg. (new)</label>
-            <input type="text" id="ebay-avg" readonly="true">
+  </div>
 
-            <label for="ebay-selling-fees">Selling Fees</label>
-            <input type="text" id="ebay-selling-fees" readonly="true">
+            
+  <div class="bc-portlet bc-portlet--brick-owl-part-out">
+      <h2 class="bc-portlet__title">Bricklink</h2>
+      <div class="bc-portlet__line-item">
+        <label for="bo-po-new" class="bc-portlet__line-item-label">Part Out New</label>
+        <input class="bc-portlet__line-item-input" value="48.00" type="text" id="bo-po-new" readonly="true">
+      </div>
+      <div class="bc-portlet__line-item">
+        <label for="bo-po-fees-new" class="bc-portlet__line-item-label">Fees</label>
+        <input class="bc-portlet__line-item-input" value="3.27" type="text" id="bo-po-fees-new" readonly="true">
+      </div>
+      <div class="bc-portlet__line-item">
+        <label for="bo-po-cost-new" class="bc-portlet__line-item-label">Set Cost</label>
+        <input class="bc-portlet__line-item-input" value="36.00" type="text" id="bo-po-cost-new" readonly="true">
+      </div>
+      <div class="bc-portlet__line-item bc-portlet__line-item--profit">
+        <label for="bo-po-profit-new" class="bc-portlet__line-item-label">Profit</label>
+        <input class="bc-portlet__line-item-input" value="10.50" type="text" id="bo-po-profit-new" readonly="true">
+      </div>
 
-            <label for="ebay-purchase-price">Purchase Price</label>
-            <input type="text" id="ebay-purchase-price" readonly="true">
 
-            <label for="ebay-profit">Profit</label>
-            <input type="text" id="ebay-profit" readonly="true">
+  </div>
+
+            
+  <div class="bc-portlet bc-portlet--brick-owl-part-out">
+      <h2 class="bc-portlet__title">eBay</h2>
+      <div class="bc-portlet__line-item">
+        <label for="bo-po-new" class="bc-portlet__line-item-label">Part Out New</label>
+        <input class="bc-portlet__line-item-input" value="72.00" type="text" id="bo-po-new" readonly="true">
+      </div>
+      <div class="bc-portlet__line-item">
+        <label for="bo-po-fees-new" class="bc-portlet__line-item-label">Fees</label>
+        <input class="bc-portlet__line-item-input" value="8.00" type="text" id="bo-po-fees-new" readonly="true">
+      </div>
+      <div class="bc-portlet__line-item">
+        <label for="bo-po-cost-new" class="bc-portlet__line-item-label">Set Cost</label>
+        <input class="bc-portlet__line-item-input" value="36.00" type="text" id="bo-po-cost-new" readonly="true">
+      </div>
+      <div class="bc-portlet__line-item bc-portlet__line-item--profit">
+        <label for="bo-po-profit-new" class="bc-portlet__line-item-label">Profit</label>
+        <input class="bc-portlet__line-item-input" value="9.45" type="text" id="bo-po-profit-new" readonly="true">
+      </div>
+
+
+  </div>
+
+            
+  <div class="bc-portlet bc-portlet--brick-owl-part-out">
+      <h2 class="bc-portlet__title">Craigslist</h2>
+      <div class="bc-portlet__line-item">
+        <label for="bo-po-new" class="bc-portlet__line-item-label">Part Out New</label>
+        <input class="bc-portlet__line-item-input" value="55.00" type="text" id="bo-po-new" readonly="true">
+      </div>
+      <div class="bc-portlet__line-item">
+        <label for="bo-po-fees-new" class="bc-portlet__line-item-label">Fees</label>
+        <input class="bc-portlet__line-item-input" value="5.67" type="text" id="bo-po-fees-new" readonly="true">
+      </div>
+      <div class="bc-portlet__line-item">
+        <label for="bo-po-cost-new" class="bc-portlet__line-item-label">Set Cost</label>
+        <input class="bc-portlet__line-item-input" value="36.00" type="text" id="bo-po-cost-new" readonly="true">
+      </div>
+      <div class="bc-portlet__line-item bc-portlet__line-item--profit">
+        <label for="bo-po-profit-new" class="bc-portlet__line-item-label">Profit</label>
+        <input class="bc-portlet__line-item-input" value="11.33" type="text" id="bo-po-profit-new" readonly="true">
+      </div>
+
+
+  </div>
+
+          
+  </div>
+
+          
+  <div class="bc-portlet-section-header">
+    <span class="bc-portlet-section-header__pre"></span>
+    <span class="bc-portlet-section-header__text">
+      Part Out Values
+    </span>
+    <span class="bc-portlet-section-header__post"></span>
+  </div>
+
+          
+  <div class="bc-portlet-grid">
+            
+            
+  <div class="bc-portlet bc-portlet--brick-owl-part-out">
+      <h2 class="bc-portlet__title">Brick Owl</h2>
+      <div class="bc-portlet__line-item">
+        <label for="bo-po-new" class="bc-portlet__line-item-label">Part Out New</label>
+        <input class="bc-portlet__line-item-input" value="55.00" type="text" id="bo-po-new" readonly="true">
+      </div>
+      <div class="bc-portlet__line-item">
+        <label for="bo-po-fees-new" class="bc-portlet__line-item-label">Fees</label>
+        <input class="bc-portlet__line-item-input" value="5.67" type="text" id="bo-po-fees-new" readonly="true">
+      </div>
+      <div class="bc-portlet__line-item">
+        <label for="bo-po-cost-new" class="bc-portlet__line-item-label">Set Cost</label>
+        <input class="bc-portlet__line-item-input" value="36.00" type="text" id="bo-po-cost-new" readonly="true">
+      </div>
+      <div class="bc-portlet__line-item bc-portlet__line-item--profit">
+        <label for="bo-po-profit-new" class="bc-portlet__line-item-label">Profit</label>
+        <input class="bc-portlet__line-item-input" value="11.33" type="text" id="bo-po-profit-new" readonly="true">
+      </div>
+
+
+  </div>
+
+            
+  <div class="bc-portlet bc-portlet--brick-owl-part-out">
+      <h2 class="bc-portlet__title">Bricklink</h2>
+      <div class="bc-portlet__line-item">
+        <label for="bo-po-new" class="bc-portlet__line-item-label">Part Out New</label>
+        <input class="bc-portlet__line-item-input" value="48.00" type="text" id="bo-po-new" readonly="true">
+      </div>
+      <div class="bc-portlet__line-item">
+        <label for="bo-po-fees-new" class="bc-portlet__line-item-label">Fees</label>
+        <input class="bc-portlet__line-item-input" value="3.27" type="text" id="bo-po-fees-new" readonly="true">
+      </div>
+      <div class="bc-portlet__line-item">
+        <label for="bo-po-cost-new" class="bc-portlet__line-item-label">Set Cost</label>
+        <input class="bc-portlet__line-item-input" value="36.00" type="text" id="bo-po-cost-new" readonly="true">
+      </div>
+      <div class="bc-portlet__line-item bc-portlet__line-item--profit">
+        <label for="bo-po-profit-new" class="bc-portlet__line-item-label">Profit</label>
+        <input class="bc-portlet__line-item-input" value="10.50" type="text" id="bo-po-profit-new" readonly="true">
+      </div>
+
+
+  </div>
+
+          
+  </div>
+
+          
+  <div class="bc-portlet-section-header">
+    <span class="bc-portlet-section-header__pre"></span>
+    <span class="bc-portlet-section-header__text">
+      Minifig Values
+    </span>
+    <span class="bc-portlet-section-header__post"></span>
+  </div>
+
+          
+  <div class="bc-portlet-grid">
+            
+            
+  <div class="bc-portlet bc-portlet--brick-owl-part-out">
+      <h2 class="bc-portlet__title">Brick Owl</h2>
+      <div class="bc-portlet__line-item">
+        <label for="bo-po-new" class="bc-portlet__line-item-label">Part Out New</label>
+        <input class="bc-portlet__line-item-input" value="55.00" type="text" id="bo-po-new" readonly="true">
+      </div>
+      <div class="bc-portlet__line-item">
+        <label for="bo-po-fees-new" class="bc-portlet__line-item-label">Fees</label>
+        <input class="bc-portlet__line-item-input" value="5.67" type="text" id="bo-po-fees-new" readonly="true">
+      </div>
+      <div class="bc-portlet__line-item">
+        <label for="bo-po-cost-new" class="bc-portlet__line-item-label">Set Cost</label>
+        <input class="bc-portlet__line-item-input" value="36.00" type="text" id="bo-po-cost-new" readonly="true">
+      </div>
+      <div class="bc-portlet__line-item bc-portlet__line-item--profit">
+        <label for="bo-po-profit-new" class="bc-portlet__line-item-label">Profit</label>
+        <input class="bc-portlet__line-item-input" value="11.33" type="text" id="bo-po-profit-new" readonly="true">
+      </div>
+
+
+  </div>
+
+            
+  <div class="bc-portlet bc-portlet--brick-owl-part-out">
+      <h2 class="bc-portlet__title">Bricklink</h2>
+      <div class="bc-portlet__line-item">
+        <label for="bo-po-new" class="bc-portlet__line-item-label">Part Out New</label>
+        <input class="bc-portlet__line-item-input" value="48.00" type="text" id="bo-po-new" readonly="true">
+      </div>
+      <div class="bc-portlet__line-item">
+        <label for="bo-po-fees-new" class="bc-portlet__line-item-label">Fees</label>
+        <input class="bc-portlet__line-item-input" value="3.27" type="text" id="bo-po-fees-new" readonly="true">
+      </div>
+      <div class="bc-portlet__line-item">
+        <label for="bo-po-cost-new" class="bc-portlet__line-item-label">Set Cost</label>
+        <input class="bc-portlet__line-item-input" value="36.00" type="text" id="bo-po-cost-new" readonly="true">
+      </div>
+      <div class="bc-portlet__line-item bc-portlet__line-item--profit">
+        <label for="bo-po-profit-new" class="bc-portlet__line-item-label">Profit</label>
+        <input class="bc-portlet__line-item-input" value="10.50" type="text" id="bo-po-profit-new" readonly="true">
+      </div>
+
+
+  </div>
+
+            
+  <div class="bc-portlet bc-portlet--brick-owl-part-out">
+      <h2 class="bc-portlet__title">eBay</h2>
+      <div class="bc-portlet__line-item">
+        <label for="bo-po-new" class="bc-portlet__line-item-label">Part Out New</label>
+        <input class="bc-portlet__line-item-input" value="72.00" type="text" id="bo-po-new" readonly="true">
+      </div>
+      <div class="bc-portlet__line-item">
+        <label for="bo-po-fees-new" class="bc-portlet__line-item-label">Fees</label>
+        <input class="bc-portlet__line-item-input" value="8.00" type="text" id="bo-po-fees-new" readonly="true">
+      </div>
+      <div class="bc-portlet__line-item">
+        <label for="bo-po-cost-new" class="bc-portlet__line-item-label">Set Cost</label>
+        <input class="bc-portlet__line-item-input" value="36.00" type="text" id="bo-po-cost-new" readonly="true">
+      </div>
+      <div class="bc-portlet__line-item bc-portlet__line-item--profit">
+        <label for="bo-po-profit-new" class="bc-portlet__line-item-label">Profit</label>
+        <input class="bc-portlet__line-item-input" value="9.45" type="text" id="bo-po-profit-new" readonly="true">
+      </div>
+
+
+  </div>
+
+          
+  </div>
+
+          <div class="bc-end-of-results-actions">
+            
+  
+  
+
+  <button
+    
+     type="button" 
+    class="bc-button bc-show-lookup-form">
+    Back To Lookup
+  </button>
+
           </div>
         </div>
 

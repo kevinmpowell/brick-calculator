@@ -1,0 +1,25 @@
+.bc-button {
+  background: $brickulator-color-background-dark;
+  border: 0;
+  border-radius: $brickulator-border-radius-control;
+  color: $brickulator-color-text-on-dark-primary;
+  cursor: pointer;
+  font-family: $brickulator-font-family-monospace;
+  font-size: $brickulator-font-size-xxl;
+  margin: 0;
+  max-width: 400px;
+  padding: $brickulator-space-inset-1-x;
+  text-transform: uppercase;
+  width: 100%;
+}
+
+.bc-button--primary {
+  background: $brickulator-color-brand;
+  color: $brickulator-color-text-on-brand-primary;
+}
+
+.bc-button--size-s {
+  font-size: $brickulator-font-size-xs;
+  padding: $brickulator-space-inset-1-half-x;
+  width: auto;
+}

@@ -1,11 +1,19 @@
+@import '../tokens/tokens.scss';
 @import '../components/autocomplete/autocomplete';
+@import '../components/button/button';
+@import '../components/set_summary/set_summary';
+@import '../components/portlet_section_header/portlet_section_header';
+@import '../components/portlet_grid/portlet_grid';
+@import '../components/portlet/portlet';
+
 
 $color-lego-bright-orange: #FE8A18;
 $color-lego-dark-orange: #A95500;
+$form-field-height: 40px;
 
 body {
-  background: $color-lego-dark-orange;
-  font-family: "Hiragino Sans", "Helvetica", sans-serif;
+  background: $brickulator-color-background-light;
+  font-family: $brickulator-font-family-sans-serif;
   margin: 0;
   padding: 0;
 }
@@ -14,11 +22,27 @@ body {
   box-sizing: border-box;
 }
 
+.bc-site-header {
+  align-items: center;
+  border-bottom: $brickulator-border-control;
+  display: flex;
+  padding: $brickulator-space-inset-1-half-x;
+  justify-content: space-between;
+  margin-bottom: $brickulator-space-stack-1-half-x;
+}
+
+.bc-site-header__title {
+  color: $brickulator-color-brand;
+  font-family: $brickulator-font-family-monospace;
+  font-size: $brickulator-font-size-m;
+  margin: 0;
+  text-align: center;
+}
+
 #bc-lookup,
 #bc-results {
   max-width: 500px;
   margin: 0 auto;
-  padding: 10px;
 }
 
 label,
@@ -26,15 +50,20 @@ input {
   display: block;
 }
 
-input,
-button {
+input {
   font-size: 24px;
   margin-bottom: 24px;
   width: 100%;
 }
 
 #bc-results {
+  // display: none;
+  padding-top: 0;
+}
+
+#bc-lookup {
   display: none;
+  padding: $brickulator-space-inset-1-x;
 }
 
 .bc--show-values {
@@ -58,9 +87,56 @@ input::-webkit-inner-spin-button {
   position: relative;
 }
 
+.bc-form-label {
+  font-size: $brickulator-font-size-m;
+}
+
 #bc-results__set-title {
   border: 0;
   background: transparent;
   font-size: 16px;
   padding: 0 8px;
+}
+
+.bc-value-lookup-form__actions {
+  display: flex;
+  justify-content: flex-end;
+}
+
+// Form styles
+input {
+  background: $brickulator-color-background-control;
+  border: $brickulator-border-control;
+  border-radius: $brickulator-border-radius-control;
+  font-size: $brickulator-font-size-xl;
+  font-family: $brickulator-font-family-sans-serif;
+  height: $form-field-height;
+  padding: $brickulator-space-inset-1-half-x;
+}
+
+.bc-form-input-prefix {
+  align-items: center;
+  background: $brickulator-color-background-control;
+  border: $brickulator-border-control;
+  border-radius: $brickulator-border-radius-control 0 0 $brickulator-border-radius-control;
+  font-family: $brickulator-font-family-sans-serif;
+  font-size: $brickulator-font-size-xl;
+  display: flex;
+  height: $form-field-height;
+  padding: $brickulator-space-inset-1-half-x;
+  border-right: 0;
+
+  + input {
+    border-bottom-left-radius: 0;
+    border-top-left-radius: 0;
+  } 
+}
+
+.bc-form-input-wrap {
+  display: flex;
+}
+
+.bc-end-of-results-actions {
+  margin: $brickulator-space-stack-4-x;
+  padding: $brickulator-space-inset-1-x;
 }

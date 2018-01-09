@@ -1,0 +1,20 @@
+{% macro button(
+    class,
+    type="button",
+    element="button",
+    href,
+    text) %}
+  {% if href %}
+    {% set element = "a" %}
+  {% endif %}
+  {% if element != "button" %}
+    {% set type = false %}
+  {% endif %}
+
+  <{{ element }}
+    {% if href %} href="{{ href }}" {% endif %}
+    {% if type %} type="{{ type }}" {% endif %}
+    class="bc-button{{ ' ' + class if class }}">
+    {{ text }}
+  </{{ element }}>
+{% endmacro %}

@@ -1,0 +1,27 @@
+{% macro set_summary(
+  title,
+  number,
+  year,
+  pcs,
+  msrp) %}
+  <div class="bc-set-summary">
+    <span class="bc-set-summary__number">{{ number }}</span>
+    <span class="bc-set-summary__year">{{ year }}</span>
+    <span id="bc-results__set-title" class="bc-set-summary__title">{{ title }}</span>
+    <span class="bc-set-summary__pcs">
+      <span class="bc-set-summary__pcs-count">
+        {{ pcs }}
+      </span>
+      <span class="bc-set-summary__pcs-abb">
+        pcs
+      </span>
+    </span>
+    <span class="bc-set-summary__msrp">
+      <span class="bc-set-summary__msrp-abbr">MSRP</span>
+      <span class="bc-set-summary__msrp-prefix">$</span>
+      <span class="bc-set-summary__msrp-value">
+        {{ msrp }}
+      </span>
+    </span>
+  </div>
+{% endmacro %}

@@ -1,18 +1,34 @@
-{% macro portlet_part_out_brick_owl(class=false) %}
-  <div class="bc-portlet bc-portlet--brick-owl-part-out">
-      <h2 class="bc-portlet__title">Brick Owl Part Out Value</h2>
-      <label for="bo-po-new">New</label>
-      <input type="text" id="bo-po-new" readonly="true">
-      <label for="bo-po-cost-new">Cost</label>
-      <input type="text" id="bo-po-cost-new" readonly="true">
-      <label for="bo-po-profit-new">Profit</label>
-      <input type="text" id="bo-po-profit-new" readonly="true">
+{% macro portlet_part_out_brick_owl(
+            class=false,
+            title,
+            avg,
+            fees,
+            cost,
+            profit) %}
+  <div class="bc-portlet bc-portlet--brick-owl-part-out{{ ' ' + class if class }}">
+      <h2 class="bc-portlet__title">{{ title }}</h2>
+      <div class="bc-portlet__line-item">
+        <label for="bo-po-new" class="bc-portlet__line-item-label">Part Out New</label>
+        <input class="bc-portlet__line-item-input" value="{{ avg }}" type="text" id="bo-po-new" readonly="true">
+      </div>
+      <div class="bc-portlet__line-item">
+        <label for="bo-po-fees-new" class="bc-portlet__line-item-label">Fees</label>
+        <input class="bc-portlet__line-item-input" value="{{ fees}}" type="text" id="bo-po-fees-new" readonly="true">
+      </div>
+      <div class="bc-portlet__line-item">
+        <label for="bo-po-cost-new" class="bc-portlet__line-item-label">Set Cost</label>
+        <input class="bc-portlet__line-item-input" value="{{ cost }}" type="text" id="bo-po-cost-new" readonly="true">
+      </div>
+      <div class="bc-portlet__line-item bc-portlet__line-item--profit">
+        <label for="bo-po-profit-new" class="bc-portlet__line-item-label">Profit</label>
+        <input class="bc-portlet__line-item-input" value="{{ profit }}" type="text" id="bo-po-profit-new" readonly="true">
+      </div>
 
-      <label for="bo-po-new">Used</label>
+{#       <label for="bo-po-new">Used</label>
       <input type="text" id="bo-po-used" readonly="true">
       <label for="bo-po-cost-used">Cost</label>
       <input type="text" id="bo-po-cost-used" readonly="true">
       <label for="bo-po-profit-used">Profit</label>
-      <input type="text" id="bo-po-profit-used" readonly="true">
+      <input type="text" id="bo-po-profit-used" readonly="true"> #}
   </div>
 {% endmacro %}

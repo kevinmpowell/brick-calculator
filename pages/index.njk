@@ -1,41 +1,60 @@
 {% extends 'templates/base.njk' %}
   {% block body %}
-    <h1>BRICKULATOR</h1>
+    <div class="bc-site-header">
+      {{ bc.button(text="Back", class="bc-show-lookup-form bc-button--size-s") }}
+      <h1 class="bc-site-header__title">BRICKULATOR</h1>
+      {{ bc.button(text="Menu", class="bc-button--size-s") }}
+    </div>
         <div id="bc-lookup">
           <form action="" class="bc-value-lookup-form" id="bc-value-lookup-form" novalidate>
+            <div class="bc-value-lookup-form__actions">
+              {{ bc.button(text="Reset Form", type="reset", class="bc-button--size-s") }}
+            </div>
             <div class="bc-field-group">
-              <label for="bc-value-lookup-form__set-number-input">Set Number</label>
+              <label class="bc-form-label" for="bc-value-lookup-form__set-number-input">Set Number</label>
               <input autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" name="setNumber" id="bc-value-lookup-form__set-number-input" type="text" pattern="[0-9]*">
               {{ bc.autocomplete() }}
             </div>
 
-            <label for="bc-value-lookup-form__purchase-price-input">Purchase Price</label>
-            <input step="0.01" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" type="number" id="bc-value-lookup-form__purchase-price-input" name="purchasePrice">
+            <label class="bc-form-label" for="bc-value-lookup-form__purchase-price-input">Purchase Price</label>
+            <div class="bc-form-input-wrap">
+              <div class="bc-form-input-prefix">
+                $
+              </div>
+              <input step="0.01" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" type="number" id="bc-value-lookup-form__purchase-price-input" name="purchasePrice">
+            </div>
 
-            <button type="submit">Brickulate!</button>
-            <button type="reset">Reset Form</button>
+            {{ bc.button(text="Brickulate!", type="submit", class="bc-button--primary") }}
           </form>
         </div>
         <div id="bc-results">
-          <a href="#bc-lookup" class="bc-show-lookup-form">Back</a>
-          <h1>Set Value</h1>
-          <input type="text" id="bc-results__set-title" readonly="true">
-
-          {{ bc.portlet_part_out_brick_owl() }}
-          {{ bc.portlet_price_per_piece() }}
-          <div class="bc-portlet">
-            <h2 class="bc-portlet__title">eBay</h2>
-            <label for="ebay-avg">6 mo. avg. (new)</label>
-            <input type="text" id="ebay-avg" readonly="true">
-
-            <label for="ebay-selling-fees">Selling Fees</label>
-            <input type="text" id="ebay-selling-fees" readonly="true">
-
-            <label for="ebay-purchase-price">Purchase Price</label>
-            <input type="text" id="ebay-purchase-price" readonly="true">
-
-            <label for="ebay-profit">Profit</label>
-            <input type="text" id="ebay-profit" readonly="true">
+          {{ bc.set_summary(
+              number="75150-1",
+              title="Vader's TIE Advanced vs. A-wing Starfighter",
+              msrp="89.99",
+              pcs="702",
+              year="2016"
+            ) }}
+          {{ bc.portlet_section_header() }}  
+          {% call bc.portlet_grid() %}        
+            {{ bc.portlet_part_out_brick_owl(title="Brick Owl", avg="55.00", fees="5.67", cost="36.00", profit="11.33") }}
+            {{ bc.portlet_part_out_brick_owl(title="Bricklink", avg="48.00", fees="3.27", cost="36.00", profit="10.50") }}
+            {{ bc.portlet_part_out_brick_owl(title="eBay", avg="72.00", fees="8.00", cost="36.00", profit="9.45") }}
+            {{ bc.portlet_part_out_brick_owl(title="Craigslist", avg="55.00", fees="5.67", cost="36.00", profit="11.33") }}
+          {% endcall %}
+          {{ bc.portlet_section_header(title="Part Out Values") }}
+          {% call bc.portlet_grid() %}        
+            {{ bc.portlet_part_out_brick_owl(title="Brick Owl", avg="55.00", fees="5.67", cost="36.00", profit="11.33") }}
+            {{ bc.portlet_part_out_brick_owl(title="Bricklink", avg="48.00", fees="3.27", cost="36.00", profit="10.50") }}
+          {% endcall %}
+          {{ bc.portlet_section_header(title="Minifig Values") }}
+          {% call bc.portlet_grid() %}        
+            {{ bc.portlet_part_out_brick_owl(title="Brick Owl", avg="55.00", fees="5.67", cost="36.00", profit="11.33") }}
+            {{ bc.portlet_part_out_brick_owl(title="Bricklink", avg="48.00", fees="3.27", cost="36.00", profit="10.50") }}
+            {{ bc.portlet_part_out_brick_owl(title="eBay", avg="72.00", fees="8.00", cost="36.00", profit="9.45") }}
+          {% endcall %}
+          <div class="bc-end-of-results-actions">
+            {{ bc.button(text="Back To Lookup", class="bc-show-lookup-form") }}
           </div>
         </div>
 

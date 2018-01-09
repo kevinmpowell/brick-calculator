@@ -1,0 +1,51 @@
+color:
+  brand: "#FE8A18"
+  background:
+    panel: "#FFFFFF"
+    light: "#EEF5F4"
+    dark: "#535555"
+    control: "#FFFFFF"
+    portlet: "#F7FFFE"
+  text:
+    on-brand:
+      primary: "#FFFFFF"
+    on-dark:
+      primary: "#FFFFFF"
+    on-light:
+      primary: "#1E1F1F"
+      secondary: "#535555"
+font:
+  family:
+    sans-serif: "'Hiragino Sans', 'Helvetica', sans-serif"
+    monospace: "'Menlo', monospace"
+  size:
+    xs: 10px
+    s: 12px
+    m: 14px
+    l: 16px
+    xl: 20px
+    xxl: 24px
+space:
+  inset:
+    1-half-x: 4px
+    1-x: 8px
+    2-x: 16px
+    3-x: 24px
+  inset-squish:
+    1-half-x: 2px 4px
+    1-x: 4px 8px
+    2-x: 8px 16px
+  inline-left:
+    1-half-x: 0 0 0 4px
+    1-x: 0 0 0 8px
+    2-x: 0 0 0 16px
+  stack:
+    1-half-x: 0 0 4px
+    1-x: 0 0 8px
+    2-x: 0 0 16px
+    3-x: 0 0 24px
+    4-x: 0 0 32px
+border:
+  control: "solid 1px #C6CDCC" 
+  radius: 
+    control: 2px

@@ -1,0 +1,5 @@
+{% macro portlet_grid() %}
+  <div class="bc-portlet-grid{{ ' ' + class if class }}">
+    {{ caller() }}
+  </div>
+{% endmacro %}

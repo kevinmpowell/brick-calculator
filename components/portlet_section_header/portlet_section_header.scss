@@ -1,0 +1,28 @@
+.bc-portlet-section-header {
+  align-items: center;
+  display: flex;
+  color: $brickulator-color-brand;
+  font-size: $brickulator-font-size-s;
+  font-family: $brickulator-font-family-monospace;
+  justify-content: space-between;
+  padding: $brickulator-space-inset-squish-1-x;
+  text-transform: uppercase;
+  text-align: center;
+}
+
+.bc-portlet-section-header__text {
+  flex-grow: 0;
+  flex-shrink: 0;
+  padding: $brickulator-space-inset-1-half-x;
+  padding-bottom: 0;
+  padding-top: 0;
+  white-space: nowrap;
+
+}
+
+.bc-portlet-section-header__pre,
+.bc-portlet-section-header__post {
+  border-top: $brickulator-border-control;
+  height: 1px;
+  width: 100px;
+}
