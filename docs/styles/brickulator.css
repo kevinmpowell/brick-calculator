@@ -161,7 +161,6 @@
   margin: 0 0 8px; }
 
 .bc-portlet__title {
-  border-bottom: solid 1px #C6CDCC;
   font-size: 12px;
   margin: 0;
   padding: 2px 4px;
@@ -191,7 +190,6 @@
   text-align: right; }
 
 .bc-portlet__profit {
-  border-top: solid 1px #C6CDCC;
   padding: 4px; }
 
 .bc-portlet__profit-input {
@@ -211,12 +209,17 @@
   font-size: 10px;
   padding: 0; }
 
+.bc-portlet__listings-count,
 .bc-portlet__data-timestamp {
   color: #959999;
   font-size: 10px;
   padding: 2px 4px;
   padding-bottom: 0;
   text-align: center; }
+
+.bc-portlet__line-items {
+  border-bottom: solid 1px #C6CDCC;
+  border-top: solid 1px #C6CDCC; }
 
 .bc-portlet__empty-wrap {
   display: none; }
@@ -240,7 +243,9 @@
             justify-content: center; }
   .bc-portlet--empty .bc-portlet__empty-message {
     display: inline-block;
+    padding: 8px;
     text-align: center; }
+  .bc-portlet--empty .bc-portlet__listings-count,
   .bc-portlet--empty .bc-portlet__line-items,
   .bc-portlet--empty .bc-portlet__profit {
     display: none; }

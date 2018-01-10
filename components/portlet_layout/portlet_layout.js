@@ -1,13 +1,153 @@
+
+// boCSNA: 30.39
+
+// boCSNH: 41.87
+
+// boCSNL: 24.13
+
+// boCSNLC: 35
+
+// boCSNM: 28.71
+
+// boMA: 9.09
+
+// boMH: 54.62
+
+// boML: 6.1
+
+// boMM: 7.82
+
+// boPON: 42.77
+
+// boPOU: 27.23
+
+// boRA: "2018-01-09T04:58:24.784Z"
+
+// k: "70901-1"
+
+// msrp: 19.99
+
+// n: "70901"
+
+// nv: "1"
+
+// pcs: 201
+
+// t: "Mr. Freeze Ice Attack"
+
+// y: 2017
+
 'use strict';
 BC.PortletLayout = function() {
   const emptyPortletClass = "bc-portlet--empty",
     defaultLayout = [
     {
-      header: "Complete Set Values",
+      header: "Complete Set Values (New)",
       portlets: [
         {
-          title: "Brick Owl (Used)",
+          title: "Brick Owl",
           retrievedAtKey: "boRA",
+          listingsCountKey: "boCSNLC",
+          lineItems: [
+            {
+              key: "boCSNM",
+              label: "Median Listing"
+            },
+            {
+              key: "boFees",
+              label: "Seller Fees"
+            },
+            {
+              key: "setCost",
+              label: "Cost"
+            }
+          ]
+        },
+        {
+          title: "Brick Owl",
+          retrievedAtKey: "boRA",
+          listingsCountKey: "boCSNLC",
+          lineItems: [
+            {
+              key: "boCSNA",
+              label: "Avg Listing"
+            },
+            {
+              key: "boFees",
+              label: "Seller Fees"
+            },
+            {
+              key: "setCost",
+              label: "Cost"
+            }
+          ]
+        },
+        {
+          title: "Brick Owl",
+          retrievedAtKey: "boRA",
+          listingsCountKey: "boCSNLC",
+          lineItems: [
+            {
+              key: "boCSNL",
+              label: "Lowest Listing"
+            },
+            {
+              key: "boFees",
+              label: "Seller Fees"
+            },
+            {
+              key: "setCost",
+              label: "Cost"
+            }
+          ]
+        },
+        {
+          title: "Brick Owl",
+          retrievedAtKey: "boRA",
+          listingsCountKey: "boCSNLC",
+          lineItems: [
+            {
+              key: "boCSNH",
+              label: "High Listing"
+            },
+            {
+              key: "boFees",
+              label: "Seller Fees"
+            },
+            {
+              key: "setCost",
+              label: "Cost"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      header: "Complete Set Values (Used)",
+      portlets: [
+        {
+          title: "Brick Owl",
+          retrievedAtKey: "boRA",
+          listingsCountKey: "boCSULC",
+          lineItems: [
+            {
+              key: "boCSUM",
+              label: "Median Listing"
+            },
+            {
+              key: "boFees",
+              label: "Seller Fees"
+            },
+            {
+              key: "setCost",
+              label: "Cost"
+            }
+          ]
+        },
+        {
+          title: "Brick Owl",
+          retrievedAtKey: "boRA",
+          listingsCountKey: "boCSULC",
           lineItems: [
             {
               key: "boCSUA",
@@ -24,12 +164,32 @@ BC.PortletLayout = function() {
           ]
         },
         {
-          title: "Brick Owl (New)",
+          title: "Brick Owl",
           retrievedAtKey: "boRA",
+          listingsCountKey: "boCSULC",
           lineItems: [
             {
-              key: "boCSNA",
-              label: "Avg Listing"
+              key: "boCSUL",
+              label: "Low Listing"
+            },
+            {
+              key: "boFees",
+              label: "Seller Fees"
+            },
+            {
+              key: "setCost",
+              label: "Cost"
+            }
+          ]
+        },
+        {
+          title: "Brick Owl",
+          retrievedAtKey: "boRA",
+          listingsCountKey: "boCSULC",
+          lineItems: [
+            {
+              key: "boCSUH",
+              label: "High Listing"
             },
             {
               key: "boFees",
@@ -116,9 +276,17 @@ BC.PortletLayout = function() {
     let portletNode = portletTemplate.cloneNode(true),
         portletNodeTitle = portletNode.querySelector(".bc-portlet__title"),
         portletRetrievedAt = portletNode.querySelector(".bc-portlet__data-retrieved-at"),
+        portletListingsCount = portletNode.querySelector(".bc-portlet__listings-count"),
+        portletListingsCountAmount = portletListingsCount.querySelector(".bc-portlet__listings-count-amount"),
         portletLineItems = portletNode.querySelector(".bc-portlet__line-items");
     portletNodeTitle.innerHTML = portlet.title;
     portletRetrievedAt.setAttribute("data-retrieved-at-key", portlet.retrievedAtKey);
+    if (portlet.listingsCountKey) {
+      portletListingsCountAmount.setAttribute("data-listings-count-key", portlet.listingsCountKey);
+    } else {
+      // If the portlet doesn't have a listingsCountKey, don't show the portletListingsCountSection
+      portletListingsCount.parentNode.removeChild(portletListingsCount);
+    }
     if (portlet.lineItems) {
       portlet.lineItems.forEach(function(li){
         portletLineItems.append(getPortletLineItem(li));
@@ -148,6 +316,9 @@ BC.PortletLayout = function() {
           profitInput = p.querySelector(".bc-portlet__profit-input"),
           portletRetrievedAt = p.querySelector(".bc-portlet__data-retrieved-at"),
           retrievedAtKey = portletRetrievedAt.getAttribute("data-retrieved-at-key"),
+          portletListingsCountAmount = p.querySelector(".bc-portlet__listings-count-amount");
+console.log(portletListingsCountAmount);
+          const listingsCountKey = portletListingsCountAmount === null ? false : portletListingsCountAmount.getAttribute("data-listings-count-key"),
           liKeys = lineItemInputs.map(function(li){ return li.getAttribute("data-value-key"); }),
           marketplaceValueKey = liKeys.find(function(k){ return data.hasOwnProperty(k); }),
           marketplaceValue = marketplaceValueKey ? data[marketplaceValueKey] : false,
@@ -157,6 +328,10 @@ BC.PortletLayout = function() {
     if (data.hasOwnProperty(retrievedAtKey)) {
       portletRetrievedAt.setAttribute("datetime", data[retrievedAtKey]);
       timeago().render(portletRetrievedAt);
+    }
+
+    if (listingsCountKey && data.hasOwnProperty(listingsCountKey)) {
+      portletListingsCountAmount.innerHTML = data[listingsCountKey];
     }
 
     let profit = Math.abs(setCost) * -1, 

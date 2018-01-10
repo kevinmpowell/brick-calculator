@@ -8,7 +8,7 @@
 }
 
 .bc-portlet__title {
-  border-bottom: $brickulator-border-control;
+  // border-bottom: $brickulator-border-control;
   font-size: $brickulator-font-size-s;
   margin: 0;
   padding: $brickulator-space-inset-squish-1-half-x;
@@ -35,7 +35,6 @@
 }
 
 .bc-portlet__profit {
-  border-top: $brickulator-border-control;
   padding: $brickulator-space-inset-1-half-x;
 }
 
@@ -58,6 +57,7 @@
   padding: 0;
 }
 
+.bc-portlet__listings-count,
 .bc-portlet__data-timestamp {
   color: $brickulator-color-text-on-light-tertiary;
   font-size: $brickulator-font-size-xs;
@@ -66,9 +66,15 @@
   text-align: center;
 }
 
+.bc-portlet__line-items {
+  border-bottom: $brickulator-border-control;
+  border-top: $brickulator-border-control;
+}
+
 .bc-portlet__empty-wrap {
   display: none;
 }
+
 
 .bc-portlet--empty {
   color: $brickulator-color-text-on-light-secondary;
@@ -84,9 +90,11 @@
 
   .bc-portlet__empty-message {
     display: inline-block;
+    padding: $brickulator-space-inset-1-x;
     text-align: center;
   }
 
+  .bc-portlet__listings-count,
   .bc-portlet__line-items,
   .bc-portlet__profit {
     display: none;
