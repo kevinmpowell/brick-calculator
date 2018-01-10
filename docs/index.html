@@ -37,11 +37,11 @@
   </button>
 
     </div>
-        <div id="bc-lookup">
-          <form action="" class="bc-value-lookup-form" id="bc-value-lookup-form" novalidate>
-            <div class="bc-value-lookup-form__actions">
-              <div class="bc-lookup-set-data-status">
-                
+    <div id="bc-lookup">
+      <form action="" class="bc-value-lookup-form" id="bc-value-lookup-form" novalidate>
+        <div class="bc-value-lookup-form__actions">
+          <div class="bc-lookup-set-data-status">
+            
   <div
        
       class="bc-spinner bc-spinner--loading-set-data">
@@ -55,12 +55,12 @@
     
   </div>
 
-                <div class="bc-lookup-set-data-status-message">
-                  <span class="bc-lookup-set-data-message">Set data cached</span> 
-                  <span class="bc-lookup-set-data-timestamp"></span>
-                </div>
-              </div>
-              
+            <div class="bc-lookup-set-data-status-message">
+              <span class="bc-lookup-set-data-message">Set data cached</span> 
+              <span class="bc-lookup-set-data-timestamp"></span>
+            </div>
+          </div>
+          
   
   
 
@@ -71,11 +71,11 @@
     Reset Form
   </button>
 
-            </div>
-            <div class="bc-field-group">
-              <label class="bc-form-label" for="bc-value-lookup-form__set-number-input">Set Number</label>
-              <input autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" name="setNumber" id="bc-value-lookup-form__set-number-input" type="text" pattern="[0-9]*">
-              
+        </div>
+        <div class="bc-field-group">
+          <label class="bc-form-label" for="bc-value-lookup-form__set-number-input">Set Number</label>
+          <input autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" name="setNumber" id="bc-value-lookup-form__set-number-input" type="text" pattern="[0-9]*">
+          
   <ul class="bc-autocomplete">
     <li class="bc-autocomplete__item bc-autocomplete__item--template">
       <a href="" class="bc-autocomplete__item-link">
@@ -87,17 +87,17 @@
     </li>
   </ul>
 
-            </div>
+        </div>
 
-            <label class="bc-form-label" for="bc-value-lookup-form__purchase-price-input">Purchase Price</label>
-            <div class="bc-form-input-wrap">
-              <div class="bc-form-input-prefix">
-                $
-              </div>
-              <input step="0.01" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" type="number" id="bc-value-lookup-form__purchase-price-input" name="purchasePrice">
-            </div>
+        <label class="bc-form-label" for="bc-value-lookup-form__purchase-price-input">Purchase Price</label>
+        <div class="bc-form-input-wrap">
+          <div class="bc-form-input-prefix">
+            $
+          </div>
+          <input step="0.01" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" type="number" id="bc-value-lookup-form__purchase-price-input" name="purchasePrice">
+        </div>
 
-            
+        
   
   
 
@@ -108,10 +108,10 @@
     Brickulate!
   </button>
 
-          </form>
-        </div>
-        <div id="bc-results">
-          
+      </form>
+    </div>
+    <div id="bc-results">
+      
   <div class="bc-set-summary">
     <span class="bc-set-summary__number">75150-1</span>
     <span class="bc-set-summary__year">2016</span>
@@ -132,14 +132,19 @@
     </span>
   </div>
 
-          <div class="bc-portlet-section-wrapper">
-            
-          </div>
-          
+      <div class="bc-portlet-section-wrapper">
+        
+      </div>
+      
   <div class="bc-portlet"  id="bc-portlet-template" >
       <h2 class="bc-portlet__title"></h2>
       <div class="bc-portlet__data-timestamp">
-        Data retrieved <span class="bc-portlet__data-retrieved-at"></span>
+        As of <span class="bc-portlet__data-retrieved-at"></span>
+      </div>
+      <div class="bc-portlet__empty-wrap">
+        <span class="bc-portlet__empty-message">
+          No Data Found
+        </span>
       </div>
       <div class="bc-portlet__line-items">
         <div class="bc-portlet__line-item">
@@ -152,7 +157,7 @@
       </div>
   </div>
 
-          
+      
   <div class="bc-portlet-section-header"  id="bc-portlet-section-header-template" >
     <span class="bc-portlet-section-header__pre"></span>
     <span class="bc-portlet-section-header__text">
@@ -161,15 +166,15 @@
     <span class="bc-portlet-section-header__post"></span>
   </div>
 
-          
+      
   <div class="bc-portlet-grid"  id="bc-portlet-grid-template" >
     
   </div>
 
 
 
-          <div class="bc-end-of-results-actions">
-            
+      <div class="bc-end-of-results-actions">
+        
   
   
 
@@ -180,9 +185,30 @@
     Back To Lookup
   </button>
 
-          </div>
-        </div>
+      </div>
+    </div>
+    
+  <div class="bc-overlay">
+    <div class="bc-overlay__content">
+      
+    <h2 class="bc-overlay__title">Please wait...</h2>
+    <p class="bc-overlay__message">Retrieving the freshest set values just for you!</p>
+    
+  <div
+       
+      class="bc-spinner bc-spinner--loading-set-data">
+    <span class="bc-spinner__icon">
+      
+    </span>
+    
+      <span class="bc-spinner__text">
+        Loading Set Data...
+      </span>
+    
+  </div>
 
+    </div>
+  </div>
 
   
         

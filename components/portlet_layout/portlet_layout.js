@@ -1,55 +1,7 @@
-// boCSNA: 28.52
-
-// boCSNH: 36.25
-
-// boCSNL: 24.65
-
-// boCSNLC: 3
-
-// boCSNM: 24.65
-
-// boCSUA: 21.05
-
-// boCSUH: 21.05
-
-// boCSUL: 21.05
-
-// boCSULC: 1
-
-// boCSUM: 21.05
-
-// boMA: 7.09
-
-// boMH: 30.51
-
-// boML: 3.47
-
-// boMM: 5.91
-
-// boPON: 41.18
-
-// boPOU: 29.64
-
-// boRA: "2018-01-06T22:24:52.312Z"
-
-// k: "70130-1"
-
-// msrp: 24.99
-
-// n: "70130"
-
-// nv: "1"
-
-// pcs: 292
-
-// t: "Sparratus' Spider Stalker"
-
-// y: 2014
-
-
 'use strict';
 BC.PortletLayout = function() {
-  const defaultLayout = [
+  const emptyPortletClass = "bc-portlet--empty",
+    defaultLayout = [
     {
       header: "Complete Set Values",
       portlets: [
@@ -152,7 +104,6 @@ BC.PortletLayout = function() {
   }
 
   function getPortletLineItem(lineItem) {
-    console.log(lineItem);
     let pliNode = portletLineItemTemplate.cloneNode(true),
         input = pliNode.querySelector(".bc-portlet__line-item-input"),
         label = pliNode.querySelector(".bc-portlet__line-item-label");
@@ -166,11 +117,9 @@ BC.PortletLayout = function() {
         portletNodeTitle = portletNode.querySelector(".bc-portlet__title"),
         portletRetrievedAt = portletNode.querySelector(".bc-portlet__data-retrieved-at"),
         portletLineItems = portletNode.querySelector(".bc-portlet__line-items");
-        console.log(portletLineItems);
     portletNodeTitle.innerHTML = portlet.title;
     portletRetrievedAt.setAttribute("data-retrieved-at-key", portlet.retrievedAtKey);
     if (portlet.lineItems) {
-      console.log(portlet.lineItems);
       portlet.lineItems.forEach(function(li){
         portletLineItems.append(getPortletLineItem(li));
       });
@@ -200,7 +149,7 @@ BC.PortletLayout = function() {
           portletRetrievedAt = p.querySelector(".bc-portlet__data-retrieved-at"),
           retrievedAtKey = portletRetrievedAt.getAttribute("data-retrieved-at-key"),
           liKeys = lineItemInputs.map(function(li){ return li.getAttribute("data-value-key"); }),
-          marketplaceValueKey = liKeys.find(function(k){ console.log(k, data); return data.hasOwnProperty(k); }),
+          marketplaceValueKey = liKeys.find(function(k){ return data.hasOwnProperty(k); }),
           marketplaceValue = marketplaceValueKey ? data[marketplaceValueKey] : false,
           marketplaceFeesKey = liKeys.find(function(k){ return k.toLowerCase().includes("fees"); }),
           marketplaceFees = marketplaceFeesKey && marketplaceValue ? getMarketplaceFees(marketplaceValue, marketplaceFeesKey) : false;
@@ -216,6 +165,7 @@ BC.PortletLayout = function() {
         };
 
     if (marketplaceValue) {
+      p.classList.remove(emptyPortletClass);
       portletValues[marketplaceValueKey] = marketplaceValue;
       profit += marketplaceValue;
       
@@ -233,6 +183,7 @@ BC.PortletLayout = function() {
 
       profitInput.value = BC.Utils.formatCurrency(profit);
     } else {
+      p.classList.add(emptyPortletClass);
       console.log("Marketplace Value not found", liKeys);
     }
 

@@ -16,7 +16,6 @@ BC.Utils = function() {
   const getBrickOwlSellerFees = function getBrickOwlSellerFees(finalValue) {
     const brickOwlCommissionPercent = 2.5,
           fee = (brickOwlCommissionPercent / 100) * finalValue;
-    console.log(fee);
     return fee;
   }
 
@@ -70,11 +69,17 @@ BC.SetDatabase = function() {
           BC.Autocomplete.updateDataset(setDB);
           hideLoadingSpinner();
           updateSetDataTimestamp(setDB.dataRetrieved);
+          BC.Overlay.hide();
         } else {
           // We reached our target server, but it returned an error
-          alert("Could not retrieve set data - connection successful, but data failed");
+          // alert("Could not retrieve set data - connection successful, but data failed");
           if (setDB !== null) {
+            // If we've got localStorage data we're in good shape, move along
             updateSetDataTimestamp(setDB.dataRetrieved);
+          } else {
+            // No local storage data and data retrieval failed.
+            BC.Overlay.show("Oh Noes!", "Something went wrong on our end. It's us, not you. We'll get on that right away.");
+            // TODO: Notify someone!
           }
           hideLoadingSpinner();
         }
@@ -82,9 +87,14 @@ BC.SetDatabase = function() {
 
       request.onerror = function() {
         // There was a connection error of some sort
-        alert("Could not retrieve set data - connection error");
+        // alert("Could not retrieve set data - connection error");
         if (setDB !== null) {
+          // If we've got localStorage data we're in good shape, move along
           updateSetDataTimestamp(setDB.dataRetrieved);
+        } else {
+          // No local storage data and data retrieval failed.
+          BC.Overlay.show("Oh Noes!", "Something went wrong on our end. It's us, not you. We'll get on that right away.");
+          // TODO: Notify someone!
         }
         hideLoadingSpinner();
       };
@@ -93,7 +103,9 @@ BC.SetDatabase = function() {
     } catch (e) {
       // console.log(e);
       if (setDB !== null) {
+        // Something went wrong with the data request, but we've got localStorage data, so move along
         updateSetDataTimestamp(setDB.dataRetrieved);
+        BC.Overlay.hide();
       }
       hideLoadingSpinner();
     }
@@ -107,11 +119,14 @@ BC.SetDatabase = function() {
   const initialize = function initialize() {
     setDB = localStorage.getItem("BCSetDB");
     setDB = JSON.parse(setDB);
+    if (setDB === null) {
+      // If there's no data to work with, put up the overlay so the form can't be used
+      BC.Overlay.show("Sit Tight.", "We're getting the freshest set values just for you!")
+    }
     // if (1 === 1) {
-    if (setDB === null || typeof setDB.dataRetrieved === 'undefined' || (Date.now() - setDB.dataRetrieved) > threeMinutes ) { // If it's been more than a minute get fresh data
+    if (setDB === null || typeof setDB.dataRetrieved === 'undefined' || (Date.now() - setDB.dataRetrieved) > oneHour ) { // If it's been more than an hour get fresh data
       retrieveFreshSetData();
     } else {
-      console.log(setDB.dataRetrieved);
       updateSetDataTimestamp(setDB.dataRetrieved);
     }
   }
@@ -214,6 +229,7 @@ function ready(fn) {
 }
 
 ready(function(){
+  BC.Overlay.initialize();
   BC.SetDatabase.initialize();
   BC.Form.initialize();
   BC.Values.initialize();
@@ -347,104 +363,43 @@ ready(function(){
 });
 
 'use strict';
-BC.PortletPartOutBrickOwl = function() {
-  const boPoNewInputId = 'bo-po-new',
-        boPoUsedInputId = 'bo-po-used',
-        boPoNewProfitInputId = 'bo-po-profit-new',
-        boPoUsedProfitInputId = 'bo-po-profit-used',
-        boPoCostNewInputId = 'bo-po-cost-new',
-        boPoCostUsedInputId = 'bo-po-cost-used';
+BC.Overlay = function() {
+  const overlaySelector = '.bc-overlay',
+        overlayTitleSelector = '.bc-overlay__title',
+        overlayMessageSelector = '.bc-overlay__message',
+        overlayVisibleClass = 'bc-overlay--visible';
 
-  let boPoNew,
-      boPoUsed,
-      boPoNewProfit,
-      boPoUsedProfit,
-      boPoCostNew,
-      boPoCostUsed;
+  let overlay,
+      title,
+      message;
 
-  const update = function update(setData, purchasePrice) {
-    boPoNew = document.getElementById(boPoNewInputId);
-    boPoUsed = document.getElementById(boPoUsedInputId);
-    boPoNewProfit = document.getElementById(boPoNewProfitInputId);
-    boPoUsedProfit = document.getElementById(boPoUsedProfitInputId);
-    boPoCostNew = document.getElementById(boPoCostNewInputId);
-    boPoCostUsed = document.getElementById(boPoCostUsedInputId);
+  const initialize = function initialize() {
+    overlay = document.querySelector(overlaySelector);
+    title = document.querySelector(overlayTitleSelector);
+    message = document.querySelector(overlayMessageSelector);
+  }
 
-    if (setData.boPON) {
-      const newValue = setData.boPON,
-            usedValue = setData.boPOU;
+  const show = function show(titleText, messageText) {
+    title.innerHTML = titleText;
+    message.innerHTML = messageText;
+    overlay.classList.add(overlayVisibleClass);
+  }
 
-      if (newValue !== null) {
-        boPoNew.value = BC.Utils.formatCurrency(newValue);
-        boPoCostNew.value = BC.Utils.formatCurrency(purchasePrice);
-        boPoNewProfit.value = BC.Utils.formatCurrency(newValue - purchasePrice);
-      }
-
-      if (usedValue !== null) {
-        boPoUsed.value = BC.Utils.formatCurrency(usedValue);
-        boPoCostUsed.value = BC.Utils.formatCurrency(purchasePrice);
-        boPoUsedProfit.value = BC.Utils.formatCurrency(usedValue - purchasePrice);
-      }
-    }
+  const hide = function hide() {
+    overlay.classList.remove(overlayVisibleClass);
   }
 
   return {
-    update: update
+    initialize: initialize,
+    show: show,
+    hide: hide
   }
 }();
 
-// boCSNA: 28.52
-
-// boCSNH: 36.25
-
-// boCSNL: 24.65
-
-// boCSNLC: 3
-
-// boCSNM: 24.65
-
-// boCSUA: 21.05
-
-// boCSUH: 21.05
-
-// boCSUL: 21.05
-
-// boCSULC: 1
-
-// boCSUM: 21.05
-
-// boMA: 7.09
-
-// boMH: 30.51
-
-// boML: 3.47
-
-// boMM: 5.91
-
-// boPON: 41.18
-
-// boPOU: 29.64
-
-// boRA: "2018-01-06T22:24:52.312Z"
-
-// k: "70130-1"
-
-// msrp: 24.99
-
-// n: "70130"
-
-// nv: "1"
-
-// pcs: 292
-
-// t: "Sparratus' Spider Stalker"
-
-// y: 2014
-
-
 'use strict';
 BC.PortletLayout = function() {
-  const defaultLayout = [
+  const emptyPortletClass = "bc-portlet--empty",
+    defaultLayout = [
     {
       header: "Complete Set Values",
       portlets: [
@@ -547,7 +502,6 @@ BC.PortletLayout = function() {
   }
 
   function getPortletLineItem(lineItem) {
-    console.log(lineItem);
     let pliNode = portletLineItemTemplate.cloneNode(true),
         input = pliNode.querySelector(".bc-portlet__line-item-input"),
         label = pliNode.querySelector(".bc-portlet__line-item-label");
@@ -561,11 +515,9 @@ BC.PortletLayout = function() {
         portletNodeTitle = portletNode.querySelector(".bc-portlet__title"),
         portletRetrievedAt = portletNode.querySelector(".bc-portlet__data-retrieved-at"),
         portletLineItems = portletNode.querySelector(".bc-portlet__line-items");
-        console.log(portletLineItems);
     portletNodeTitle.innerHTML = portlet.title;
     portletRetrievedAt.setAttribute("data-retrieved-at-key", portlet.retrievedAtKey);
     if (portlet.lineItems) {
-      console.log(portlet.lineItems);
       portlet.lineItems.forEach(function(li){
         portletLineItems.append(getPortletLineItem(li));
       });
@@ -595,7 +547,7 @@ BC.PortletLayout = function() {
           portletRetrievedAt = p.querySelector(".bc-portlet__data-retrieved-at"),
           retrievedAtKey = portletRetrievedAt.getAttribute("data-retrieved-at-key"),
           liKeys = lineItemInputs.map(function(li){ return li.getAttribute("data-value-key"); }),
-          marketplaceValueKey = liKeys.find(function(k){ console.log(k, data); return data.hasOwnProperty(k); }),
+          marketplaceValueKey = liKeys.find(function(k){ return data.hasOwnProperty(k); }),
           marketplaceValue = marketplaceValueKey ? data[marketplaceValueKey] : false,
           marketplaceFeesKey = liKeys.find(function(k){ return k.toLowerCase().includes("fees"); }),
           marketplaceFees = marketplaceFeesKey && marketplaceValue ? getMarketplaceFees(marketplaceValue, marketplaceFeesKey) : false;
@@ -611,6 +563,7 @@ BC.PortletLayout = function() {
         };
 
     if (marketplaceValue) {
+      p.classList.remove(emptyPortletClass);
       portletValues[marketplaceValueKey] = marketplaceValue;
       profit += marketplaceValue;
       
@@ -628,6 +581,7 @@ BC.PortletLayout = function() {
 
       profitInput.value = BC.Utils.formatCurrency(profit);
     } else {
+      p.classList.add(emptyPortletClass);
       console.log("Marketplace Value not found", liKeys);
     }
 
@@ -670,6 +624,53 @@ BC.PortletLayout = function() {
     initialize: initialize,
     buildLayout: buildLayout,
     updateAllPortletValues: updateAllPortletValues
+  }
+}();
+
+'use strict';
+BC.PortletPartOutBrickOwl = function() {
+  const boPoNewInputId = 'bo-po-new',
+        boPoUsedInputId = 'bo-po-used',
+        boPoNewProfitInputId = 'bo-po-profit-new',
+        boPoUsedProfitInputId = 'bo-po-profit-used',
+        boPoCostNewInputId = 'bo-po-cost-new',
+        boPoCostUsedInputId = 'bo-po-cost-used';
+
+  let boPoNew,
+      boPoUsed,
+      boPoNewProfit,
+      boPoUsedProfit,
+      boPoCostNew,
+      boPoCostUsed;
+
+  const update = function update(setData, purchasePrice) {
+    boPoNew = document.getElementById(boPoNewInputId);
+    boPoUsed = document.getElementById(boPoUsedInputId);
+    boPoNewProfit = document.getElementById(boPoNewProfitInputId);
+    boPoUsedProfit = document.getElementById(boPoUsedProfitInputId);
+    boPoCostNew = document.getElementById(boPoCostNewInputId);
+    boPoCostUsed = document.getElementById(boPoCostUsedInputId);
+
+    if (setData.boPON) {
+      const newValue = setData.boPON,
+            usedValue = setData.boPOU;
+
+      if (newValue !== null) {
+        boPoNew.value = BC.Utils.formatCurrency(newValue);
+        boPoCostNew.value = BC.Utils.formatCurrency(purchasePrice);
+        boPoNewProfit.value = BC.Utils.formatCurrency(newValue - purchasePrice);
+      }
+
+      if (usedValue !== null) {
+        boPoUsed.value = BC.Utils.formatCurrency(usedValue);
+        boPoCostUsed.value = BC.Utils.formatCurrency(purchasePrice);
+        boPoUsedProfit.value = BC.Utils.formatCurrency(usedValue - purchasePrice);
+      }
+    }
+  }
+
+  return {
+    update: update
   }
 }();
 

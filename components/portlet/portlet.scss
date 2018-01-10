@@ -1,6 +1,8 @@
 .bc-portlet {
   background: $brickulator-color-background-portlet;
   border: $brickulator-border-control;
+  display: flex;
+  flex-direction: column;
   font-size: $brickulator-font-size-s;
   margin: $brickulator-space-stack-1-x;
 }
@@ -9,6 +11,7 @@
   border-bottom: $brickulator-border-control;
   font-size: $brickulator-font-size-s;
   margin: 0;
+  padding: $brickulator-space-inset-squish-1-half-x;
   text-align: center;
 }
 
@@ -16,7 +19,7 @@
   color: $brickulator-color-text-on-light-secondary;
   display: flex;
   justify-content: space-between;
-  padding: $brickulator-space-inset-1-half-x;
+  padding: $brickulator-space-inset-squish-1-half-x;
 }
 
 .bc-portlet__line-item-input {
@@ -61,6 +64,33 @@
   padding: $brickulator-space-inset-squish-1-half-x;
   padding-bottom: 0;
   text-align: center;
+}
+
+.bc-portlet__empty-wrap {
+  display: none;
+}
+
+.bc-portlet--empty {
+  color: $brickulator-color-text-on-light-secondary;
+  opacity: 0.7;
+  
+  .bc-portlet__empty-wrap {
+    align-items: center;
+    display: flex;
+    flex-grow: 1;
+    font-size: $brickulator-font-size-xl;
+    justify-content: center;
+  }
+
+  .bc-portlet__empty-message {
+    display: inline-block;
+    text-align: center;
+  }
+
+  .bc-portlet__line-items,
+  .bc-portlet__profit {
+    display: none;
+  }
 }
 
 

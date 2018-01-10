@@ -1,0 +1,13 @@
+{% macro overlay(
+          class,
+          title="Please wait...",
+          message="Retrieving the freshest set values just for you!") %}
+  <div class="bc-overlay">
+    <div class="bc-overlay__content">
+      
+    <h2 class="bc-overlay__title">{{ title }}</h2>
+    <p class="bc-overlay__message">{{ message }}</p>
+    {{ spinner(text="Loading Set Data...", class="bc-spinner--loading-set-data") }}
+    </div>
+  </div>
+{% endmacro %}

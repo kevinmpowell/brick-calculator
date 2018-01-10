@@ -1,0 +1,17 @@
+.bc-overlay {
+  align-items: center;
+  background: rgba($brickulator-color-background-dark, 0.9);
+  color: $brickulator-color-text-on-dark-primary;
+  display: none;
+  height: 100vh;
+  justify-content: center;
+  left: 0;
+  padding: $brickulator-space-inset-3-x;
+  position: absolute;
+  top: 0;
+  width: 100vw;
+}
+
+.bc-overlay--visible {
+  display: flex;
+}

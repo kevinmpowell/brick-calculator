@@ -26,6 +26,8 @@ font:
     l: 16px
     xl: 20px
     xxl: 24px
+line-height:
+  body: 1.2
 space:
   inset:
     1-half-x: 4px

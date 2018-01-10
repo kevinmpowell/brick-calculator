@@ -7,15 +7,15 @@
 @import '../components/portlet_grid/portlet_grid';
 @import '../components/portlet/portlet';
 @import '../components/spinner/spinner';
+@import '../components/overlay/overlay';
 
 
-$color-lego-bright-orange: #FE8A18;
-$color-lego-dark-orange: #A95500;
 $form-field-height: 40px;
 
 body {
   background: $brickulator-color-background-light;
   font-family: $brickulator-font-family-sans-serif;
+  line-height: $brickulator-line-height-body;
   margin: 0;
   padding: 0;
 }

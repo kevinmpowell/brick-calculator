@@ -15,7 +15,6 @@ BC.Utils = function() {
   const getBrickOwlSellerFees = function getBrickOwlSellerFees(finalValue) {
     const brickOwlCommissionPercent = 2.5,
           fee = (brickOwlCommissionPercent / 100) * finalValue;
-    console.log(fee);
     return fee;
   }
 
@@ -69,11 +68,17 @@ BC.SetDatabase = function() {
           BC.Autocomplete.updateDataset(setDB);
           hideLoadingSpinner();
           updateSetDataTimestamp(setDB.dataRetrieved);
+          BC.Overlay.hide();
         } else {
           // We reached our target server, but it returned an error
-          alert("Could not retrieve set data - connection successful, but data failed");
+          // alert("Could not retrieve set data - connection successful, but data failed");
           if (setDB !== null) {
+            // If we've got localStorage data we're in good shape, move along
             updateSetDataTimestamp(setDB.dataRetrieved);
+          } else {
+            // No local storage data and data retrieval failed.
+            BC.Overlay.show("Oh Noes!", "Something went wrong on our end. It's us, not you. We'll get on that right away.");
+            // TODO: Notify someone!
           }
           hideLoadingSpinner();
         }
@@ -81,9 +86,14 @@ BC.SetDatabase = function() {
 
       request.onerror = function() {
         // There was a connection error of some sort
-        alert("Could not retrieve set data - connection error");
+        // alert("Could not retrieve set data - connection error");
         if (setDB !== null) {
+          // If we've got localStorage data we're in good shape, move along
           updateSetDataTimestamp(setDB.dataRetrieved);
+        } else {
+          // No local storage data and data retrieval failed.
+          BC.Overlay.show("Oh Noes!", "Something went wrong on our end. It's us, not you. We'll get on that right away.");
+          // TODO: Notify someone!
         }
         hideLoadingSpinner();
       };
@@ -92,7 +102,9 @@ BC.SetDatabase = function() {
     } catch (e) {
       // console.log(e);
       if (setDB !== null) {
+        // Something went wrong with the data request, but we've got localStorage data, so move along
         updateSetDataTimestamp(setDB.dataRetrieved);
+        BC.Overlay.hide();
       }
       hideLoadingSpinner();
     }
@@ -106,11 +118,14 @@ BC.SetDatabase = function() {
   const initialize = function initialize() {
     setDB = localStorage.getItem("BCSetDB");
     setDB = JSON.parse(setDB);
+    if (setDB === null) {
+      // If there's no data to work with, put up the overlay so the form can't be used
+      BC.Overlay.show("Sit Tight.", "We're getting the freshest set values just for you!")
+    }
     // if (1 === 1) {
-    if (setDB === null || typeof setDB.dataRetrieved === 'undefined' || (Date.now() - setDB.dataRetrieved) > threeMinutes ) { // If it's been more than a minute get fresh data
+    if (setDB === null || typeof setDB.dataRetrieved === 'undefined' || (Date.now() - setDB.dataRetrieved) > oneHour ) { // If it's been more than an hour get fresh data
       retrieveFreshSetData();
     } else {
-      console.log(setDB.dataRetrieved);
       updateSetDataTimestamp(setDB.dataRetrieved);
     }
   }
@@ -213,6 +228,7 @@ function ready(fn) {
 }
 
 ready(function(){
+  BC.Overlay.initialize();
   BC.SetDatabase.initialize();
   BC.Form.initialize();
   BC.Values.initialize();
