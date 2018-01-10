@@ -107,7 +107,7 @@ BC.SetDatabase = function() {
     setDB = localStorage.getItem("BCSetDB");
     setDB = JSON.parse(setDB);
     // if (1 === 1) {
-    if (setDB === null || (Date.now() - setDB.dataRetrieved) > threeMinutes ) { // If it's been more than a minute get fresh data
+    if (setDB === null || setDB.dataRetrieved === null || (Date.now() - setDB.dataRetrieved) > threeMinutes ) { // If it's been more than a minute get fresh data
       retrieveFreshSetData();
     } else {
       console.log(setDB.dataRetrieved);

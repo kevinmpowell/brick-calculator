@@ -108,7 +108,7 @@ BC.SetDatabase = function() {
     setDB = localStorage.getItem("BCSetDB");
     setDB = JSON.parse(setDB);
     // if (1 === 1) {
-    if (setDB === null || (Date.now() - setDB.dataRetrieved) > threeMinutes ) { // If it's been more than a minute get fresh data
+    if (setDB === null || setDB.dataRetrieved === null || (Date.now() - setDB.dataRetrieved) > threeMinutes ) { // If it's been more than a minute get fresh data
       retrieveFreshSetData();
     } else {
       console.log(setDB.dataRetrieved);
@@ -626,34 +626,6 @@ BC.PortletLayout = function() {
   }
 }();
 
-// 'use strict';
-// BC.PortletPricePerPiece = function() {
-//   const msrpPPPInputId = 'ppp-msrp',
-//         userPPPInputId = 'ppp-your-price';
-
-//   let msrpPPP,
-//       userPPP;
-
-//   const update = function update(setData, purchasePrice) {
-//     msrpPPP = document.getElementById(msrpPPPInputId);
-//     userPPP = document.getElementById(userPPPInputId);
-//     const partCount = setData.pcs;
-//     console.log(setData);
-
-//     if (partCount !== null) {
-//       if (setData.msrp !== null) {
-//         msrpPPP.value = BC.Utils.formatCurrency(setData.msrp / partCount) + " per piece";
-//       }
-
-//       userPPP.value = BC.Utils.formatCurrency(purchasePrice / partCount) + " per piece";
-//     }
-//   }
-
-//   return {
-//     update: update
-//   }
-// }();
-
 'use strict';
 BC.PortletPartOutBrickOwl = function() {
   const boPoNewInputId = 'bo-po-new',
@@ -700,6 +672,34 @@ BC.PortletPartOutBrickOwl = function() {
     update: update
   }
 }();
+
+// 'use strict';
+// BC.PortletPricePerPiece = function() {
+//   const msrpPPPInputId = 'ppp-msrp',
+//         userPPPInputId = 'ppp-your-price';
+
+//   let msrpPPP,
+//       userPPP;
+
+//   const update = function update(setData, purchasePrice) {
+//     msrpPPP = document.getElementById(msrpPPPInputId);
+//     userPPP = document.getElementById(userPPPInputId);
+//     const partCount = setData.pcs;
+//     console.log(setData);
+
+//     if (partCount !== null) {
+//       if (setData.msrp !== null) {
+//         msrpPPP.value = BC.Utils.formatCurrency(setData.msrp / partCount) + " per piece";
+//       }
+
+//       userPPP.value = BC.Utils.formatCurrency(purchasePrice / partCount) + " per piece";
+//     }
+//   }
+
+//   return {
+//     update: update
+//   }
+// }();
 
 'use strict';
 BC.SetSummary = function() {
