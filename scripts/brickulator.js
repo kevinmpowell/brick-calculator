@@ -4,7 +4,8 @@ let setDB;
 
 const ebaySellingFeePercentage = .13, // TODO: Get this from a lookup
       oneMinute = 60000, // in milliseconds
-      oneHour = 3600000; // in milliseconds
+      threeMinutes = oneMinute * 3, // in milliseconds
+      oneHour = oneMinute * 60; // in milliseconds
 
 BC.Utils = function() {
   const formatCurrency = function formatCurrency(number) {
@@ -106,7 +107,7 @@ BC.SetDatabase = function() {
     setDB = localStorage.getItem("BCSetDB");
     setDB = JSON.parse(setDB);
     // if (1 === 1) {
-    if (setDB === null || (Date.now() - setDB.dataRetrieved) > oneHour ) { // If it's been more than a minute get fresh data
+    if (setDB === null || (Date.now() - setDB.dataRetrieved) > threeMinutes ) { // If it's been more than a minute get fresh data
       retrieveFreshSetData();
     } else {
       console.log(setDB.dataRetrieved);
