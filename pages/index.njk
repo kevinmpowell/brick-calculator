@@ -49,12 +49,12 @@
           {{ bc.portlet_section_header(id="bc-portlet-section-header-template") }}
           {{ bc.portlet_grid(id="bc-portlet-grid-template") }}
 
-          {{ bc.portlet_section_header(title="Minifig Values") }}
+{#           {{ bc.portlet_section_header(title="Minifig Values") }}
           {% call bc.portlet_grid() %}        
             {{ bc.portlet_part_out_brick_owl(title="Brick Owl", avg="55.00", fees="5.67", cost="36.00", profit="11.33") }}
             {{ bc.portlet_part_out_brick_owl(title="Bricklink", avg="48.00", fees="3.27", cost="36.00", profit="10.50") }}
             {{ bc.portlet_part_out_brick_owl(title="eBay", avg="72.00", fees="8.00", cost="36.00", profit="9.45") }}
-          {% endcall %}
+          {% endcall %} #}
           <div class="bc-end-of-results-actions">
             {{ bc.button(text="Back To Lookup", class="bc-show-lookup-form") }}
           </div>

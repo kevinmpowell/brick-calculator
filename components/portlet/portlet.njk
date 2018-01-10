@@ -8,13 +8,14 @@
             profit) %}
   <div class="bc-portlet{{ ' ' + class if class }}" {% if id %} id="{{ id }}" {% endif %}>
       <h2 class="bc-portlet__title">{{ title }}</h2>
-      <div class="bc-portlet__line-item">
-        <label class="bc-portlet__line-item-label">Part Out New</label>
-        <input class="bc-portlet__line-item-input" value="{{ avg }}" type="text" id="bo-po-new" readonly="true">
+      <div class="bc-portlet__line-items">
+        <div class="bc-portlet__line-item">
+          <label class="bc-portlet__line-item-label">Label</label>
+          <input class="bc-portlet__line-item-input" value="{{ avg }}" type="text"readonly="true">
+        </div>
       </div>
-      <div class="bc-portlet__line-item bc-portlet__line-item--profit">
-        <label for="bo-po-profit-new" class="bc-portlet__line-item-label">Profit</label>
-        <input class="bc-portlet__line-item-input" value="{{ profit }}" type="text" id="bo-po-profit-new" readonly="true">
+      <div class="bc-portlet__profit">
+        <input class="bc-portlet__profit-input" value="{{ profit }}" type="text" readonly="true">
       </div>
   </div>
 {% endmacro %}

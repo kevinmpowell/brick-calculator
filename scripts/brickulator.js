@@ -46,33 +46,47 @@ BC.SetDatabase = function() {
     const apiDomain = apiMapping[currentDomain];
 
     showLoadingSpinner();
-    request.open('GET', apiDomain + '/lego_sets', true);
-    request.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+    try {
+      request.open('GET', apiDomain + '/lego_sets', true);
+      request.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
 
-    request.onload = function() {
-      if (request.status >= 200 && request.status < 400) {
-        // Success!
-        var data = JSON.parse(request.responseText);
-        data.dataRetrieved = Date.now();
-        saveSetDBToLocalStorage(JSON.stringify(data));
-        setDB = data;
-        BC.Autocomplete.updateDataset(setDB);
+      request.onload = function() {
+        if (request.status >= 200 && request.status < 400) {
+          // Success!
+          var data = JSON.parse(request.responseText);
+          data.dataRetrieved = Date.now();
+          saveSetDBToLocalStorage(JSON.stringify(data));
+          setDB = data;
+          BC.Autocomplete.updateDataset(setDB);
+          hideLoadingSpinner();
+          updateSetDataTimestamp(setDB.dataRetrieved);
+        } else {
+          // We reached our target server, but it returned an error
+          alert("Could not retrieve set data - connection successful, but data failed");
+          if (setDB !== null) {
+            updateSetDataTimestamp(setDB.dataRetrieved);
+          }
+          hideLoadingSpinner();
+        }
+      };
+
+      request.onerror = function() {
+        // There was a connection error of some sort
+        alert("Could not retrieve set data - connection error");
+        if (setDB !== null) {
+          updateSetDataTimestamp(setDB.dataRetrieved);
+        }
         hideLoadingSpinner();
+      };
+
+      request.send();
+    } catch (e) {
+      // console.log(e);
+      if (setDB !== null) {
         updateSetDataTimestamp(setDB.dataRetrieved);
-      } else {
-        // We reached our target server, but it returned an error
-        alert("Could not retrieve set data - connection successful, but data failed");
-        hideLoadingSpinner();
       }
-    };
-
-    request.onerror = function() {
-      // There was a connection error of some sort
-      alert("Could not retrieve set data - connection error");
       hideLoadingSpinner();
-    };
-
-    request.send();
+    }
   }
 
   function updateSetDataTimestamp(timestamp) {
@@ -113,6 +127,7 @@ BC.Values = function() {
 
     if (setData) {
       BC.SetSummary.update(setData);
+      BC.PortletLayout.updateAllPortletValues(setData, purchasePrice);
 
       showValues();
     } else {
