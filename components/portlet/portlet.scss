@@ -13,29 +13,38 @@
 }
 
 .bc-portlet__line-item {
+  color: $brickulator-color-text-on-light-secondary;
   display: flex;
   justify-content: space-between;
   padding: $brickulator-space-inset-1-half-x;
 }
 
-.bc-portlet__line-item--profit {
-  border-top: $brickulator-border-control;
-}
-
 .bc-portlet__line-item-input {
   background: none;
   border: 0;
+  color: $brickulator-color-text-on-light-secondary;
   height: auto;
   flex: 1 1 20%;
   font-size: $brickulator-font-size-xs;
   margin: 0;
   padding: 0;
   text-align: right;
+}
 
-  .bc-portlet__line-item--profit & {
-    font-size: $brickulator-font-size-l;
-    text-align: center;
-  }
+.bc-portlet__profit {
+  border-top: $brickulator-border-control;
+  padding: $brickulator-space-inset-1-half-x;
+}
+
+.bc-portlet__profit-input {
+  background: none;
+  border: 0;
+  font-size: $brickulator-font-size-l;
+  margin: 0;
+  padding: 0;
+  line-height: 1;
+  height: auto;
+  text-align: center;
 }
 
 .bc-portlet__line-item-label {
@@ -44,10 +53,14 @@
   height: auto;
   font-size: $brickulator-font-size-xs;
   padding: 0;
+}
 
-  .bc-portlet__line-item--profit & {
-    display: none;
-  }
+.bc-portlet__data-timestamp {
+  color: $brickulator-color-text-on-light-tertiary;
+  font-size: $brickulator-font-size-xs;
+  padding: $brickulator-space-inset-squish-1-half-x;
+  padding-bottom: 0;
+  text-align: center;
 }
 
 

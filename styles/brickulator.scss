@@ -68,6 +68,10 @@ input {
   padding: $brickulator-space-inset-1-x;
 }
 
+.bc-show-lookup-form {
+  visibility: hidden;
+}
+
 .bc--show-values {
   #bc-results {
     display: block;
@@ -75,6 +79,10 @@ input {
 
   #bc-lookup {
     display: none;
+  }
+
+  .bc-show-lookup-form {
+    visibility: visible;
   }
 }
 

@@ -11,8 +11,16 @@ BC.Utils = function() {
     return number.toLocaleString('en-US', { style: 'currency', currency: 'USD' });
   }
 
+  const getBrickOwlSellerFees = function getBrickOwlSellerFees(finalValue) {
+    const brickOwlCommissionPercent = 2.5,
+          fee = (brickOwlCommissionPercent / 100) * finalValue;
+    console.log(fee);
+    return fee;
+  }
+
   return {
-    formatCurrency: formatCurrency
+    formatCurrency: formatCurrency,
+    getBrickOwlSellerFees: getBrickOwlSellerFees
   }
 }();
 

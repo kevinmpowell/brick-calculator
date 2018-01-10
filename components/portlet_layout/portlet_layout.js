@@ -55,6 +55,7 @@ BC.PortletLayout = function() {
       portlets: [
         {
           title: "Brick Owl (Used)",
+          retrievedAtKey: "boRA",
           lineItems: [
             {
               key: "boCSUA",
@@ -72,6 +73,7 @@ BC.PortletLayout = function() {
         },
         {
           title: "Brick Owl (New)",
+          retrievedAtKey: "boRA",
           lineItems: [
             {
               key: "boCSNA",
@@ -94,6 +96,7 @@ BC.PortletLayout = function() {
       portlets: [
       {
         title: "Brick Owl (Used)",
+        retrievedAtKey: "boRA",
         lineItems: [
           {
             key: "boPOU",
@@ -111,6 +114,7 @@ BC.PortletLayout = function() {
       },
       {
         title: "Brick Owl (New)",
+        retrievedAtKey: "boRA",
         lineItems: [
           {
             key: "boPON",
@@ -160,9 +164,11 @@ BC.PortletLayout = function() {
   function getPortlet(portlet) {
     let portletNode = portletTemplate.cloneNode(true),
         portletNodeTitle = portletNode.querySelector(".bc-portlet__title"),
+        portletRetrievedAt = portletNode.querySelector(".bc-portlet__data-retrieved-at"),
         portletLineItems = portletNode.querySelector(".bc-portlet__line-items");
         console.log(portletLineItems);
     portletNodeTitle.innerHTML = portlet.title;
+    portletRetrievedAt.setAttribute("data-retrieved-at-key", portlet.retrievedAtKey);
     if (portlet.lineItems) {
       console.log(portlet.lineItems);
       portlet.lineItems.forEach(function(li){
@@ -183,20 +189,26 @@ BC.PortletLayout = function() {
   function getMarketplaceFees(salePrice, feesKey) {
     switch(feesKey) {
       case 'boFees':
-        return 2;
+        return BC.Utils.getBrickOwlSellerFees(salePrice);
         break;
     }
   }
 
   function updatePortletValues(p, data, setCost) {
-    console.log(p, data, setCost);
     const lineItemInputs = Array.from(p.querySelectorAll(".bc-portlet__line-item-input")),
           profitInput = p.querySelector(".bc-portlet__profit-input"),
+          portletRetrievedAt = p.querySelector(".bc-portlet__data-retrieved-at"),
+          retrievedAtKey = portletRetrievedAt.getAttribute("data-retrieved-at-key"),
           liKeys = lineItemInputs.map(function(li){ return li.getAttribute("data-value-key"); }),
           marketplaceValueKey = liKeys.find(function(k){ console.log(k, data); return data.hasOwnProperty(k); }),
           marketplaceValue = marketplaceValueKey ? data[marketplaceValueKey] : false,
           marketplaceFeesKey = liKeys.find(function(k){ return k.toLowerCase().includes("fees"); }),
           marketplaceFees = marketplaceFeesKey && marketplaceValue ? getMarketplaceFees(marketplaceValue, marketplaceFeesKey) : false;
+
+    if (data.hasOwnProperty(retrievedAtKey)) {
+      portletRetrievedAt.setAttribute("datetime", data[retrievedAtKey]);
+      timeago().render(portletRetrievedAt);
+    }
 
     let profit = Math.abs(setCost) * -1, 
         portletValues = {
@@ -216,7 +228,6 @@ BC.PortletLayout = function() {
 
       lineItemInputs.forEach(function(i){
         const key = i.getAttribute("data-value-key");
-        console.log(portletValues[key], BC.Utils.formatCurrency(portletValues[key]));
         i.value = BC.Utils.formatCurrency(portletValues[key]);
       });
 
