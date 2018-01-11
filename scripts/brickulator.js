@@ -5,7 +5,12 @@ let setDB;
 const ebaySellingFeePercentage = .13, // TODO: Get this from a lookup
       oneMinute = 60000, // in milliseconds
       threeMinutes = oneMinute * 3, // in milliseconds
-      oneHour = oneMinute * 60; // in milliseconds
+      oneHour = oneMinute * 60,
+      currentDomain = window.location.hostname,
+      apiMapping = {
+        'localhost': 'http://localhost:5000',
+        'kevinmpowell.github.io': 'https://brickulator-api.herokuapp.com'
+      }; // in milliseconds
 
 BC.Utils = function() {
   const formatCurrency = function formatCurrency(number) {
@@ -28,12 +33,7 @@ BC.SetDatabase = function() {
   const loadingSpinner = document.querySelector(".bc-spinner--loading-set-data"),
         loadingSpinnerVisibleClass = "bc-spinner--visible",
         setDataCachedMessage = document.querySelector(".bc-lookup-set-data-status-message"),
-        setDataCachedMessageHiddenClass = "bc-lookup-set-data-status-message--hidden",
-        currentDomain = window.location.hostname,
-        apiMapping = {
-          'localhost': 'http://localhost:5000',
-          'kevinmpowell.github.io': 'https://brickulator-api.herokuapp.com'
-        };
+        setDataCachedMessageHiddenClass = "bc-lookup-set-data-status-message--hidden";
   function saveSetDBToLocalStorage(rawJSON) {
     localStorage.clear();
     localStorage.setItem("BCSetDB", rawJSON);
@@ -235,4 +235,5 @@ ready(function(){
   BC.SetSummary.initialize();
   BC.PortletLayout.initialize();
   BC.PortletLayout.buildLayout();
+  BC.SignUpForm.initialize();
 });

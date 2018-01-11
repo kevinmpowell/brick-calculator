@@ -191,6 +191,35 @@
       </div>
     </div>
     
+  <div class="bc-site-menu">
+    
+  <form action="" method="POST" id="bc-sign-up-form">
+    <div class="bc-field-group">
+      <label class="bc-form-label" for="bc-sign-up-form-email">Email</label>
+      <input autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" name="bc-sign-up-form-email" id="bc-sign-up-form-email" type="email">
+    </div>
+
+    <div class="bc-field-group">
+      <label class="bc-form-label" for="bc-sign-up-form-password">Create Password</label>
+      <input name="bc-sign-up-form-password" id="bc-sign-up-form-password" type="password">
+    </div>
+
+    
+  
+  
+
+  <button
+    
+     type="submit" 
+    class="bc-button bc-button--primary bc-sign-up-form__submit-button">
+    Sign Up
+  </button>
+
+  </form>
+
+  </div>
+
+    
   <div class="bc-overlay">
     <div class="bc-overlay__content">
       
@@ -218,15 +247,5 @@
     <script type="text/javascript" src="scripts/dependencies/timeago.min.js"></script>
     <script type="text/javascript" src="scripts/brickulator.js"></script>
   
-        <script type="text/javascript">
-            window.onload = function() {
-                setTimeout(function() {
-                    var node = document.createElement('iframe');
-                    node.setAttribute('style', 'display: none;');
-                    node.setAttribute('src', 'manifestLoader.html');
-                    document.body.appendChild(node);
-                }, 250);
-            };
-        </script>
     </body>
 </html>
