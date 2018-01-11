@@ -10,6 +10,13 @@
           "node_modules/timeago.js/dist/timeago.min.js"
         ],
         "destination": "docs/scripts/dependencies"
+      },
+      {
+        "name": "application-cache",
+        "sources": [
+          "brickulator.appcache"
+        ],
+        "destination": "docs"
       }
     ]
 }
