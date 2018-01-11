@@ -13,15 +13,5 @@
     <body>
         {% block body %}{% endblock body %}
         {% block closing_body_assets %}{% endblock closing_body_assets %}
-        <script type="text/javascript">
-            window.onload = function() {
-                setTimeout(function() {
-                    var node = document.createElement('iframe');
-                    node.setAttribute('style', 'display: none;');
-                    node.setAttribute('src', 'manifestLoader.html');
-                    document.body.appendChild(node);
-                }, 250);
-            };
-        </script>
     </body>
 </html>
