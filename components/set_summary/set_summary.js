@@ -21,7 +21,6 @@ BC.SetSummary = function() {
   }
 
   const update = function update(setData) {
-    console.log(setData, number, year, title, setData.t);
     const setNumber = typeof setData.nv === 'undefined' ? setData.n : setData.n + '-' + setData.nv;
     number.innerHTML = setNumber;
     year.innerHTML = setData.y;

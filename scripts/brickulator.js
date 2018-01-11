@@ -236,4 +236,5 @@ ready(function(){
   BC.PortletLayout.initialize();
   BC.PortletLayout.buildLayout();
   BC.SignUpForm.initialize();
+  BC.SiteMenu.initialize();
 });

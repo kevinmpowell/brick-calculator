@@ -237,6 +237,7 @@ ready(function(){
   BC.PortletLayout.initialize();
   BC.PortletLayout.buildLayout();
   BC.SignUpForm.initialize();
+  BC.SiteMenu.initialize();
 });
 
 'use strict';
@@ -911,7 +912,6 @@ BC.SetSummary = function() {
   }
 
   const update = function update(setData) {
-    console.log(setData, number, year, title, setData.t);
     const setNumber = typeof setData.nv === 'undefined' ? setData.n : setData.n + '-' + setData.nv;
     number.innerHTML = setNumber;
     year.innerHTML = setData.y;
@@ -1021,7 +1021,7 @@ BC.SignUpForm = function() {
 }();
 
 'use strict';
-BC.SetSummary = function() {
+BC.SiteMenu = function() {
   const showMenuSelector = '.bc-site-menu-show-trigger',
         hideMenuSelector = '.bc-site-menu-hide-trigger',
         menuSelector = '.bc-site-menu',

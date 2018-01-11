@@ -1,5 +1,5 @@
 'use strict';
-BC.SetSummary = function() {
+BC.SiteMenu = function() {
   const showMenuSelector = '.bc-site-menu-show-trigger',
         hideMenuSelector = '.bc-site-menu-hide-trigger',
         menuSelector = '.bc-site-menu',
