@@ -14,6 +14,7 @@ $form-field-height: 40px;
 
 body {
   background: $brickulator-color-background-light;
+  background: $brickulator-color-background-light;
   font-family: $brickulator-font-family-sans-serif;
   line-height: $brickulator-line-height-body;
   margin: 0;
@@ -37,6 +38,7 @@ body {
   color: $brickulator-color-brand;
   font-family: $brickulator-font-family-monospace;
   font-size: $brickulator-font-size-m;
+  letter-spacing: 0.05em;
   margin: 0;
   text-align: center;
 }

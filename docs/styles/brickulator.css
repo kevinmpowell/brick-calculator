@@ -337,6 +337,7 @@
 
 body {
   background: #EEF5F4;
+  background: #EEF5F4;
   font-family: "Hiragino Sans", "Helvetica", sans-serif;
   line-height: 1.2;
   margin: 0;
@@ -364,6 +365,7 @@ body {
   color: #FE8A18;
   font-family: "Menlo", monospace;
   font-size: 14px;
+  letter-spacing: 0.05em;
   margin: 0;
   text-align: center; }
 
