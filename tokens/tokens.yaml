@@ -52,3 +52,10 @@ border:
   control: "solid 1px #C6CDCC" 
   radius: 
     control: 2px
+z-index:
+  behind: -1
+  ground-floor: 0
+  molehill: 1
+  mountain: 100
+  overlay: 500
+  top-of-the-world: 999

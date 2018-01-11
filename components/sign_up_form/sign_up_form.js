@@ -22,12 +22,20 @@ BC.SignUpForm = function() {
     submitButton.removeAttribute('disabled');
   }
 
+  function resetForm() {
+    form.reset();
+  }
+
+  function saveAuthToken(authToken) {
+    localStorage.setItem('bcUserAuthToken', authToken)
+  }
+
   function handleFormSignup(e) {
     e.preventDefault();
     disableForm();
     var request = new XMLHttpRequest();
     const apiDomain = apiMapping[currentDomain],
-          params = "email=" + emailField.value + "&password=" + passwordField.value;
+          params = "email=" + emailField.value + "&password=" + passwordField.value + "&password_confirmation=" + passwordField.value;
     request.open('POST', apiDomain + '/signup', true);
     request.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
     //Send the proper header information along with the request for the POST to work
@@ -37,13 +45,17 @@ BC.SignUpForm = function() {
       if (request.status >= 200 && request.status < 400) {
         // Success!
         var data = JSON.parse(request.responseText);
-        console.log(data)
+        saveAuthToken(data.auth_token);
+        BC.Overlay.show("Welcome!", "User account created successfully.", true);
         enableForm();
+        resetForm();
       } else if (request.status === 422) {
 
         var data = JSON.parse(request.responseText);
-        if (data.message && data.message.includes('already exists')) {
+        if (data.message && data.message.toLowerCase().includes('already exists')) {
           BC.Overlay.show("Sorry! Can't create that account.", data.message, true);
+        } else if (data.message && data.message.toLowerCase().includes("password can't be blank")) {
+          BC.Overlay.show("Forget something?", "Please enter a password", true);
         }
         // We reached our target server, but it returned an error
         enableForm();

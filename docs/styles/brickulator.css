@@ -56,6 +56,12 @@
   padding: 4px;
   width: auto; }
 
+.bc-form-label {
+  color: #1E1F1F; }
+
+.bc-form-label--on-dark {
+  color: #FFFFFF; }
+
 .bc-set-summary {
   display: -webkit-box;
   display: -ms-flexbox;
@@ -250,6 +256,40 @@
   .bc-portlet--empty .bc-portlet__profit {
     display: none; }
 
+.bc-site-menu {
+  background: #535555;
+  height: 100vh;
+  left: 0;
+  position: absolute;
+  top: 0;
+  max-width: 320px;
+  -webkit-transform: translateX(100vw);
+          transform: translateX(100vw);
+  -webkit-transition: -webkit-transform .4s ease-out;
+  transition: -webkit-transform .4s ease-out;
+  transition: transform .4s ease-out;
+  transition: transform .4s ease-out, -webkit-transform .4s ease-out;
+  will-change: transform;
+  width: 70vw;
+  z-index: 500; }
+
+.bc-site-menu--visible {
+  -webkit-transform: translateX(30vw);
+          transform: translateX(30vw);
+  -webkit-transition: -webkit-transform .4s ease-in;
+  transition: -webkit-transform .4s ease-in;
+  transition: transform .4s ease-in;
+  transition: transform .4s ease-in, -webkit-transform .4s ease-in; }
+
+.bc-site-menu__actions {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: end;
+      -ms-flex-pack: end;
+          justify-content: flex-end;
+  padding: 8px 16px; }
+
 .bc-spinner {
   -webkit-box-align: center;
       -ms-flex-align: center;
@@ -328,12 +368,16 @@
   padding: 24px;
   position: absolute;
   top: 0;
-  width: 100vw; }
+  width: 100vw;
+  z-index: 999; }
 
 .bc-overlay--visible {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex; }
+
+#bc-sign-up-form {
+  padding: 16px; }
 
 body {
   background: #EEF5F4;

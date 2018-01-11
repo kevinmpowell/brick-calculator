@@ -15,6 +15,6 @@
     {% if href %} href="{{ href }}" {% endif %}
     {% if type %} type="{{ type }}" {% endif %}
     class="bc-button{{ ' ' + class if class }}">
-    {{ text }}
+    {{ text | safe }}
   </{{ element }}>
 {% endmacro %}
