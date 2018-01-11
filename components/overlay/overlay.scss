@@ -10,6 +10,7 @@
   position: absolute;
   top: 0;
   width: 100vw;
+  z-index: $brickulator-z-index-top-of-the-world;
 }
 
 .bc-overlay--visible {

@@ -1,0 +1,8 @@
+{% macro site_menu() %}
+  <div class="bc-site-menu">
+    <div class="bc-site-menu__actions">
+      {{ button(text="&times; Close", class="bc-button--primary bc-button--size-s bc-site-menu-hide-trigger") }}
+    </div>
+    {{ sign_up_form() }}
+  </div>
+{% endmacro %}

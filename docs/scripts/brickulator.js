@@ -6,7 +6,12 @@ let setDB;
 const ebaySellingFeePercentage = .13, // TODO: Get this from a lookup
       oneMinute = 60000, // in milliseconds
       threeMinutes = oneMinute * 3, // in milliseconds
-      oneHour = oneMinute * 60; // in milliseconds
+      oneHour = oneMinute * 60,
+      currentDomain = window.location.hostname,
+      apiMapping = {
+        'localhost': 'http://localhost:5000',
+        'kevinmpowell.github.io': 'https://brickulator-api.herokuapp.com'
+      }; // in milliseconds
 
 BC.Utils = function() {
   const formatCurrency = function formatCurrency(number) {
@@ -29,12 +34,7 @@ BC.SetDatabase = function() {
   const loadingSpinner = document.querySelector(".bc-spinner--loading-set-data"),
         loadingSpinnerVisibleClass = "bc-spinner--visible",
         setDataCachedMessage = document.querySelector(".bc-lookup-set-data-status-message"),
-        setDataCachedMessageHiddenClass = "bc-lookup-set-data-status-message--hidden",
-        currentDomain = window.location.hostname,
-        apiMapping = {
-          'localhost': 'http://localhost:5000',
-          'kevinmpowell.github.io': 'https://brickulator-api.herokuapp.com'
-        };
+        setDataCachedMessageHiddenClass = "bc-lookup-set-data-status-message--hidden";
   function saveSetDBToLocalStorage(rawJSON) {
     localStorage.clear();
     localStorage.setItem("BCSetDB", rawJSON);
@@ -236,6 +236,7 @@ ready(function(){
   BC.SetSummary.initialize();
   BC.PortletLayout.initialize();
   BC.PortletLayout.buildLayout();
+  BC.SignUpForm.initialize();
 });
 
 'use strict';
@@ -373,16 +374,26 @@ BC.Overlay = function() {
       title,
       message;
 
+  function dismissOverlay() {
+    hide();
+    overlay.removeEventListener("click", dismissOverlay);
+  }
+
   const initialize = function initialize() {
     overlay = document.querySelector(overlaySelector);
     title = document.querySelector(overlayTitleSelector);
     message = document.querySelector(overlayMessageSelector);
   }
 
-  const show = function show(titleText, messageText) {
+  const show = function show(titleText, messageText, dismissible) {
+    dismissible = typeof dismissible === 'undefined' ? false : true;
     title.innerHTML = titleText;
     message.innerHTML = messageText;
     overlay.classList.add(overlayVisibleClass);
+
+    if (dismissible) {
+      overlay.addEventListener("click", dismissOverlay);
+    }
   }
 
   const hide = function hide() {
@@ -912,5 +923,143 @@ BC.SetSummary = function() {
   return {
     initialize: initialize,
     update: update
+  }
+}();
+
+'use strict';
+BC.SetSummary = function() {
+  const showMenuSelector = '.bc-site-menu-show-trigger',
+        hideMenuSelector = '.bc-site-menu-hide-trigger',
+        menuSelector = '.bc-site-menu',
+        menuVisibleClass = 'bc-site-menu--visible';
+
+  let showMenuTriggers,
+      hideMenuTriggers,
+      menu;
+
+  const showMenu = function showMenu() {
+    menu.classList.add(menuVisibleClass);
+  }
+
+  const hideMenu = function showMenu() {
+    menu.classList.remove(menuVisibleClass);
+  }
+
+  function setEventListeners() {
+    showMenuTriggers.forEach(function(t){
+      t.addEventListener("click", showMenu);
+    });
+
+    hideMenuTriggers.forEach(function(t){
+      t.addEventListener("click", hideMenu);
+    });
+  }
+
+
+  const initialize = function initialize() {
+    showMenuTriggers = Array.from(document.querySelectorAll(showMenuSelector));
+    hideMenuTriggers = Array.from(document.querySelectorAll(hideMenuSelector));
+    menu = document.querySelector(menuSelector);
+    setEventListeners();
+  }
+
+  return {
+    initialize: initialize,
+    showMenu: showMenu,
+    hideMenu: hideMenu,
+  }
+}();
+
+'use strict';
+BC.SignUpForm = function() {
+  const signUpFormId = 'bc-sign-up-form',
+        emailFieldId = 'bc-sign-up-form-email',
+        passwordFieldId = 'bc-sign-up-form-password',
+        submitButtonSelector = '.bc-sign-up-form__submit-button';
+
+  let form,
+      emailField,
+      passwordField,
+      submitButton;
+
+  function disableForm() {
+    emailField.setAttribute('disabled', true);
+    passwordField.setAttribute('disabled', true);
+    submitButton.setAttribute('disabled', true);
+  }
+
+  function enableForm() {
+    emailField.removeAttribute('disabled');
+    passwordField.removeAttribute('disabled');
+    submitButton.removeAttribute('disabled');
+  }
+
+  function resetForm() {
+    form.reset();
+  }
+
+  function saveAuthToken(authToken) {
+    localStorage.setItem('bcUserAuthToken', authToken)
+  }
+
+  function handleFormSignup(e) {
+    e.preventDefault();
+    disableForm();
+    var request = new XMLHttpRequest();
+    const apiDomain = apiMapping[currentDomain],
+          params = "email=" + emailField.value + "&password=" + passwordField.value + "&password_confirmation=" + passwordField.value;
+    request.open('POST', apiDomain + '/signup', true);
+    request.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+    //Send the proper header information along with the request for the POST to work
+    request.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+
+    request.onload = function() {
+      if (request.status >= 200 && request.status < 400) {
+        // Success!
+        var data = JSON.parse(request.responseText);
+        saveAuthToken(data.auth_token);
+        BC.Overlay.show("Welcome!", "User account created successfully.", true);
+        enableForm();
+        resetForm();
+      } else if (request.status === 422) {
+
+        var data = JSON.parse(request.responseText);
+        if (data.message && data.message.toLowerCase().includes('already exists')) {
+          BC.Overlay.show("Sorry! Can't create that account.", data.message, true);
+        } else if (data.message && data.message.toLowerCase().includes("password can't be blank")) {
+          BC.Overlay.show("Forget something?", "Please enter a password", true);
+        }
+        // We reached our target server, but it returned an error
+        enableForm();
+      } else {
+        alert("Sign up failed - connection successful, but data failed");
+        enableForm();
+      }
+    };
+
+    request.onerror = function() {
+      // There was a connection error of some sort
+      alert("Could not sign up - connection error");
+      enableForm();
+    };
+
+    request.send(params); // POST params are sent down here
+    return false; // prevent form submission
+  }
+
+  function setEventListeners() {
+    form.addEventListener("submit", handleFormSignup);
+  }
+
+  const initialize = function initialize() {
+    form = document.getElementById(signUpFormId);
+    emailField = document.getElementById(emailFieldId);
+    passwordField = document.getElementById(passwordFieldId);
+    submitButton = document.querySelector(submitButtonSelector);
+    setEventListeners();
+  }
+
+  return {
+    initialize: initialize
   }
 }();

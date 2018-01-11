@@ -1,7 +1,0 @@
-CACHE MANIFEST
-# v0.1.0
-# This is a comment.
-index.html
-styles/brickulator.css
-scripts/brickulator.js
-scripts/dependencies/timeago.min.js

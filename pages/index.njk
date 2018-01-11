@@ -3,7 +3,7 @@
     <div class="bc-site-header">
       {{ bc.button(text="Back", class="bc-show-lookup-form bc-button--size-s") }}
       <h1 class="bc-site-header__title">BRICKULATOR</h1>
-      {{ bc.button(text="Menu", class="bc-button--size-s") }}
+      {{ bc.button(text="Menu", class="bc-button--size-s bc-site-menu-show-trigger") }}
     </div>
     <div id="bc-lookup">
       <form action="" class="bc-value-lookup-form" id="bc-value-lookup-form" novalidate>
@@ -59,6 +59,7 @@
         {{ bc.button(text="Back To Lookup", class="bc-show-lookup-form") }}
       </div>
     </div>
+    {{ bc.site_menu() }}
     {{ bc.overlay() }}
   {% endblock %}
 
