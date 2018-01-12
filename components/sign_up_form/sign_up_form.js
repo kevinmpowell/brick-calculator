@@ -3,7 +3,8 @@ BC.SignUpForm = function() {
   const signUpFormId = 'bc-sign-up-form',
         emailFieldId = 'bc-sign-up-form-email',
         passwordFieldId = 'bc-sign-up-form-password',
-        submitButtonSelector = '.bc-sign-up-form__submit-button';
+        submitButtonSelector = '.bc-sign-up-form__submit-button',
+        signUpEndpoint = '/signup';
 
   let form,
       emailField,
@@ -27,7 +28,7 @@ BC.SignUpForm = function() {
   }
 
   function saveAuthToken(authToken) {
-    localStorage.setItem('bcUserAuthToken', authToken)
+    localStorage.setItem(authTokenKeyName, authToken)
   }
 
   function handleFormSignup(e) {
@@ -36,7 +37,7 @@ BC.SignUpForm = function() {
     var request = new XMLHttpRequest();
     const apiDomain = apiMapping[currentDomain],
           params = "email=" + emailField.value + "&password=" + passwordField.value + "&password_confirmation=" + passwordField.value;
-    request.open('POST', apiDomain + '/signup', true);
+    request.open('POST', apiDomain + signUpEndpoint, true);
     request.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
     //Send the proper header information along with the request for the POST to work
     request.setRequestHeader("Content-type", "application/x-www-form-urlencoded");

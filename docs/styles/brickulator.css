@@ -340,8 +340,8 @@ input {
   top: 0;
   max-width: 320px;
   pointer-events: auto;
-  -webkit-transform: translateX(100vw);
-          transform: translateX(100vw);
+  -webkit-transform: translateX(30vw);
+          transform: translateX(30vw);
   -webkit-transition: -webkit-transform .2s ease-out;
   transition: -webkit-transform .2s ease-out;
   transition: transform .2s ease-out;
@@ -463,6 +463,9 @@ input {
 #bc-sign-in-form {
   border-bottom: solid 1px #EEF5F4;
   padding: 8px 16px; }
+
+.bc-sign-in-form--hidden {
+  display: none; }
 
 .bc-sign-in-form__actions {
   -webkit-box-align: center;

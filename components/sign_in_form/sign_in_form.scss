@@ -3,6 +3,10 @@
   padding: $brickulator-space-inset-squish-2-x;
 }
 
+.bc-sign-in-form--hidden {
+  display: none;
+}
+
 .bc-sign-in-form__actions {
   align-items: center;
   display: flex;

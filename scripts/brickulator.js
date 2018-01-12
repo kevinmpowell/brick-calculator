@@ -7,12 +7,82 @@ const ebaySellingFeePercentage = .13, // TODO: Get this from a lookup
       threeMinutes = oneMinute * 3, // in milliseconds
       oneHour = oneMinute * 60,
       currentDomain = window.location.hostname,
+      authTokenKeyName = 'bcUserAuthToken',
+      userSettingsKeyName = 'bcUserSettings',
       apiMapping = {
         'localhost': 'http://localhost:5000',
         'kevinmpowell.github.io': 'https://brickulator-api.herokuapp.com'
-      }; // in milliseconds
+      },
+      apiDomain = apiMapping[currentDomain]; // in milliseconds
+
+
+      // Headers and params are optional
+      // makeRequest({
+      //   method: 'GET',
+      //   url: 'http://example.com'
+      // })
+      // .then(function (datums) {
+      //   return makeRequest({
+      //     method: 'POST',
+      //     url: datums.url,
+      //     params: {
+      //       score: 9001
+      //     },
+      //     headers: {
+      //       'X-Subliminal-Message': 'Upvote-this-answer'
+      //     }
+      //   });
+      // })
+      // .catch(function (err) {
+      //   console.error('Augh, there was an error!', err.statusText);
+      // });
+BC.API = function() {
+  const makeRequest = function makeRequest (opts) {
+    const apiUrl = apiDomain + opts.url;
+    return new Promise(function (resolve, reject) {
+      var xhr = new XMLHttpRequest();
+      xhr.open(opts.method, apiUrl);
+      xhr.onload = function () {
+        if (this.status >= 200 && this.status < 300) {
+          resolve(xhr.response);
+        } else {
+          reject({
+            status: this.status,
+            statusText: xhr.statusText
+          });
+        }
+      };
+      xhr.onerror = function () {
+        reject({
+          status: this.status,
+          statusText: xhr.statusText
+        });
+      };
+      if (opts.headers) {
+        Object.keys(opts.headers).forEach(function (key) {
+          xhr.setRequestHeader(key, opts.headers[key]);
+        });
+      }
+      var params = opts.params;
+      // We'll need to stringify if we've been given an object
+      // If we have a string, this is skipped.
+      if (params && typeof params === 'object') {
+        params = Object.keys(params).map(function (key) {
+          return encodeURIComponent(key) + '=' + encodeURIComponent(params[key]);
+        }).join('&');
+      }
+      xhr.send(params);
+    });
+  }
+
+  return {
+    makeRequest: makeRequest
+  }
+}();
 
 BC.Utils = function() {
+  const checkAuthTokenEndpoint = '/auth/validate-token';
+
   const formatCurrency = function formatCurrency(number) {
     return number.toLocaleString('en-US', { style: 'currency', currency: 'USD' });
   }
@@ -23,9 +93,46 @@ BC.Utils = function() {
     return fee;
   }
 
+  const saveToLocalStorage = function saveToLocalStorage(key, value) {
+    if (typeof value !== "string") {
+      value = JSON.stringify(value);
+    }
+    localStorage.setItem(key, value);
+  }
+
+  const getFromLocalStorage = function getFromLocalStorage(key) {
+    let value = localStorage.getItem(key);
+    try {
+      value = JSON.parse(value);
+    } catch(e) {
+      // Eat the JSON.parse failure, just return the value
+      // console.log("Value wasn't JSON, just returning as is.");
+    }
+    return value;
+  }
+
+  const validateAuthToken = function validateAuthToken() {
+    const storedToken = getFromLocalStorage(authTokenKeyName);
+    let haveValidToken = false;
+
+    if (storedToken !== null) {
+      return BC.API.makeRequest({
+          method: 'GET', 
+          url: '/auth/validate-token', 
+          headers:{
+            'Authorization': storedToken
+          }});
+    } else {
+      return Promise.reject(new Error('Stored Token does not exist'));
+    }
+  }
+
   return {
     formatCurrency: formatCurrency,
-    getBrickOwlSellerFees: getBrickOwlSellerFees
+    getBrickOwlSellerFees: getBrickOwlSellerFees,
+    saveToLocalStorage: saveToLocalStorage,
+    getFromLocalStorage: getFromLocalStorage,
+    validateAuthToken: validateAuthToken
   }
 }();
 
@@ -51,7 +158,6 @@ BC.SetDatabase = function() {
 
   const retrieveFreshSetData = function retrieveFreshSetData() {
     var request = new XMLHttpRequest();
-    const apiDomain = apiMapping[currentDomain];
 
     showLoadingSpinner();
     try {
@@ -236,5 +342,6 @@ ready(function(){
   BC.PortletLayout.initialize();
   BC.PortletLayout.buildLayout();
   BC.SignUpForm.initialize();
+  BC.SignInForm.initialize();
   BC.SiteMenu.initialize();
 });

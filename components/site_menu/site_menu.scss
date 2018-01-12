@@ -19,7 +19,8 @@ $bc-site-menu-max-width: 320px;
   top: 0;
   max-width: $bc-site-menu-max-width;
   pointer-events: auto; 
-  transform: translateX(100vw);
+  // transform: translateX(100vw);
+  transform: translateX(30vw); //Make menu visible on reload for debugging
   transition: transform .2s ease-out;
   will-change: transform;
   width: 70vw;

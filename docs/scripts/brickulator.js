@@ -8,12 +8,82 @@ const ebaySellingFeePercentage = .13, // TODO: Get this from a lookup
       threeMinutes = oneMinute * 3, // in milliseconds
       oneHour = oneMinute * 60,
       currentDomain = window.location.hostname,
+      authTokenKeyName = 'bcUserAuthToken',
+      userSettingsKeyName = 'bcUserSettings',
       apiMapping = {
         'localhost': 'http://localhost:5000',
         'kevinmpowell.github.io': 'https://brickulator-api.herokuapp.com'
-      }; // in milliseconds
+      },
+      apiDomain = apiMapping[currentDomain]; // in milliseconds
+
+
+      // Headers and params are optional
+      // makeRequest({
+      //   method: 'GET',
+      //   url: 'http://example.com'
+      // })
+      // .then(function (datums) {
+      //   return makeRequest({
+      //     method: 'POST',
+      //     url: datums.url,
+      //     params: {
+      //       score: 9001
+      //     },
+      //     headers: {
+      //       'X-Subliminal-Message': 'Upvote-this-answer'
+      //     }
+      //   });
+      // })
+      // .catch(function (err) {
+      //   console.error('Augh, there was an error!', err.statusText);
+      // });
+BC.API = function() {
+  const makeRequest = function makeRequest (opts) {
+    const apiUrl = apiDomain + opts.url;
+    return new Promise(function (resolve, reject) {
+      var xhr = new XMLHttpRequest();
+      xhr.open(opts.method, apiUrl);
+      xhr.onload = function () {
+        if (this.status >= 200 && this.status < 300) {
+          resolve(xhr.response);
+        } else {
+          reject({
+            status: this.status,
+            statusText: xhr.statusText
+          });
+        }
+      };
+      xhr.onerror = function () {
+        reject({
+          status: this.status,
+          statusText: xhr.statusText
+        });
+      };
+      if (opts.headers) {
+        Object.keys(opts.headers).forEach(function (key) {
+          xhr.setRequestHeader(key, opts.headers[key]);
+        });
+      }
+      var params = opts.params;
+      // We'll need to stringify if we've been given an object
+      // If we have a string, this is skipped.
+      if (params && typeof params === 'object') {
+        params = Object.keys(params).map(function (key) {
+          return encodeURIComponent(key) + '=' + encodeURIComponent(params[key]);
+        }).join('&');
+      }
+      xhr.send(params);
+    });
+  }
+
+  return {
+    makeRequest: makeRequest
+  }
+}();
 
 BC.Utils = function() {
+  const checkAuthTokenEndpoint = '/auth/validate-token';
+
   const formatCurrency = function formatCurrency(number) {
     return number.toLocaleString('en-US', { style: 'currency', currency: 'USD' });
   }
@@ -24,9 +94,46 @@ BC.Utils = function() {
     return fee;
   }
 
+  const saveToLocalStorage = function saveToLocalStorage(key, value) {
+    if (typeof value !== "string") {
+      value = JSON.stringify(value);
+    }
+    localStorage.setItem(key, value);
+  }
+
+  const getFromLocalStorage = function getFromLocalStorage(key) {
+    let value = localStorage.getItem(key);
+    try {
+      value = JSON.parse(value);
+    } catch(e) {
+      // Eat the JSON.parse failure, just return the value
+      // console.log("Value wasn't JSON, just returning as is.");
+    }
+    return value;
+  }
+
+  const validateAuthToken = function validateAuthToken() {
+    const storedToken = getFromLocalStorage(authTokenKeyName);
+    let haveValidToken = false;
+
+    if (storedToken !== null) {
+      return BC.API.makeRequest({
+          method: 'GET', 
+          url: '/auth/validate-token', 
+          headers:{
+            'Authorization': storedToken
+          }});
+    } else {
+      return Promise.reject(new Error('Stored Token does not exist'));
+    }
+  }
+
   return {
     formatCurrency: formatCurrency,
-    getBrickOwlSellerFees: getBrickOwlSellerFees
+    getBrickOwlSellerFees: getBrickOwlSellerFees,
+    saveToLocalStorage: saveToLocalStorage,
+    getFromLocalStorage: getFromLocalStorage,
+    validateAuthToken: validateAuthToken
   }
 }();
 
@@ -52,7 +159,6 @@ BC.SetDatabase = function() {
 
   const retrieveFreshSetData = function retrieveFreshSetData() {
     var request = new XMLHttpRequest();
-    const apiDomain = apiMapping[currentDomain];
 
     showLoadingSpinner();
     try {
@@ -237,6 +343,7 @@ ready(function(){
   BC.PortletLayout.initialize();
   BC.PortletLayout.buildLayout();
   BC.SignUpForm.initialize();
+  BC.SignInForm.initialize();
   BC.SiteMenu.initialize();
 });
 
@@ -927,11 +1034,117 @@ BC.SetSummary = function() {
 }();
 
 'use strict';
+BC.SignInForm = function() {
+  const signInFormId = 'bc-sign-in-form',
+        emailFieldId = 'bc-sign-in-form-email',
+        passwordFieldId = 'bc-sign-in-form-password',
+        submitButtonSelector = '.bc-sign-in-form__submit-button',
+        signInEndpoint = '/auth/signin',
+        signInFormHiddenClass = 'bc-sign-in-form--hidden';
+
+  let form,
+      emailField,
+      passwordField,
+      submitButton;
+
+  function disableForm() {
+    emailField.setAttribute('disabled', true);
+    passwordField.setAttribute('disabled', true);
+    submitButton.setAttribute('disabled', true);
+  }
+
+  function enableForm() {
+    emailField.removeAttribute('disabled');
+    passwordField.removeAttribute('disabled');
+    submitButton.removeAttribute('disabled');
+  }
+
+  function resetForm() {
+    form.reset();
+  }
+
+  function handleFormSignIn(e) {
+    e.preventDefault();
+    disableForm();
+    var request = new XMLHttpRequest();
+    const apiDomain = apiMapping[currentDomain],
+          params = "email=" + emailField.value + "&password=" + passwordField.value,
+          endpointUrl = apiDomain + signInEndpoint;
+    request.open('POST', endpointUrl, true);
+    request.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+    //Send the proper header information along with the request for the POST to work
+    request.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+
+    request.onload = function() {
+      console.log(request);
+      if (request.status >= 200 && request.status < 400) {
+        // Success!
+        var data = JSON.parse(request.responseText);
+        BC.Utils.saveToLocalStorage(authTokenKeyName, data.auth_token);
+        BC.Utils.saveToLocalStorage(userSettingsKeyName, data.preferences);
+        // TODO: Broadcast event that user settings have been loaded
+        BC.Overlay.show("Welcome back!", "Sign in successful.", true);
+        setSignedInState();
+        enableForm();
+        resetForm();
+      } else {
+        var data = JSON.parse(request.responseText);
+        BC.Overlay.show("Sign In Failed", data.message, true);
+        enableForm();
+      }
+    };
+
+    request.onerror = function() {
+      // There was a connection error of some sort
+      BC.Overlay.show("Sign In Failed", "Something happened and we couldn't connect to sign you in. Sit tight, we'll fix it.", true);
+      enableForm();
+    };
+
+    request.send(params); // POST params are sent down here
+    return false; // prevent form submission
+  }
+
+  function setEventListeners() {
+    form.addEventListener("submit", handleFormSignIn);
+    // document.getElementById('submit-button').addEventListener("click", handleFormSignIn);
+  }
+
+  function hideSignInForm() {
+    form.classList.add(signInFormHiddenClass);
+  }
+
+  const setSignedInState = function setSignedInState() {
+    BC.Utils.validateAuthToken().then(function(){
+      hideSignInForm();
+      // TODO: Broadcast that user is signed in, do stuff with preferences, enable plus features, etc.
+    }, function() {
+      BC.Overlay.show("Not currently signed in", "This is an annoying message and should not be shown on page load.", true);
+    }
+    );
+  }
+
+  const initialize = function initialize() {
+    form = document.getElementById(signInFormId);
+    emailField = document.getElementById(emailFieldId);
+    passwordField = document.getElementById(passwordFieldId);
+    submitButton = document.querySelector(submitButtonSelector);
+    setSignedInState();
+    setEventListeners();
+  }
+
+  return {
+    initialize: initialize,
+    setSignedInState: setSignedInState,
+  }
+}();
+
+'use strict';
 BC.SignUpForm = function() {
   const signUpFormId = 'bc-sign-up-form',
         emailFieldId = 'bc-sign-up-form-email',
         passwordFieldId = 'bc-sign-up-form-password',
-        submitButtonSelector = '.bc-sign-up-form__submit-button';
+        submitButtonSelector = '.bc-sign-up-form__submit-button',
+        signUpEndpoint = '/signup';
 
   let form,
       emailField,
@@ -955,7 +1168,7 @@ BC.SignUpForm = function() {
   }
 
   function saveAuthToken(authToken) {
-    localStorage.setItem('bcUserAuthToken', authToken)
+    localStorage.setItem(authTokenKeyName, authToken)
   }
 
   function handleFormSignup(e) {
@@ -964,7 +1177,7 @@ BC.SignUpForm = function() {
     var request = new XMLHttpRequest();
     const apiDomain = apiMapping[currentDomain],
           params = "email=" + emailField.value + "&password=" + passwordField.value + "&password_confirmation=" + passwordField.value;
-    request.open('POST', apiDomain + '/signup', true);
+    request.open('POST', apiDomain + signUpEndpoint, true);
     request.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
     //Send the proper header information along with the request for the POST to work
     request.setRequestHeader("Content-type", "application/x-www-form-urlencoded");

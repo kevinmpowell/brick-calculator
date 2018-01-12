@@ -1,5 +1,6 @@
 {% macro button(
     class,
+    id,
     type="button",
     element="button",
     href,
@@ -14,6 +15,7 @@
   <{{ element }}
     {% if href %} href="{{ href }}" {% endif %}
     {% if type %} type="{{ type }}" {% endif %}
+    {% if id %} id="{{ id }}" {% endif %}
     class="bc-button{{ ' ' + class if class }}">
     {{ text | safe }}
   </{{ element }}>
