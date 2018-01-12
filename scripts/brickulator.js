@@ -13,7 +13,10 @@ const ebaySellingFeePercentage = .13, // TODO: Get this from a lookup
         'localhost': 'http://localhost:5000',
         'kevinmpowell.github.io': 'https://brickulator-api.herokuapp.com'
       },
-      apiDomain = apiMapping[currentDomain]; // in milliseconds
+      apiDomain = apiMapping[currentDomain],
+      customEvents = {
+        userSignedIn: 'bc-user-signed-in'
+      }; // in milliseconds
 
 
       // Headers and params are optional
@@ -122,9 +125,19 @@ BC.Utils = function() {
           headers:{
             'Authorization': storedToken
           }});
+      // TODO, maybe wire up default promise.then failure?
     } else {
+      broadcastEvent('bc-auth-token-invalid');
       return Promise.reject(new Error('Stored Token does not exist'));
     }
+  }
+
+  const broadcastEvent = function broadcastEvent(eventName, data, element) {
+    data = typeof data !== 'undefined' ? data : {};
+    element = typeof element !== 'undefined' ? element : document;
+
+    const event = new CustomEvent(eventName, {detail: data});
+    element.dispatchEvent(event);
   }
 
   return {
@@ -132,7 +145,8 @@ BC.Utils = function() {
     getBrickOwlSellerFees: getBrickOwlSellerFees,
     saveToLocalStorage: saveToLocalStorage,
     getFromLocalStorage: getFromLocalStorage,
-    validateAuthToken: validateAuthToken
+    validateAuthToken: validateAuthToken,
+    broadcastEvent: broadcastEvent
   }
 }();
 
@@ -342,6 +356,7 @@ ready(function(){
   BC.PortletLayout.initialize();
   BC.PortletLayout.buildLayout();
   BC.SignUpForm.initialize();
-  BC.SignInForm.initialize();
   BC.SiteMenu.initialize();
+  BC.UserSettingsPane.initialize();
+  BC.SignInForm.initialize();
 });

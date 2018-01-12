@@ -14,7 +14,10 @@ const ebaySellingFeePercentage = .13, // TODO: Get this from a lookup
         'localhost': 'http://localhost:5000',
         'kevinmpowell.github.io': 'https://brickulator-api.herokuapp.com'
       },
-      apiDomain = apiMapping[currentDomain]; // in milliseconds
+      apiDomain = apiMapping[currentDomain],
+      customEvents = {
+        userSignedIn: 'bc-user-signed-in'
+      }; // in milliseconds
 
 
       // Headers and params are optional
@@ -123,9 +126,19 @@ BC.Utils = function() {
           headers:{
             'Authorization': storedToken
           }});
+      // TODO, maybe wire up default promise.then failure?
     } else {
+      broadcastEvent('bc-auth-token-invalid');
       return Promise.reject(new Error('Stored Token does not exist'));
     }
+  }
+
+  const broadcastEvent = function broadcastEvent(eventName, data, element) {
+    data = typeof data !== 'undefined' ? data : {};
+    element = typeof element !== 'undefined' ? element : document;
+
+    const event = new CustomEvent(eventName, {detail: data});
+    element.dispatchEvent(event);
   }
 
   return {
@@ -133,7 +146,8 @@ BC.Utils = function() {
     getBrickOwlSellerFees: getBrickOwlSellerFees,
     saveToLocalStorage: saveToLocalStorage,
     getFromLocalStorage: getFromLocalStorage,
-    validateAuthToken: validateAuthToken
+    validateAuthToken: validateAuthToken,
+    broadcastEvent: broadcastEvent
   }
 }();
 
@@ -343,8 +357,9 @@ ready(function(){
   BC.PortletLayout.initialize();
   BC.PortletLayout.buildLayout();
   BC.SignUpForm.initialize();
-  BC.SignInForm.initialize();
   BC.SiteMenu.initialize();
+  BC.UserSettingsPane.initialize();
+  BC.SignInForm.initialize();
 });
 
 'use strict';
@@ -997,43 +1012,6 @@ BC.PortletPartOutBrickOwl = function() {
 // }();
 
 'use strict';
-BC.SetSummary = function() {
-  const numberSelector = '.bc-set-summary__number',
-        yearSelector = '.bc-set-summary__year',
-        titleSelector = '.bc-set-summary__title',
-        pcsSelector = '.bc-set-summary__pcs-count',
-        msrpSelector = '.bc-set-summary__msrp-value';
-
-  let number,
-      year,
-      title,
-      pcs,
-      msrp;
-
-  const initialize = function initialize() {
-    number = document.querySelector(numberSelector);
-    year = document.querySelector(yearSelector);
-    title = document.querySelector(titleSelector);
-    pcs = document.querySelector(pcsSelector);
-    msrp = document.querySelector(msrpSelector);
-  }
-
-  const update = function update(setData) {
-    const setNumber = typeof setData.nv === 'undefined' ? setData.n : setData.n + '-' + setData.nv;
-    number.innerHTML = setNumber;
-    year.innerHTML = setData.y;
-    title.innerHTML = setData.t;
-    pcs.innerHTML = setData.pcs;
-    msrp.innerHTML = parseFloat(setData.msrp, 10) > 0 ? "$" + setData.msrp : "Unknown";
-  }
-
-  return {
-    initialize: initialize,
-    update: update
-  }
-}();
-
-'use strict';
 BC.SignInForm = function() {
   const signInFormId = 'bc-sign-in-form',
         emailFieldId = 'bc-sign-in-form-email',
@@ -1106,7 +1084,6 @@ BC.SignInForm = function() {
 
   function setEventListeners() {
     form.addEventListener("submit", handleFormSignIn);
-    // document.getElementById('submit-button').addEventListener("click", handleFormSignIn);
   }
 
   function hideSignInForm() {
@@ -1116,7 +1093,7 @@ BC.SignInForm = function() {
   const setSignedInState = function setSignedInState() {
     BC.Utils.validateAuthToken().then(function(){
       hideSignInForm();
-      // TODO: Broadcast that user is signed in, do stuff with preferences, enable plus features, etc.
+      BC.Utils.broadcastEvent(customEvents.userSignedIn);
     }, function() {
       BC.Overlay.show("Not currently signed in", "This is an annoying message and should not be shown on page load.", true);
     }
@@ -1135,6 +1112,43 @@ BC.SignInForm = function() {
   return {
     initialize: initialize,
     setSignedInState: setSignedInState,
+  }
+}();
+
+'use strict';
+BC.SetSummary = function() {
+  const numberSelector = '.bc-set-summary__number',
+        yearSelector = '.bc-set-summary__year',
+        titleSelector = '.bc-set-summary__title',
+        pcsSelector = '.bc-set-summary__pcs-count',
+        msrpSelector = '.bc-set-summary__msrp-value';
+
+  let number,
+      year,
+      title,
+      pcs,
+      msrp;
+
+  const initialize = function initialize() {
+    number = document.querySelector(numberSelector);
+    year = document.querySelector(yearSelector);
+    title = document.querySelector(titleSelector);
+    pcs = document.querySelector(pcsSelector);
+    msrp = document.querySelector(msrpSelector);
+  }
+
+  const update = function update(setData) {
+    const setNumber = typeof setData.nv === 'undefined' ? setData.n : setData.n + '-' + setData.nv;
+    number.innerHTML = setNumber;
+    year.innerHTML = setData.y;
+    title.innerHTML = setData.t;
+    pcs.innerHTML = setData.pcs;
+    msrp.innerHTML = parseFloat(setData.msrp, 10) > 0 ? "$" + setData.msrp : "Unknown";
+  }
+
+  return {
+    initialize: initialize,
+    update: update
   }
 }();
 
@@ -1274,5 +1288,34 @@ BC.SiteMenu = function() {
     initialize: initialize,
     showMenu: showMenu,
     hideMenu: hideMenu,
+  }
+}();
+
+'use strict';
+BC.UserSettingsPane = function() {
+  const userTaxRateFieldId = 'bc-user-settings-taxRate'
+
+  let taxRate;
+  // TODO, need a way to fetch fresh user settings - probably another endpoint, that way user doesn't have to log out and log back in to get fresh settings
+
+
+  const update = function update() {
+    const userSettings = BC.Utils.getFromLocalStorage(userSettingsKeyName);
+    console.log(userSettings);
+    taxRate.value = userSettings.taxRate;
+  }
+
+  function setEventListeners() {
+    document.addEventListener(customEvents.userSignedIn, update);
+  }
+
+  const initialize = function initialize() {
+    taxRate = document.getElementById(userTaxRateFieldId);
+    setEventListeners();
+  }
+
+  return {
+    initialize: initialize,
+    update: update
   }
 }();

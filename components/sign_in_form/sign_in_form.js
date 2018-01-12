@@ -71,7 +71,6 @@ BC.SignInForm = function() {
 
   function setEventListeners() {
     form.addEventListener("submit", handleFormSignIn);
-    // document.getElementById('submit-button').addEventListener("click", handleFormSignIn);
   }
 
   function hideSignInForm() {
@@ -81,7 +80,7 @@ BC.SignInForm = function() {
   const setSignedInState = function setSignedInState() {
     BC.Utils.validateAuthToken().then(function(){
       hideSignInForm();
-      // TODO: Broadcast that user is signed in, do stuff with preferences, enable plus features, etc.
+      BC.Utils.broadcastEvent(customEvents.userSignedIn);
     }, function() {
       BC.Overlay.show("Not currently signed in", "This is an annoying message and should not be shown on page load.", true);
     }
