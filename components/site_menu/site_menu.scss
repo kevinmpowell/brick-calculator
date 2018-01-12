@@ -1,3 +1,5 @@
+$bc-site-menu-max-width: 320px;
+
 .bc-site-menu {
   position: fixed;
   left: 0;
@@ -15,7 +17,7 @@
   left: 0;
   position: absolute;
   top: 0;
-  max-width: 320px;
+  max-width: $bc-site-menu-max-width;
   pointer-events: auto; 
   transform: translateX(100vw);
   transition: transform .2s ease-out;
@@ -26,6 +28,12 @@
   .bc-site-menu--visible & {
     transform: translateX(30vw);
     transition: transform .2s ease-in;
+  
+  }
+}
+@media screen and (min-width: ($bc-site-menu-max-width / .7)) {
+  .bc-site-menu--visible .bc-site-menu__inner {
+    transform: translateX(calc(100vw - #{$bc-site-menu-max-width}));
   }
 }
 
