@@ -4,6 +4,14 @@
       <div class="bc-site-menu__actions">
         {{ button(text="&times; Close", class="bc-button--primary bc-button--size-s bc-site-menu-hide-trigger") }}
       </div>
+      {{ sign_in_form() }}
+      {{ user_settings_pane() }}
+      {{ list_group(items=[
+        {
+          href: "#settings",
+          label: "Settings"
+        }
+        ]) }}
       {{ sign_up_form() }}
     </div>
   </div>

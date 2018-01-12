@@ -56,11 +56,77 @@
   padding: 4px;
   width: auto; }
 
+.bc-button--size-m {
+  font-size: 14px;
+  padding: 4px 8px;
+  width: auto; }
+
+.bc-button--link-style {
+  color: #20b6a1;
+  padding-left: 0;
+  padding-right: 0;
+  text-decoration: underline;
+  text-transform: none; }
+
 .bc-form-label {
-  color: #1E1F1F; }
+  color: #1E1F1F;
+  font-size: 14px; }
+
+.bc-form-label--size-m {
+  font-size: 12px; }
 
 .bc-form-label--on-dark {
   color: #FFFFFF; }
+
+.bc-form-input--size-m {
+  font-size: 14px;
+  height: auto;
+  padding: 4px; }
+
+input {
+  background: #FFFFFF;
+  border: solid 1px #C6CDCC;
+  border-radius: 2px;
+  font-size: 20px;
+  font-family: "Hiragino Sans", "Helvetica", sans-serif;
+  height: 40px;
+  padding: 4px; }
+
+.bc-form-input-prefix,
+.bc-form-input-suffix {
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  background: #FFFFFF;
+  border: solid 1px #C6CDCC;
+  border-radius: 2px 0 0 2px;
+  font-family: "Hiragino Sans", "Helvetica", sans-serif;
+  font-size: 20px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  height: 40px;
+  padding: 4px;
+  border-right: 0; }
+  .bc-form-input-prefix + input,
+  .bc-form-input-suffix + input {
+    border-bottom-left-radius: 0;
+    border-top-left-radius: 0; }
+
+.bc-form-input-suffix {
+  border-left: 0;
+  border-radius: 0 2px 2px 0;
+  -webkit-box-ordinal-group: 4;
+      -ms-flex-order: 3;
+          order: 3; }
+  .bc-form-input-suffix + input {
+    border-bottom-right-radius: 0;
+    border-top-right-radius: 0; }
+
+.bc-form-input-wrap {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex; }
 
 .bc-set-summary {
   display: -webkit-box;
@@ -394,6 +460,25 @@
 #bc-sign-up-form {
   padding: 16px; }
 
+#bc-sign-in-form {
+  border-bottom: solid 1px #EEF5F4;
+  padding: 8px 16px; }
+
+.bc-sign-in-form__actions {
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between; }
+
+.bc-sign-in-form__or {
+  color: #EEF5F4;
+  font-size: 12px; }
+
 body {
   background: #EEF5F4;
   background: #EEF5F4;
@@ -471,9 +556,6 @@ input::-webkit-inner-spin-button {
 .bc-field-group {
   position: relative; }
 
-.bc-form-label {
-  font-size: 14px; }
-
 #bc-results__set-title {
   border: 0;
   background: transparent;
@@ -497,39 +579,6 @@ input::-webkit-inner-spin-button {
 
 .bc-lookup-set-data-status-message--hidden {
   display: none; }
-
-input {
-  background: #FFFFFF;
-  border: solid 1px #C6CDCC;
-  border-radius: 2px;
-  font-size: 20px;
-  font-family: "Hiragino Sans", "Helvetica", sans-serif;
-  height: 40px;
-  padding: 4px; }
-
-.bc-form-input-prefix {
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
-  background: #FFFFFF;
-  border: solid 1px #C6CDCC;
-  border-radius: 2px 0 0 2px;
-  font-family: "Hiragino Sans", "Helvetica", sans-serif;
-  font-size: 20px;
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  height: 40px;
-  padding: 4px;
-  border-right: 0; }
-  .bc-form-input-prefix + input {
-    border-bottom-left-radius: 0;
-    border-top-left-radius: 0; }
-
-.bc-form-input-wrap {
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex; }
 
 .bc-end-of-results-actions {
   margin: 0 0 32px;
