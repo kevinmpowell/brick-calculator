@@ -239,6 +239,9 @@ input {
   text-align: center; }
 
 .bc-portlet__line-item {
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
   color: #535555;
   display: -webkit-box;
   display: -ms-flexbox;
@@ -254,8 +257,8 @@ input {
   color: #535555;
   height: auto;
   -webkit-box-flex: 1;
-      -ms-flex: 1 1 20%;
-          flex: 1 1 20%;
+      -ms-flex: 1 0 60px;
+          flex: 1 0 60px;
   font-size: 10px;
   margin: 0;
   padding: 0;
@@ -291,7 +294,10 @@ input {
 
 .bc-portlet__line-items {
   border-bottom: solid 1px #C6CDCC;
-  border-top: solid 1px #C6CDCC; }
+  border-top: solid 1px #C6CDCC;
+  -webkit-box-flex: 2;
+      -ms-flex-positive: 2;
+          flex-grow: 2; }
 
 .bc-portlet__empty-wrap {
   display: none; }
@@ -340,8 +346,8 @@ input {
   top: 0;
   max-width: 320px;
   pointer-events: auto;
-  -webkit-transform: translateX(30vw);
-          transform: translateX(30vw);
+  -webkit-transform: translateX(100vw);
+          transform: translateX(100vw);
   -webkit-transition: -webkit-transform .2s ease-out;
   transition: -webkit-transform .2s ease-out;
   transition: transform .2s ease-out;

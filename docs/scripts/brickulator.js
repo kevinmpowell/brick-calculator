@@ -91,9 +91,16 @@ BC.Utils = function() {
     return number.toLocaleString('en-US', { style: 'currency', currency: 'USD' });
   }
 
+  const getPayPalTransactionFee = function getPayPalTransactionFee(finalValue) {
+    const payPalTransactionPercent = 2.9,
+          payPalPerTransactionCharge = 0.3;
+    return ((payPalTransactionPercent / 100) * finalValue) + payPalPerTransactionCharge;
+  }
+
   const getBrickOwlSellerFees = function getBrickOwlSellerFees(finalValue) {
     const brickOwlCommissionPercent = 2.5,
-          fee = (brickOwlCommissionPercent / 100) * finalValue;
+          payPalTransactionFee = getPayPalTransactionFee(finalValue),
+          fee = ((brickOwlCommissionPercent / 100) * finalValue) + payPalTransactionFee;
     return fee;
   }
 
@@ -587,11 +594,11 @@ BC.PortletLayout = function() {
             },
             {
               key: "boFees",
-              label: "Seller Fees"
+              label: "BrickOwl & PayPal Fees"
             },
             {
               key: "setCost",
-              label: "Cost"
+              label: "Set Cost"
             }
           ]
         },
@@ -606,11 +613,11 @@ BC.PortletLayout = function() {
             },
             {
               key: "boFees",
-              label: "Seller Fees"
+              label: "Brick Owl & PayPal Fees"
             },
             {
               key: "setCost",
-              label: "Cost"
+              label: "Set Cost"
             }
           ]
         },
@@ -625,11 +632,11 @@ BC.PortletLayout = function() {
             },
             {
               key: "boFees",
-              label: "Seller Fees"
+              label: "Brick Owl & PayPal Fees"
             },
             {
               key: "setCost",
-              label: "Cost"
+              label: "Set Cost"
             }
           ]
         },
@@ -644,11 +651,11 @@ BC.PortletLayout = function() {
             },
             {
               key: "boFees",
-              label: "Seller Fees"
+              label: "Brick Owl & PayPal Fees"
             },
             {
               key: "setCost",
-              label: "Cost"
+              label: "Set Cost"
             }
           ]
         }
@@ -668,11 +675,11 @@ BC.PortletLayout = function() {
             },
             {
               key: "boFees",
-              label: "Seller Fees"
+              label: "Brick Owl & PayPal Fees"
             },
             {
               key: "setCost",
-              label: "Cost"
+              label: "Set Cost"
             }
           ]
         },
@@ -687,11 +694,11 @@ BC.PortletLayout = function() {
             },
             {
               key: "boFees",
-              label: "Seller Fees"
+              label: "Brick Owl & PayPal Fees"
             },
             {
               key: "setCost",
-              label: "Cost"
+              label: "Set Cost"
             }
           ]
         },
@@ -706,11 +713,11 @@ BC.PortletLayout = function() {
             },
             {
               key: "boFees",
-              label: "Seller Fees"
+              label: "Brick Owl & PayPal Fees"
             },
             {
               key: "setCost",
-              label: "Cost"
+              label: "Set Cost"
             }
           ]
         },
@@ -725,11 +732,11 @@ BC.PortletLayout = function() {
             },
             {
               key: "boFees",
-              label: "Seller Fees"
+              label: "Brick Owl & PayPal Fees"
             },
             {
               key: "setCost",
-              label: "Cost"
+              label: "Set Cost"
             }
           ]
         }
@@ -748,11 +755,11 @@ BC.PortletLayout = function() {
           },
           {
             key: "boFees",
-            label: "Seller Fees"
+            label: "Brick Owl & PayPal Fees"
           },
           {
             key: "setCost",
-            label: "Cost"
+            label: "Set Cost"
           }
         ]
       },
@@ -766,11 +773,11 @@ BC.PortletLayout = function() {
           },
           {
             key: "boFees",
-            label: "Seller Fees"
+            label: "Brick Owl & PayPal Fees"
           },
           {
             key: "setCost",
-            label: "Cost"
+            label: "Set Cost"
           }
         ]
       }
@@ -1012,6 +1019,43 @@ BC.PortletPartOutBrickOwl = function() {
 // }();
 
 'use strict';
+BC.SetSummary = function() {
+  const numberSelector = '.bc-set-summary__number',
+        yearSelector = '.bc-set-summary__year',
+        titleSelector = '.bc-set-summary__title',
+        pcsSelector = '.bc-set-summary__pcs-count',
+        msrpSelector = '.bc-set-summary__msrp-value';
+
+  let number,
+      year,
+      title,
+      pcs,
+      msrp;
+
+  const initialize = function initialize() {
+    number = document.querySelector(numberSelector);
+    year = document.querySelector(yearSelector);
+    title = document.querySelector(titleSelector);
+    pcs = document.querySelector(pcsSelector);
+    msrp = document.querySelector(msrpSelector);
+  }
+
+  const update = function update(setData) {
+    const setNumber = typeof setData.nv === 'undefined' ? setData.n : setData.n + '-' + setData.nv;
+    number.innerHTML = setNumber;
+    year.innerHTML = setData.y;
+    title.innerHTML = setData.t;
+    pcs.innerHTML = setData.pcs;
+    msrp.innerHTML = parseFloat(setData.msrp, 10) > 0 ? "$" + setData.msrp : "Unknown";
+  }
+
+  return {
+    initialize: initialize,
+    update: update
+  }
+}();
+
+'use strict';
 BC.SignInForm = function() {
   const signInFormId = 'bc-sign-in-form',
         emailFieldId = 'bc-sign-in-form-email',
@@ -1112,43 +1156,6 @@ BC.SignInForm = function() {
   return {
     initialize: initialize,
     setSignedInState: setSignedInState,
-  }
-}();
-
-'use strict';
-BC.SetSummary = function() {
-  const numberSelector = '.bc-set-summary__number',
-        yearSelector = '.bc-set-summary__year',
-        titleSelector = '.bc-set-summary__title',
-        pcsSelector = '.bc-set-summary__pcs-count',
-        msrpSelector = '.bc-set-summary__msrp-value';
-
-  let number,
-      year,
-      title,
-      pcs,
-      msrp;
-
-  const initialize = function initialize() {
-    number = document.querySelector(numberSelector);
-    year = document.querySelector(yearSelector);
-    title = document.querySelector(titleSelector);
-    pcs = document.querySelector(pcsSelector);
-    msrp = document.querySelector(msrpSelector);
-  }
-
-  const update = function update(setData) {
-    const setNumber = typeof setData.nv === 'undefined' ? setData.n : setData.n + '-' + setData.nv;
-    number.innerHTML = setNumber;
-    year.innerHTML = setData.y;
-    title.innerHTML = setData.t;
-    pcs.innerHTML = setData.pcs;
-    msrp.innerHTML = parseFloat(setData.msrp, 10) > 0 ? "$" + setData.msrp : "Unknown";
-  }
-
-  return {
-    initialize: initialize,
-    update: update
   }
 }();
 

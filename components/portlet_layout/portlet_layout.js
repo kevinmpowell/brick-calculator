@@ -55,11 +55,11 @@ BC.PortletLayout = function() {
             },
             {
               key: "boFees",
-              label: "Seller Fees"
+              label: "BrickOwl & PayPal Fees"
             },
             {
               key: "setCost",
-              label: "Cost"
+              label: "Set Cost"
             }
           ]
         },
@@ -74,11 +74,11 @@ BC.PortletLayout = function() {
             },
             {
               key: "boFees",
-              label: "Seller Fees"
+              label: "Brick Owl & PayPal Fees"
             },
             {
               key: "setCost",
-              label: "Cost"
+              label: "Set Cost"
             }
           ]
         },
@@ -93,11 +93,11 @@ BC.PortletLayout = function() {
             },
             {
               key: "boFees",
-              label: "Seller Fees"
+              label: "Brick Owl & PayPal Fees"
             },
             {
               key: "setCost",
-              label: "Cost"
+              label: "Set Cost"
             }
           ]
         },
@@ -112,11 +112,11 @@ BC.PortletLayout = function() {
             },
             {
               key: "boFees",
-              label: "Seller Fees"
+              label: "Brick Owl & PayPal Fees"
             },
             {
               key: "setCost",
-              label: "Cost"
+              label: "Set Cost"
             }
           ]
         }
@@ -136,11 +136,11 @@ BC.PortletLayout = function() {
             },
             {
               key: "boFees",
-              label: "Seller Fees"
+              label: "Brick Owl & PayPal Fees"
             },
             {
               key: "setCost",
-              label: "Cost"
+              label: "Set Cost"
             }
           ]
         },
@@ -155,11 +155,11 @@ BC.PortletLayout = function() {
             },
             {
               key: "boFees",
-              label: "Seller Fees"
+              label: "Brick Owl & PayPal Fees"
             },
             {
               key: "setCost",
-              label: "Cost"
+              label: "Set Cost"
             }
           ]
         },
@@ -174,11 +174,11 @@ BC.PortletLayout = function() {
             },
             {
               key: "boFees",
-              label: "Seller Fees"
+              label: "Brick Owl & PayPal Fees"
             },
             {
               key: "setCost",
-              label: "Cost"
+              label: "Set Cost"
             }
           ]
         },
@@ -193,11 +193,11 @@ BC.PortletLayout = function() {
             },
             {
               key: "boFees",
-              label: "Seller Fees"
+              label: "Brick Owl & PayPal Fees"
             },
             {
               key: "setCost",
-              label: "Cost"
+              label: "Set Cost"
             }
           ]
         }
@@ -216,11 +216,11 @@ BC.PortletLayout = function() {
           },
           {
             key: "boFees",
-            label: "Seller Fees"
+            label: "Brick Owl & PayPal Fees"
           },
           {
             key: "setCost",
-            label: "Cost"
+            label: "Set Cost"
           }
         ]
       },
@@ -234,11 +234,11 @@ BC.PortletLayout = function() {
           },
           {
             key: "boFees",
-            label: "Seller Fees"
+            label: "Brick Owl & PayPal Fees"
           },
           {
             key: "setCost",
-            label: "Cost"
+            label: "Set Cost"
           }
         ]
       }

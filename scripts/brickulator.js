@@ -90,9 +90,16 @@ BC.Utils = function() {
     return number.toLocaleString('en-US', { style: 'currency', currency: 'USD' });
   }
 
+  const getPayPalTransactionFee = function getPayPalTransactionFee(finalValue) {
+    const payPalTransactionPercent = 2.9,
+          payPalPerTransactionCharge = 0.3;
+    return ((payPalTransactionPercent / 100) * finalValue) + payPalPerTransactionCharge;
+  }
+
   const getBrickOwlSellerFees = function getBrickOwlSellerFees(finalValue) {
     const brickOwlCommissionPercent = 2.5,
-          fee = (brickOwlCommissionPercent / 100) * finalValue;
+          payPalTransactionFee = getPayPalTransactionFee(finalValue),
+          fee = ((brickOwlCommissionPercent / 100) * finalValue) + payPalTransactionFee;
     return fee;
   }
 
