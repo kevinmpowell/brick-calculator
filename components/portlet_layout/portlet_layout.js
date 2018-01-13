@@ -39,7 +39,7 @@
 
 'use strict';
 BC.PortletLayout = function() {
-  const userSettings = BC.Utils.getFromLocalStorage(userSettingsKeyName),
+  const userSettings = BC.Utils.getFromLocalStorage(localStorageKeys.userSettings),
     setCostLabel = userSettings !== null && userSettings.plus_member && userSettings.taxRate ? "Cost w/tax" : "Cost",
     emptyPortletClass = "bc-portlet--empty",
     defaultLayout = [

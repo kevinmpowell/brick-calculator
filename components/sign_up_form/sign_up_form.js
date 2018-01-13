@@ -4,12 +4,17 @@ BC.SignUpForm = function() {
         emailFieldId = 'bc-sign-up-form-email',
         passwordFieldId = 'bc-sign-up-form-password',
         submitButtonSelector = '.bc-sign-up-form__submit-button',
-        signUpEndpoint = '/signup';
+        signUpEndpoint = '/signup',
+        formPaneSelector = '.bc-sign-up-form-pane',
+        formVisibleClass = 'bc-sign-up-form-pane--visible',
+        hidePaneTriggerSelector = '.bc-sign-up-form-pane-hide-trigger';
 
   let form,
+      formPane,
       emailField,
       passwordField,
-      submitButton;
+      submitButton,
+      hidePaneTriggers;
 
   function disableForm() {
     emailField.setAttribute('disabled', true);
@@ -28,7 +33,7 @@ BC.SignUpForm = function() {
   }
 
   function saveAuthToken(authToken) {
-    localStorage.setItem(authTokenKeyName, authToken)
+    localStorage.setItem(localStorageKeys.authToken, authToken)
   }
 
   function handleFormSignup(e) {
@@ -78,10 +83,23 @@ BC.SignUpForm = function() {
 
   function setEventListeners() {
     form.addEventListener("submit", handleFormSignup);
+    hidePaneTriggers.forEach(function(t) {
+      t.addEventListener("click", hideFormPane);
+    });
+  }
+
+  const showFormPane = function showFormPane() {
+    formPane.classList.add(formVisibleClass);
+  }
+
+  const hideFormPane = function hideFormPane() {
+    formPane.classList.remove(formVisibleClass);
   }
 
   const initialize = function initialize() {
     form = document.getElementById(signUpFormId);
+    formPane = document.querySelector(formPaneSelector);
+    hidePaneTriggers = Array.from(document.querySelectorAll(hidePaneTriggerSelector));
     emailField = document.getElementById(emailFieldId);
     passwordField = document.getElementById(passwordFieldId);
     submitButton = document.querySelector(submitButtonSelector);
@@ -89,6 +107,8 @@ BC.SignUpForm = function() {
   }
 
   return {
-    initialize: initialize
+    initialize: initialize,
+    showFormPane: showFormPane,
+    hideFormPane: hideFormPane
   }
 }();

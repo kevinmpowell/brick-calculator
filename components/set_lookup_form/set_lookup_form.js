@@ -29,7 +29,7 @@ BC.SetLookupForm = function() {
   }
 
   function updateFormDisplayForSignedInUser() {
-    const userSettings = BC.Utils.getFromLocalStorage(userSettingsKeyName);
+    const userSettings = BC.Utils.getFromLocalStorage(localStorageKeys.userSettings);
     if (userSettings !== null) {
       setTaxRateDisplay(userSettings);
     }

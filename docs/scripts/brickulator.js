@@ -8,15 +8,18 @@ const ebaySellingFeePercentage = .13, // TODO: Get this from a lookup
       threeMinutes = oneMinute * 3, // in milliseconds
       oneHour = oneMinute * 60,
       currentDomain = window.location.hostname,
-      authTokenKeyName = 'bcUserAuthToken',
-      userSettingsKeyName = 'bcUserSettings',
+      localStorageKeys = {
+        authToken: 'bcUserAuthToken',
+        userSettings: 'bcUserSettings'
+      },
       apiMapping = {
         'localhost': 'http://localhost:5000',
         'kevinmpowell.github.io': 'https://brickulator-api.herokuapp.com'
       },
       apiDomain = apiMapping[currentDomain],
       customEvents = {
-        userSignedIn: 'bc-user-signed-in'
+        userSignedIn: 'bc-user-signed-in',
+        userSignedOut: 'bc-user-signed-out'
       }; // in milliseconds
 
 
@@ -42,12 +45,19 @@ const ebaySellingFeePercentage = .13, // TODO: Get this from a lookup
       // });
 
 BC.App = function() {
-  function setSignedInState() {
+  const setSignedInState = function setSignedInState() {
     BC.Utils.validateAuthToken().then(function(){
       BC.Utils.broadcastEvent(customEvents.userSignedIn);
     }, function() {
+      BC.Utils.broadcastEvent(customEvents.userSignedOut);
       BC.Overlay.show("Not currently signed in", "This is an annoying message and should not be shown on page load.", true);
     });
+  }
+
+  const signOut = function signOut() {
+    BC.Utils.removeFromLocalStorage(localStorageKeys.authToken);
+    BC.Utils.removeFromLocalStorage(localStorageKeys.userSettings);
+    setSignedInState();
   }
 
   const initialize = function initialize() {
@@ -55,7 +65,9 @@ BC.App = function() {
   }
 
   return {
-    initialize: initialize
+    initialize: initialize,
+    signOut: signOut,
+    setSignedInState: setSignedInState
   };
 }();
 
@@ -130,6 +142,10 @@ BC.Utils = function() {
     localStorage.setItem(key, value);
   }
 
+  const removeFromLocalStorage = function removeFromLocalStorage(key) {
+    localStorage.removeItem(key);
+  }
+
   const getFromLocalStorage = function getFromLocalStorage(key) {
     let value = localStorage.getItem(key);
     try {
@@ -142,7 +158,7 @@ BC.Utils = function() {
   }
 
   const validateAuthToken = function validateAuthToken() {
-    const storedToken = getFromLocalStorage(authTokenKeyName);
+    const storedToken = getFromLocalStorage(localStorageKeys.authToken);
     let haveValidToken = false;
 
     if (storedToken !== null) {
@@ -172,6 +188,7 @@ BC.Utils = function() {
     getBrickOwlSellerFees: getBrickOwlSellerFees,
     saveToLocalStorage: saveToLocalStorage,
     getFromLocalStorage: getFromLocalStorage,
+    removeFromLocalStorage: removeFromLocalStorage,
     validateAuthToken: validateAuthToken,
     broadcastEvent: broadcastEvent
   }
@@ -567,7 +584,7 @@ BC.Overlay = function() {
 
 'use strict';
 BC.PortletLayout = function() {
-  const userSettings = BC.Utils.getFromLocalStorage(userSettingsKeyName),
+  const userSettings = BC.Utils.getFromLocalStorage(localStorageKeys.userSettings),
     setCostLabel = userSettings !== null && userSettings.plus_member && userSettings.taxRate ? "Cost w/tax" : "Cost",
     emptyPortletClass = "bc-portlet--empty",
     defaultLayout = [
@@ -1017,62 +1034,6 @@ BC.PortletPartOutBrickOwl = function() {
 // }();
 
 'use strict';
-BC.SetLookupForm = function() {
-  const formId = 'bc-value-lookup-form',
-        setNumberFieldId = "bc-value-lookup-form__set-number-input",
-        purchasePriceFieldId = "bc-value-lookup-form__purchase-price-input",
-        taxRateSelector = ".bc-set-lookup-form__tax-message",
-        taxRateAmountSelector = ".bc-set-lookup-form__tax-amount",
-        taxRateVisibleClass = "bc-set-lookup-form__tax-message--visible";
-
-  let form,
-      setNumber,
-      purchasePrice,
-      taxRateAmount,
-      taxRate;
-
-  function handleFormSubmit(e) {
-    e.preventDefault();
-    BC.Values.calculate(setNumber.value, purchasePrice.value);
-  }
-
-  function setTaxRateDisplay(userSettings) {
-    if (userSettings.plus_member && userSettings.taxRate) {
-      taxRateAmount.innerHTML = userSettings.taxRate;
-      taxRate.classList.add(taxRateVisibleClass);
-    } else {
-      taxRateAmount.innerHTML = '';
-      taxRate.classList.remove(taxRateVisibleClass);
-    }
-  }
-
-  function updateFormDisplayForSignedInUser() {
-    const userSettings = BC.Utils.getFromLocalStorage(userSettingsKeyName);
-    if (userSettings !== null) {
-      setTaxRateDisplay(userSettings);
-    }
-  }
-
-  function setEventListeners() {
-    form.addEventListener("submit", handleFormSubmit);
-    document.addEventListener(customEvents.userSignedIn, updateFormDisplayForSignedInUser);
-  }
-
-  const initialize = function initialize() {
-    form = document.getElementById(formId);
-    setNumber = document.getElementById(setNumberFieldId);
-    purchasePrice = document.getElementById(purchasePriceFieldId);
-    taxRate = form.querySelector(taxRateSelector);
-    taxRateAmount = form.querySelector(taxRateAmountSelector);
-    setEventListeners();
-  }
-
-  return {
-    initialize: initialize
-  }
-}();
-
-'use strict';
 BC.SetSummary = function() {
   const numberSelector = '.bc-set-summary__number',
         yearSelector = '.bc-set-summary__year',
@@ -1110,18 +1071,76 @@ BC.SetSummary = function() {
 }();
 
 'use strict';
+BC.SetLookupForm = function() {
+  const formId = 'bc-value-lookup-form',
+        setNumberFieldId = "bc-value-lookup-form__set-number-input",
+        purchasePriceFieldId = "bc-value-lookup-form__purchase-price-input",
+        taxRateSelector = ".bc-set-lookup-form__tax-message",
+        taxRateAmountSelector = ".bc-set-lookup-form__tax-amount",
+        taxRateVisibleClass = "bc-set-lookup-form__tax-message--visible";
+
+  let form,
+      setNumber,
+      purchasePrice,
+      taxRateAmount,
+      taxRate;
+
+  function handleFormSubmit(e) {
+    e.preventDefault();
+    BC.Values.calculate(setNumber.value, purchasePrice.value);
+  }
+
+  function setTaxRateDisplay(userSettings) {
+    if (userSettings.plus_member && userSettings.taxRate) {
+      taxRateAmount.innerHTML = userSettings.taxRate;
+      taxRate.classList.add(taxRateVisibleClass);
+    } else {
+      taxRateAmount.innerHTML = '';
+      taxRate.classList.remove(taxRateVisibleClass);
+    }
+  }
+
+  function updateFormDisplayForSignedInUser() {
+    const userSettings = BC.Utils.getFromLocalStorage(localStorageKeys.userSettings);
+    if (userSettings !== null) {
+      setTaxRateDisplay(userSettings);
+    }
+  }
+
+  function setEventListeners() {
+    form.addEventListener("submit", handleFormSubmit);
+    document.addEventListener(customEvents.userSignedIn, updateFormDisplayForSignedInUser);
+  }
+
+  const initialize = function initialize() {
+    form = document.getElementById(formId);
+    setNumber = document.getElementById(setNumberFieldId);
+    purchasePrice = document.getElementById(purchasePriceFieldId);
+    taxRate = form.querySelector(taxRateSelector);
+    taxRateAmount = form.querySelector(taxRateAmountSelector);
+    setEventListeners();
+  }
+
+  return {
+    initialize: initialize
+  }
+}();
+
+'use strict';
 BC.SignInForm = function() {
   const signInFormId = 'bc-sign-in-form',
         emailFieldId = 'bc-sign-in-form-email',
         passwordFieldId = 'bc-sign-in-form-password',
         submitButtonSelector = '.bc-sign-in-form__submit-button',
         signInEndpoint = '/auth/signin',
-        signInFormHiddenClass = 'bc-sign-in-form--hidden';
+        signInFormHiddenClass = 'bc-sign-in-form--hidden',
+        signUpLinkSelector = '.bc-show-sign-up-form';
 
   let form,
       emailField,
       passwordField,
-      submitButton;
+      submitButton,
+      signUpLink;
 
   function disableForm() {
     emailField.setAttribute('disabled', true);
@@ -1156,8 +1175,8 @@ BC.SignInForm = function() {
       if (request.status >= 200 && request.status < 400) {
         // Success!
         var data = JSON.parse(request.responseText);
-        BC.Utils.saveToLocalStorage(authTokenKeyName, data.auth_token);
-        BC.Utils.saveToLocalStorage(userSettingsKeyName, data.preferences);
+        BC.Utils.saveToLocalStorage(localStorageKeys.authToken, data.auth_token);
+        BC.Utils.saveToLocalStorage(localStorageKeys.userSettings, data.preferences);
         // TODO: Broadcast event that user settings have been loaded
         BC.Overlay.show("Welcome back!", "Sign in successful.", true);
         BC.App.setSignedInState();
@@ -1180,14 +1199,19 @@ BC.SignInForm = function() {
     return false; // prevent form submission
   }
 
-
   function hideSignInForm() {
     form.classList.add(signInFormHiddenClass);
   }
 
+  function showSignInForm() {
+    form.classList.remove(signInFormHiddenClass);
+  }
+
   function setEventListeners() {
     form.addEventListener("submit", handleFormSignIn);
+    signUpLink.addEventListener("click", BC.SignUpForm.showFormPane);
     document.addEventListener(customEvents.userSignedIn, hideSignInForm);
+    document.addEventListener(customEvents.userSignedOut, showSignInForm);
   }
 
   const initialize = function initialize() {
@@ -1195,6 +1219,7 @@ BC.SignInForm = function() {
     emailField = document.getElementById(emailFieldId);
     passwordField = document.getElementById(passwordFieldId);
     submitButton = document.querySelector(submitButtonSelector);
+    signUpLink = document.querySelector(signUpLinkSelector);
     setEventListeners();
   }
 
@@ -1209,12 +1234,17 @@ BC.SignUpForm = function() {
         emailFieldId = 'bc-sign-up-form-email',
         passwordFieldId = 'bc-sign-up-form-password',
         submitButtonSelector = '.bc-sign-up-form__submit-button',
-        signUpEndpoint = '/signup';
+        signUpEndpoint = '/signup',
+        formPaneSelector = '.bc-sign-up-form-pane',
+        formVisibleClass = 'bc-sign-up-form-pane--visible',
+        hidePaneTriggerSelector = '.bc-sign-up-form-pane-hide-trigger';
 
   let form,
+      formPane,
       emailField,
       passwordField,
-      submitButton;
+      submitButton,
+      hidePaneTriggers;
 
   function disableForm() {
     emailField.setAttribute('disabled', true);
@@ -1233,7 +1263,7 @@ BC.SignUpForm = function() {
   }
 
   function saveAuthToken(authToken) {
-    localStorage.setItem(authTokenKeyName, authToken)
+    localStorage.setItem(localStorageKeys.authToken, authToken)
   }
 
   function handleFormSignup(e) {
@@ -1283,10 +1313,23 @@ BC.SignUpForm = function() {
 
   function setEventListeners() {
     form.addEventListener("submit", handleFormSignup);
+    hidePaneTriggers.forEach(function(t) {
+      t.addEventListener("click", hideFormPane);
+    });
+  }
+
+  const showFormPane = function showFormPane() {
+    formPane.classList.add(formVisibleClass);
+  }
+
+  const hideFormPane = function hideFormPane() {
+    formPane.classList.remove(formVisibleClass);
   }
 
   const initialize = function initialize() {
     form = document.getElementById(signUpFormId);
+    formPane = document.querySelector(formPaneSelector);
+    hidePaneTriggers = Array.from(document.querySelectorAll(hidePaneTriggerSelector));
     emailField = document.getElementById(emailFieldId);
     passwordField = document.getElementById(passwordFieldId);
     submitButton = document.querySelector(submitButtonSelector);
@@ -1294,7 +1337,9 @@ BC.SignUpForm = function() {
   }
 
   return {
-    initialize: initialize
+    initialize: initialize,
+    showFormPane: showFormPane,
+    hideFormPane: hideFormPane
   }
 }();
 
@@ -1303,10 +1348,14 @@ BC.SiteMenu = function() {
   const showMenuSelector = '.bc-site-menu-show-trigger',
         hideMenuSelector = '.bc-site-menu-hide-trigger',
         menuSelector = '.bc-site-menu',
-        menuVisibleClass = 'bc-site-menu--visible';
+        menuVisibleClass = 'bc-site-menu--visible',
+        signOutSelector = '[href="#sign-out"]',
+        settingsSelector = '[href="#user-settings"]';
 
   let showMenuTriggers,
       hideMenuTriggers,
+      signOutLink,
+      settingsLink,
       menu;
 
   const showMenu = function showMenu() {
@@ -1325,6 +1374,9 @@ BC.SiteMenu = function() {
     hideMenuTriggers.forEach(function(t){
       t.addEventListener("click", hideMenu);
     });
+
+    signOutLink.addEventListener("click", BC.App.signOut);
+    settingsLink.addEventListener("click", BC.UserSettingsPane.showPane);
   }
 
 
@@ -1332,6 +1384,8 @@ BC.SiteMenu = function() {
     showMenuTriggers = Array.from(document.querySelectorAll(showMenuSelector));
     hideMenuTriggers = Array.from(document.querySelectorAll(hideMenuSelector));
     menu = document.querySelector(menuSelector);
+    signOutLink = document.querySelector(signOutSelector);
+    settingsLink = document.querySelector(settingsSelector);
     setEventListeners();
   }
 
@@ -1344,41 +1398,69 @@ BC.SiteMenu = function() {
 
 'use strict';
 BC.UserSettingsPane = function() {
-  const userTaxRateFieldId = 'bc-user-settings-taxRate',
-        userSettings = BC.Utils.getFromLocalStorage(userSettingsKeyName);
+  const settingsPaneSelector = '.bc-user-settings-pane',
+        userTaxRateFieldId = 'bc-user-settings-taxRate',
+        paneVisibleClass = 'bc-user-settings-pane--visible',
+        hidePaneSelector = '.bc-user-settings-pane-hide-trigger';
 
-  let taxRate;
-  // TODO, need a way to fetch fresh user settings - probably another endpoint, that way user doesn't have to log out and log back in to get fresh settings
+  let taxRate,
+      settingsPane,
+      hidePaneTriggers;
+
+  function disableTaxesSetting() {
+    taxRate.value = '';
+    taxRate.setAttribute('disabled', true);
+  }
+
+  function enableTaxesSetting(userSettings) {
+    taxRate.removeAttribute('disabled');
+    if (userSettings.taxRate) {
+      taxRate.value = userSettings.taxRate; // If they've previously saved a tax rate, restore that value here
+    }
+  }
 
   function updateTaxesSetting(userSettings) {
-    if (userSettings.plus_member) {
-      if (userSettings.taxRate) {
-        taxRate.removeAttribute('disabled');
-        taxRate.value = userSettings.taxRate;
-      } else {
-        taxRate.setAttribute('disabled', true);
-      }
+    disableTaxesSetting();
+    if (userSettings !== null && userSettings.plus_member) {
+      enableTaxesSetting(userSettings); // If they're a plus member, give them access to the tax rate settings
     }
   }
 
   function setEventListeners() {
     document.addEventListener(customEvents.userSignedIn, update);
+    document.addEventListener(customEvents.userSignedOut, update);
+    hidePaneTriggers.forEach(function(t){
+      t.addEventListener("click", hidePane);
+    });
+  }
+
+  const showPane = function showPane() {
+    console.log("SHOW IT");
+    settingsPane.classList.add(paneVisibleClass);
+  }
+
+  const hidePane = function hidePane() {
+    settingsPane.classList.remove(paneVisibleClass);
   }
 
   const update = function update() {
-    if (userSettings !== null) {
-      updateTaxesSetting(userSettings);
-    }
+    const userSettings = BC.Utils.getFromLocalStorage(localStorageKeys.userSettings);
+    console.log("USER SETTINGS", userSettings);
+    updateTaxesSetting(userSettings);
   }
 
   const initialize = function initialize() {
     taxRate = document.getElementById(userTaxRateFieldId);
+    settingsPane = document.querySelector(settingsPaneSelector);
+    hidePaneTriggers = Array.from(document.querySelectorAll(hidePaneSelector));
     update();
     setEventListeners();
   }
 
   return {
     initialize: initialize,
-    update: update
+    update: update,
+    showPane: showPane,
+    hidePane: hidePane
   }
 }();
