@@ -39,7 +39,9 @@
 
 'use strict';
 BC.PortletLayout = function() {
-  const emptyPortletClass = "bc-portlet--empty",
+  const userSettings = BC.Utils.getFromLocalStorage(userSettingsKeyName),
+    setCostLabel = userSettings !== null && userSettings.plus_member && userSettings.taxRate ? "Cost w/tax" : "Cost",
+    emptyPortletClass = "bc-portlet--empty",
     defaultLayout = [
     {
       header: "Complete Set Values (New)",
@@ -59,7 +61,7 @@ BC.PortletLayout = function() {
             },
             {
               key: "setCost",
-              label: "Set Cost"
+              label: setCostLabel
             }
           ]
         },
@@ -78,7 +80,7 @@ BC.PortletLayout = function() {
             },
             {
               key: "setCost",
-              label: "Set Cost"
+              label: setCostLabel
             }
           ]
         },
@@ -97,7 +99,7 @@ BC.PortletLayout = function() {
             },
             {
               key: "setCost",
-              label: "Set Cost"
+              label: setCostLabel
             }
           ]
         },
@@ -116,7 +118,7 @@ BC.PortletLayout = function() {
             },
             {
               key: "setCost",
-              label: "Set Cost"
+              label: setCostLabel
             }
           ]
         }
@@ -140,7 +142,7 @@ BC.PortletLayout = function() {
             },
             {
               key: "setCost",
-              label: "Set Cost"
+              label: setCostLabel
             }
           ]
         },
@@ -159,7 +161,7 @@ BC.PortletLayout = function() {
             },
             {
               key: "setCost",
-              label: "Set Cost"
+              label: setCostLabel
             }
           ]
         },
@@ -178,7 +180,7 @@ BC.PortletLayout = function() {
             },
             {
               key: "setCost",
-              label: "Set Cost"
+              label: setCostLabel
             }
           ]
         },
@@ -197,7 +199,7 @@ BC.PortletLayout = function() {
             },
             {
               key: "setCost",
-              label: "Set Cost"
+              label: setCostLabel
             }
           ]
         }
@@ -220,7 +222,7 @@ BC.PortletLayout = function() {
           },
           {
             key: "setCost",
-            label: "Set Cost"
+            label: setCostLabel
           }
         ]
       },
@@ -238,7 +240,7 @@ BC.PortletLayout = function() {
           },
           {
             key: "setCost",
-            label: "Set Cost"
+            label: setCostLabel
           }
         ]
       }
@@ -316,9 +318,8 @@ BC.PortletLayout = function() {
           profitInput = p.querySelector(".bc-portlet__profit-input"),
           portletRetrievedAt = p.querySelector(".bc-portlet__data-retrieved-at"),
           retrievedAtKey = portletRetrievedAt.getAttribute("data-retrieved-at-key"),
-          portletListingsCountAmount = p.querySelector(".bc-portlet__listings-count-amount");
-console.log(portletListingsCountAmount);
-          const listingsCountKey = portletListingsCountAmount === null ? false : portletListingsCountAmount.getAttribute("data-listings-count-key"),
+          portletListingsCountAmount = p.querySelector(".bc-portlet__listings-count-amount"),
+          listingsCountKey = portletListingsCountAmount === null ? false : portletListingsCountAmount.getAttribute("data-listings-count-key"),
           liKeys = lineItemInputs.map(function(li){ return li.getAttribute("data-value-key"); }),
           marketplaceValueKey = liKeys.find(function(k){ return data.hasOwnProperty(k); }),
           marketplaceValue = marketplaceValueKey ? data[marketplaceValueKey] : false,
@@ -361,12 +362,20 @@ console.log(portletListingsCountAmount);
       p.classList.add(emptyPortletClass);
       console.log("Marketplace Value not found", liKeys);
     }
+  }
 
+  function getSetCostWithTaxes(setCost) {
+    setCost = parseFloat(setCost, 10);
+    if (userSettings.plus_member && userSettings.taxRate) {
+      const taxes = parseFloat(userSettings.taxRate / 100, 10) * setCost;
+      setCost += taxes;
+    }
+    return setCost;
   }
 
   const updateAllPortletValues = function updateAllPortletValues(data, setCost) {
     const portlets = document.querySelectorAll(".bc-portlet"),
-          cost = parseFloat(setCost, 10);
+          cost = getSetCostWithTaxes(setCost);
 
     portlets.forEach(function(p){
       updatePortletValues(p, data, cost);

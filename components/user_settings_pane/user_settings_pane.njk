@@ -3,7 +3,7 @@
     <form action="" id="bc-user-settings-form">
       {% call form_field_group() %}
         {{ form_label(label="Tax Rate", class="bc-form-label--on-dark", for="bc-user-settings-taxRate") }}
-        {{ form_input(step="0.01", type="number", suffix="%", id="bc-user-settings-taxRate")}}
+        {{ form_input(step="0.01", type="number", suffix="%", id="bc-user-settings-taxRate", disabled=true)}}
       {% endcall %}
     </form>
   </div>

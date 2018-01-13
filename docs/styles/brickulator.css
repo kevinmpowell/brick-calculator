@@ -488,6 +488,13 @@ input {
   color: #EEF5F4;
   font-size: 12px; }
 
+.bc-set-lookup-form__tax-message {
+  display: none;
+  font-size: 10px; }
+
+.bc-set-lookup-form__tax-message--visible {
+  display: inline; }
+
 body {
   background: #EEF5F4;
   background: #EEF5F4;

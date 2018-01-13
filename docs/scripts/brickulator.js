@@ -40,6 +40,25 @@ const ebaySellingFeePercentage = .13, // TODO: Get this from a lookup
       // .catch(function (err) {
       //   console.error('Augh, there was an error!', err.statusText);
       // });
+
+BC.App = function() {
+  function setSignedInState() {
+    BC.Utils.validateAuthToken().then(function(){
+      BC.Utils.broadcastEvent(customEvents.userSignedIn);
+    }, function() {
+      BC.Overlay.show("Not currently signed in", "This is an annoying message and should not be shown on page load.", true);
+    });
+  }
+
+  const initialize = function initialize() {
+    setSignedInState();
+  }
+
+  return {
+    initialize: initialize
+  };
+}();
+
 BC.API = function() {
   const makeRequest = function makeRequest (opts) {
     const apiUrl = apiDomain + opts.url;
@@ -274,8 +293,6 @@ BC.Values = function() {
 
   function calculate(setNumber, purchasePrice) {
     const setData = setDB[setNumber];
-    // BC.PortletPricePerPiece.update(setData, purchasePrice);
-    // BC.PortletPartOutBrickOwl.update(setData, purchasePrice);
 
     if (setData) {
       BC.SetSummary.update(setData);
@@ -318,35 +335,6 @@ BC.Values = function() {
   }
 }();
 
-BC.Form = function() {
-  const formId = "bc-value-lookup-form",
-        setNumberFieldId = "bc-value-lookup-form__set-number-input",
-        purchasePriceFieldId = "bc-value-lookup-form__purchase-price-input";
-
-  function handleFormSubmit(e) {
-    e.preventDefault();
-    const setNumber = document.getElementById(setNumberFieldId).value,
-          purchasePrice = document.getElementById(purchasePriceFieldId).value;
-    BC.Values.calculate(setNumber, purchasePrice);
-  }
-
-  function setEventListeners() {
-    const form = document.getElementById(formId);
-    form.addEventListener("submit", handleFormSubmit);
-  }
-
-
-  let initialize = function initialize() {
-    setEventListeners();
-  };
-
-  return {
-    initialize: initialize
-  }
-}();
-
-
-
 function ready(fn) {
   if (document.attachEvent ? document.readyState === "complete" : document.readyState !== "loading"){
     fn();
@@ -358,7 +346,6 @@ function ready(fn) {
 ready(function(){
   BC.Overlay.initialize();
   BC.SetDatabase.initialize();
-  BC.Form.initialize();
   BC.Values.initialize();
   BC.SetSummary.initialize();
   BC.PortletLayout.initialize();
@@ -367,6 +354,8 @@ ready(function(){
   BC.SiteMenu.initialize();
   BC.UserSettingsPane.initialize();
   BC.SignInForm.initialize();
+  BC.SetLookupForm.initialize();
+  BC.App.initialize(); // Check auth token, broadcast user state events
 });
 
 'use strict';
@@ -578,7 +567,9 @@ BC.Overlay = function() {
 
 'use strict';
 BC.PortletLayout = function() {
-  const emptyPortletClass = "bc-portlet--empty",
+  const userSettings = BC.Utils.getFromLocalStorage(userSettingsKeyName),
+    setCostLabel = userSettings !== null && userSettings.plus_member && userSettings.taxRate ? "Cost w/tax" : "Cost",
+    emptyPortletClass = "bc-portlet--empty",
     defaultLayout = [
     {
       header: "Complete Set Values (New)",
@@ -598,7 +589,7 @@ BC.PortletLayout = function() {
             },
             {
               key: "setCost",
-              label: "Set Cost"
+              label: setCostLabel
             }
           ]
         },
@@ -617,7 +608,7 @@ BC.PortletLayout = function() {
             },
             {
               key: "setCost",
-              label: "Set Cost"
+              label: setCostLabel
             }
           ]
         },
@@ -636,7 +627,7 @@ BC.PortletLayout = function() {
             },
             {
               key: "setCost",
-              label: "Set Cost"
+              label: setCostLabel
             }
           ]
         },
@@ -655,7 +646,7 @@ BC.PortletLayout = function() {
             },
             {
               key: "setCost",
-              label: "Set Cost"
+              label: setCostLabel
             }
           ]
         }
@@ -679,7 +670,7 @@ BC.PortletLayout = function() {
             },
             {
               key: "setCost",
-              label: "Set Cost"
+              label: setCostLabel
             }
           ]
         },
@@ -698,7 +689,7 @@ BC.PortletLayout = function() {
             },
             {
               key: "setCost",
-              label: "Set Cost"
+              label: setCostLabel
             }
           ]
         },
@@ -717,7 +708,7 @@ BC.PortletLayout = function() {
             },
             {
               key: "setCost",
-              label: "Set Cost"
+              label: setCostLabel
             }
           ]
         },
@@ -736,7 +727,7 @@ BC.PortletLayout = function() {
             },
             {
               key: "setCost",
-              label: "Set Cost"
+              label: setCostLabel
             }
           ]
         }
@@ -759,7 +750,7 @@ BC.PortletLayout = function() {
           },
           {
             key: "setCost",
-            label: "Set Cost"
+            label: setCostLabel
           }
         ]
       },
@@ -777,7 +768,7 @@ BC.PortletLayout = function() {
           },
           {
             key: "setCost",
-            label: "Set Cost"
+            label: setCostLabel
           }
         ]
       }
@@ -855,9 +846,8 @@ BC.PortletLayout = function() {
           profitInput = p.querySelector(".bc-portlet__profit-input"),
           portletRetrievedAt = p.querySelector(".bc-portlet__data-retrieved-at"),
           retrievedAtKey = portletRetrievedAt.getAttribute("data-retrieved-at-key"),
-          portletListingsCountAmount = p.querySelector(".bc-portlet__listings-count-amount");
-console.log(portletListingsCountAmount);
-          const listingsCountKey = portletListingsCountAmount === null ? false : portletListingsCountAmount.getAttribute("data-listings-count-key"),
+          portletListingsCountAmount = p.querySelector(".bc-portlet__listings-count-amount"),
+          listingsCountKey = portletListingsCountAmount === null ? false : portletListingsCountAmount.getAttribute("data-listings-count-key"),
           liKeys = lineItemInputs.map(function(li){ return li.getAttribute("data-value-key"); }),
           marketplaceValueKey = liKeys.find(function(k){ return data.hasOwnProperty(k); }),
           marketplaceValue = marketplaceValueKey ? data[marketplaceValueKey] : false,
@@ -900,12 +890,20 @@ console.log(portletListingsCountAmount);
       p.classList.add(emptyPortletClass);
       console.log("Marketplace Value not found", liKeys);
     }
+  }
 
+  function getSetCostWithTaxes(setCost) {
+    setCost = parseFloat(setCost, 10);
+    if (userSettings.plus_member && userSettings.taxRate) {
+      const taxes = parseFloat(userSettings.taxRate / 100, 10) * setCost;
+      setCost += taxes;
+    }
+    return setCost;
   }
 
   const updateAllPortletValues = function updateAllPortletValues(data, setCost) {
     const portlets = document.querySelectorAll(".bc-portlet"),
-          cost = parseFloat(setCost, 10);
+          cost = getSetCostWithTaxes(setCost);
 
     portlets.forEach(function(p){
       updatePortletValues(p, data, cost);
@@ -1019,6 +1017,62 @@ BC.PortletPartOutBrickOwl = function() {
 // }();
 
 'use strict';
+BC.SetLookupForm = function() {
+  const formId = 'bc-value-lookup-form',
+        setNumberFieldId = "bc-value-lookup-form__set-number-input",
+        purchasePriceFieldId = "bc-value-lookup-form__purchase-price-input",
+        taxRateSelector = ".bc-set-lookup-form__tax-message",
+        taxRateAmountSelector = ".bc-set-lookup-form__tax-amount",
+        taxRateVisibleClass = "bc-set-lookup-form__tax-message--visible";
+
+  let form,
+      setNumber,
+      purchasePrice,
+      taxRateAmount,
+      taxRate;
+
+  function handleFormSubmit(e) {
+    e.preventDefault();
+    BC.Values.calculate(setNumber.value, purchasePrice.value);
+  }
+
+  function setTaxRateDisplay(userSettings) {
+    if (userSettings.plus_member && userSettings.taxRate) {
+      taxRateAmount.innerHTML = userSettings.taxRate;
+      taxRate.classList.add(taxRateVisibleClass);
+    } else {
+      taxRateAmount.innerHTML = '';
+      taxRate.classList.remove(taxRateVisibleClass);
+    }
+  }
+
+  function updateFormDisplayForSignedInUser() {
+    const userSettings = BC.Utils.getFromLocalStorage(userSettingsKeyName);
+    if (userSettings !== null) {
+      setTaxRateDisplay(userSettings);
+    }
+  }
+
+  function setEventListeners() {
+    form.addEventListener("submit", handleFormSubmit);
+    document.addEventListener(customEvents.userSignedIn, updateFormDisplayForSignedInUser);
+  }
+
+  const initialize = function initialize() {
+    form = document.getElementById(formId);
+    setNumber = document.getElementById(setNumberFieldId);
+    purchasePrice = document.getElementById(purchasePriceFieldId);
+    taxRate = form.querySelector(taxRateSelector);
+    taxRateAmount = form.querySelector(taxRateAmountSelector);
+    setEventListeners();
+  }
+
+  return {
+    initialize: initialize
+  }
+}();
+
+'use strict';
 BC.SetSummary = function() {
   const numberSelector = '.bc-set-summary__number',
         yearSelector = '.bc-set-summary__year',
@@ -1106,7 +1160,7 @@ BC.SignInForm = function() {
         BC.Utils.saveToLocalStorage(userSettingsKeyName, data.preferences);
         // TODO: Broadcast event that user settings have been loaded
         BC.Overlay.show("Welcome back!", "Sign in successful.", true);
-        setSignedInState();
+        BC.App.setSignedInState();
         enableForm();
         resetForm();
       } else {
@@ -1126,22 +1180,14 @@ BC.SignInForm = function() {
     return false; // prevent form submission
   }
 
-  function setEventListeners() {
-    form.addEventListener("submit", handleFormSignIn);
-  }
 
   function hideSignInForm() {
     form.classList.add(signInFormHiddenClass);
   }
 
-  const setSignedInState = function setSignedInState() {
-    BC.Utils.validateAuthToken().then(function(){
-      hideSignInForm();
-      BC.Utils.broadcastEvent(customEvents.userSignedIn);
-    }, function() {
-      BC.Overlay.show("Not currently signed in", "This is an annoying message and should not be shown on page load.", true);
-    }
-    );
+  function setEventListeners() {
+    form.addEventListener("submit", handleFormSignIn);
+    document.addEventListener(customEvents.userSignedIn, hideSignInForm);
   }
 
   const initialize = function initialize() {
@@ -1149,13 +1195,11 @@ BC.SignInForm = function() {
     emailField = document.getElementById(emailFieldId);
     passwordField = document.getElementById(passwordFieldId);
     submitButton = document.querySelector(submitButtonSelector);
-    setSignedInState();
     setEventListeners();
   }
 
   return {
-    initialize: initialize,
-    setSignedInState: setSignedInState,
+    initialize: initialize
   }
 }();
 
@@ -1300,24 +1344,36 @@ BC.SiteMenu = function() {
 
 'use strict';
 BC.UserSettingsPane = function() {
-  const userTaxRateFieldId = 'bc-user-settings-taxRate'
+  const userTaxRateFieldId = 'bc-user-settings-taxRate',
+        userSettings = BC.Utils.getFromLocalStorage(userSettingsKeyName);
 
   let taxRate;
   // TODO, need a way to fetch fresh user settings - probably another endpoint, that way user doesn't have to log out and log back in to get fresh settings
 
-
-  const update = function update() {
-    const userSettings = BC.Utils.getFromLocalStorage(userSettingsKeyName);
-    console.log(userSettings);
-    taxRate.value = userSettings.taxRate;
+  function updateTaxesSetting(userSettings) {
+    if (userSettings.plus_member) {
+      if (userSettings.taxRate) {
+        taxRate.removeAttribute('disabled');
+        taxRate.value = userSettings.taxRate;
+      } else {
+        taxRate.setAttribute('disabled', true);
+      }
+    }
   }
 
   function setEventListeners() {
     document.addEventListener(customEvents.userSignedIn, update);
   }
 
+  const update = function update() {
+    if (userSettings !== null) {
+      updateTaxesSetting(userSettings);
+    }
+  }
+
   const initialize = function initialize() {
     taxRate = document.getElementById(userTaxRateFieldId);
+    update();
     setEventListeners();
   }
 

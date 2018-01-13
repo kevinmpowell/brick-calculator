@@ -39,6 +39,25 @@ const ebaySellingFeePercentage = .13, // TODO: Get this from a lookup
       // .catch(function (err) {
       //   console.error('Augh, there was an error!', err.statusText);
       // });
+
+BC.App = function() {
+  function setSignedInState() {
+    BC.Utils.validateAuthToken().then(function(){
+      BC.Utils.broadcastEvent(customEvents.userSignedIn);
+    }, function() {
+      BC.Overlay.show("Not currently signed in", "This is an annoying message and should not be shown on page load.", true);
+    });
+  }
+
+  const initialize = function initialize() {
+    setSignedInState();
+  }
+
+  return {
+    initialize: initialize
+  };
+}();
+
 BC.API = function() {
   const makeRequest = function makeRequest (opts) {
     const apiUrl = apiDomain + opts.url;
@@ -273,8 +292,6 @@ BC.Values = function() {
 
   function calculate(setNumber, purchasePrice) {
     const setData = setDB[setNumber];
-    // BC.PortletPricePerPiece.update(setData, purchasePrice);
-    // BC.PortletPartOutBrickOwl.update(setData, purchasePrice);
 
     if (setData) {
       BC.SetSummary.update(setData);
@@ -317,35 +334,6 @@ BC.Values = function() {
   }
 }();
 
-BC.Form = function() {
-  const formId = "bc-value-lookup-form",
-        setNumberFieldId = "bc-value-lookup-form__set-number-input",
-        purchasePriceFieldId = "bc-value-lookup-form__purchase-price-input";
-
-  function handleFormSubmit(e) {
-    e.preventDefault();
-    const setNumber = document.getElementById(setNumberFieldId).value,
-          purchasePrice = document.getElementById(purchasePriceFieldId).value;
-    BC.Values.calculate(setNumber, purchasePrice);
-  }
-
-  function setEventListeners() {
-    const form = document.getElementById(formId);
-    form.addEventListener("submit", handleFormSubmit);
-  }
-
-
-  let initialize = function initialize() {
-    setEventListeners();
-  };
-
-  return {
-    initialize: initialize
-  }
-}();
-
-
-
 function ready(fn) {
   if (document.attachEvent ? document.readyState === "complete" : document.readyState !== "loading"){
     fn();
@@ -357,7 +345,6 @@ function ready(fn) {
 ready(function(){
   BC.Overlay.initialize();
   BC.SetDatabase.initialize();
-  BC.Form.initialize();
   BC.Values.initialize();
   BC.SetSummary.initialize();
   BC.PortletLayout.initialize();
@@ -366,4 +353,6 @@ ready(function(){
   BC.SiteMenu.initialize();
   BC.UserSettingsPane.initialize();
   BC.SignInForm.initialize();
+  BC.SetLookupForm.initialize();
+  BC.App.initialize(); // Check auth token, broadcast user state events
 });

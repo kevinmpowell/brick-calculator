@@ -13,7 +13,8 @@
               pattern,
               step,
               prefix,
-              suffix) %}
+              suffix,
+              disabled=false) %}
   {% if prefix or suffix %}
     <div class="bc-form-input-wrap">
   {% endif %}
@@ -36,7 +37,11 @@
               {% endif %}
               {% if step %}
               step="{{ step }}"
-              {% endif %}>
+              {% endif %}
+              {% if disabled %}
+                disabled
+              {% endif %}
+              >
   {% if prefix or suffix %}
     </div>
   {% endif %}

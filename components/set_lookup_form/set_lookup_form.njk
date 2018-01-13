@@ -16,7 +16,12 @@
       {{ autocomplete() }}
     </div>
 
-    <label class="bc-form-label" for="bc-value-lookup-form__purchase-price-input">Purchase Price</label>
+    <label class="bc-form-label" for="bc-value-lookup-form__purchase-price-input">
+      Purchase Price
+      <span class="bc-set-lookup-form__tax-message">
+        (<span class="bc-set-lookup-form__tax-amount"></span>% sales tax will be added)
+      </span>
+    </label>
     <div class="bc-form-input-wrap">
       <div class="bc-form-input-prefix">
         $

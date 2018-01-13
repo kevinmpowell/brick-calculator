@@ -49,7 +49,7 @@ BC.SignInForm = function() {
         BC.Utils.saveToLocalStorage(userSettingsKeyName, data.preferences);
         // TODO: Broadcast event that user settings have been loaded
         BC.Overlay.show("Welcome back!", "Sign in successful.", true);
-        setSignedInState();
+        BC.App.setSignedInState();
         enableForm();
         resetForm();
       } else {
@@ -69,22 +69,14 @@ BC.SignInForm = function() {
     return false; // prevent form submission
   }
 
-  function setEventListeners() {
-    form.addEventListener("submit", handleFormSignIn);
-  }
 
   function hideSignInForm() {
     form.classList.add(signInFormHiddenClass);
   }
 
-  const setSignedInState = function setSignedInState() {
-    BC.Utils.validateAuthToken().then(function(){
-      hideSignInForm();
-      BC.Utils.broadcastEvent(customEvents.userSignedIn);
-    }, function() {
-      BC.Overlay.show("Not currently signed in", "This is an annoying message and should not be shown on page load.", true);
-    }
-    );
+  function setEventListeners() {
+    form.addEventListener("submit", handleFormSignIn);
+    document.addEventListener(customEvents.userSignedIn, hideSignInForm);
   }
 
   const initialize = function initialize() {
@@ -92,12 +84,10 @@ BC.SignInForm = function() {
     emailField = document.getElementById(emailFieldId);
     passwordField = document.getElementById(passwordFieldId);
     submitButton = document.querySelector(submitButtonSelector);
-    setSignedInState();
     setEventListeners();
   }
 
   return {
-    initialize: initialize,
-    setSignedInState: setSignedInState,
+    initialize: initialize
   }
 }();
