@@ -1,3 +1,54 @@
 {% macro form_label(class, for, label) %}
   <label for="{{ for }}" class="bc-form-label{{ ' ' + class if class }}">{{ label }}</label>
 {% endmacro %}
+
+{% macro form_input(
+              class, 
+              type="text", 
+              id,
+              autocomplete="off",
+              autocorrect="off",
+              autocapitalize="off",
+              spellcheck="false",
+              pattern,
+              step,
+              prefix,
+              suffix,
+              disabled=false) %}
+  {% if prefix or suffix %}
+    <div class="bc-form-input-wrap">
+  {% endif %}
+    {% if prefix %}
+      <div class="bc-form-input-prefix">{{ prefix }}</div>
+    {% endif %}
+    {% if suffix %}
+      <div class="bc-form-input-suffix">{{ suffix }}</div>
+    {% endif %}
+      <input type="{{ type }}" 
+              class="bc-form-input{{ ' ' + class if class }}"
+              id="{{ id }}" 
+              name="{{ id }}"
+              autocomplete="{{ autocomplete }}" 
+              autocorrect="{{ autocorrect }}" 
+              autocapitalize="{{ autocapitalize }}" 
+              spellcheck="{{ spellcheck }}"
+              {% if pattern %}
+              pattern="{{ pattern }}"
+              {% endif %}
+              {% if step %}
+              step="{{ step }}"
+              {% endif %}
+              {% if disabled %}
+                disabled
+              {% endif %}
+              >
+  {% if prefix or suffix %}
+    </div>
+  {% endif %}
+{% endmacro %}
+
+{% macro form_field_group(class) %}
+  <div class="bc-form-field-group{{ ' ' + class if class }}">
+    {{ caller() }}
+  </div>
+{% endmacro %}

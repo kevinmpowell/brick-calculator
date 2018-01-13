@@ -20,6 +20,7 @@
   <button
     
      type="button" 
+    
     class="bc-button bc-show-lookup-form bc-button--size-s">
     Back
   </button>
@@ -32,16 +33,18 @@
   <button
     
      type="button" 
+    
     class="bc-button bc-button--size-s bc-site-menu-show-trigger">
     Menu
   </button>
 
     </div>
     <div id="bc-lookup">
-      <form action="" class="bc-value-lookup-form" id="bc-value-lookup-form" novalidate>
-        <div class="bc-value-lookup-form__actions">
-          <div class="bc-lookup-set-data-status">
-            
+      
+  <form action="" class="bc-value-lookup-form" id="bc-value-lookup-form" novalidate>
+    <div class="bc-value-lookup-form__actions">
+      <div class="bc-lookup-set-data-status">
+        
   <div
        
       class="bc-spinner bc-spinner--loading-set-data">
@@ -55,27 +58,28 @@
     
   </div>
 
-            <div class="bc-lookup-set-data-status-message">
-              <span class="bc-lookup-set-data-message">Last updated</span> 
-              <span class="bc-lookup-set-data-timestamp"></span>
-            </div>
-          </div>
-          
+        <div class="bc-lookup-set-data-status-message">
+          <span class="bc-lookup-set-data-message">Last updated</span> 
+          <span class="bc-lookup-set-data-timestamp"></span>
+        </div>
+      </div>
+      
   
   
 
   <button
     
      type="reset" 
+    
     class="bc-button bc-button--size-s">
     Reset Form
   </button>
 
-        </div>
-        <div class="bc-field-group">
-          <label class="bc-form-label" for="bc-value-lookup-form__set-number-input">Set Number</label>
-          <input autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" name="setNumber" id="bc-value-lookup-form__set-number-input" type="text" pattern="[0-9]*">
-          
+    </div>
+    <div class="bc-field-group">
+      <label class="bc-form-label" for="bc-value-lookup-form__set-number-input">Set Number</label>
+      <input autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" name="setNumber" id="bc-value-lookup-form__set-number-input" type="text" pattern="[0-9]*">
+      
   <ul class="bc-autocomplete">
     <li class="bc-autocomplete__item bc-autocomplete__item--template">
       <a href="" class="bc-autocomplete__item-link">
@@ -87,28 +91,36 @@
     </li>
   </ul>
 
-        </div>
+    </div>
 
-        <label class="bc-form-label" for="bc-value-lookup-form__purchase-price-input">Purchase Price</label>
-        <div class="bc-form-input-wrap">
-          <div class="bc-form-input-prefix">
-            $
-          </div>
-          <input step="0.01" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" type="number" id="bc-value-lookup-form__purchase-price-input" name="purchasePrice">
-        </div>
+    <label class="bc-form-label" for="bc-value-lookup-form__purchase-price-input">
+      Purchase Price
+      <span class="bc-set-lookup-form__tax-message">
+        (<span class="bc-set-lookup-form__tax-amount"></span>% sales tax will be added)
+      </span>
+    </label>
+    <div class="bc-form-input-wrap">
+      <div class="bc-form-input-prefix">
+        $
+      </div>
+      <input step="0.01" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" type="number" id="bc-value-lookup-form__purchase-price-input" name="purchasePrice">
+    </div>
 
-        
+    
   
   
 
   <button
     
      type="submit" 
+    
     class="bc-button bc-button--primary">
     Brickulate!
   </button>
 
-      </form>
+  </form>
+  
+
     </div>
     <div id="bc-results">
       
@@ -184,6 +196,7 @@
   <button
     
      type="button" 
+    
     class="bc-button bc-show-lookup-form">
     Back To Lookup
   </button>
@@ -201,11 +214,147 @@
   <button
     
      type="button" 
+    
     class="bc-button bc-button--primary bc-button--size-s bc-site-menu-hide-trigger">
     &times; Close
   </button>
 
       </div>
+      
+  <form action="" method="POST" id="bc-sign-in-form">
+    <div class="bc-field-group">
+      
+  <label for="bc-sign-in-form-email" class="bc-form-label bc-form-label--on-dark bc-form-label--size-m">Email</label>
+
+      
+  
+    
+    
+      <input type="email" 
+              class="bc-form-input bc-form-input--size-m"
+              id="bc-sign-in-form-email" 
+              name="bc-sign-in-form-email"
+              autocomplete="off" 
+              autocorrect="off" 
+              autocapitalize="off" 
+              spellcheck="false"
+              
+              
+              
+              >
+  
+
+    </div>
+
+    <div class="bc-field-group">
+      
+  <label for="bc-sign-in-form-password" class="bc-form-label bc-form-label--on-dark bc-form-label--size-m">Password</label>
+
+      
+  
+    
+    
+      <input type="password" 
+              class="bc-form-input bc-form-input--size-m"
+              id="bc-sign-in-form-password" 
+              name="bc-sign-in-form-password"
+              autocomplete="off" 
+              autocorrect="off" 
+              autocapitalize="off" 
+              spellcheck="false"
+              
+              
+              
+              >
+  
+
+    </div>
+
+    <div class="bc-sign-in-form__actions">
+      
+  
+  
+
+  <button
+    
+     type="submit" 
+    
+    class="bc-button bc-button--primary 
+    bc-button--size-m bc-sign-in-form__submit-button">
+    Sign In
+  </button>
+
+        <span class="bc-sign-in-form__or">or</span>
+      
+  
+  
+
+  <button
+    
+     type="button" 
+    
+    class="bc-button bc-button--link-style bc-button--link-style-on-dark 
+      bc-button--size-m bc-show-sign-up-form">
+    Sign Up
+  </button>
+
+    </div>
+  </form>
+
+      
+  <div class="bc-user-settings-pane">
+    <form action="" id="bc-user-settings-form">
+      
+  <div class="bc-form-field-group">
+    
+        
+  <label for="bc-user-settings-taxRate" class="bc-form-label bc-form-label--on-dark">Tax Rate</label>
+
+        
+  
+    <div class="bc-form-input-wrap">
+  
+    
+    
+      <div class="bc-form-input-suffix">%</div>
+    
+      <input type="number" 
+              class="bc-form-input"
+              id="bc-user-settings-taxRate" 
+              name="bc-user-settings-taxRate"
+              autocomplete="off" 
+              autocorrect="off" 
+              autocapitalize="off" 
+              spellcheck="false"
+              
+              
+              step="0.01"
+              
+              
+                disabled
+              
+              >
+  
+    </div>
+  
+
+      
+  </div>
+
+    </form>
+  </div>
+
+      
+  <div class="bc-list-group">
+    <ul class="bc-list-group__list">
+      
+        <li class="bc-list-group__list-item">
+          <a href="#settings" class="bc-list-group__link">Settings</a> 
+        </li>
+      
+    </ul>
+  </div>
+
       
   <form action="" method="POST" id="bc-sign-up-form">
     <div class="bc-field-group">
@@ -229,6 +378,7 @@
   <button
     
      type="submit" 
+    
     class="bc-button bc-button--primary bc-sign-up-form__submit-button">
     Sign Up
   </button>

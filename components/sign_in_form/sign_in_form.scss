@@ -1,0 +1,19 @@
+#bc-sign-in-form {
+  border-bottom: $brickulator-border-separator-on-dark-secondary;
+  padding: $brickulator-space-inset-squish-2-x;
+}
+
+.bc-sign-in-form--hidden {
+  display: none;
+}
+
+.bc-sign-in-form__actions {
+  align-items: center;
+  display: flex;
+  justify-content: space-between;
+}
+
+.bc-sign-in-form__or {
+  color: $brickulator-color-text-on-dark-secondary;
+  font-size: $brickulator-font-size-s;
+}

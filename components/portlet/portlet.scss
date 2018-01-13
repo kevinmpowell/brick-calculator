@@ -16,6 +16,7 @@
 }
 
 .bc-portlet__line-item {
+  align-items: center;
   color: $brickulator-color-text-on-light-secondary;
   display: flex;
   justify-content: space-between;
@@ -27,7 +28,7 @@
   border: 0;
   color: $brickulator-color-text-on-light-secondary;
   height: auto;
-  flex: 1 1 20%;
+  flex: 1 0 60px;
   font-size: $brickulator-font-size-xs;
   margin: 0;
   padding: 0;
@@ -69,6 +70,7 @@
 .bc-portlet__line-items {
   border-bottom: $brickulator-border-control;
   border-top: $brickulator-border-control;
+  flex-grow: 2;
 }
 
 .bc-portlet__empty-wrap {

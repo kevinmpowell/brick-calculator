@@ -1,0 +1,11 @@
+{% macro list_group(class, items) %}
+  <div class="bc-list-group{{ ' ' + class if class }}">
+    <ul class="bc-list-group__list">
+      {% for item in items %}
+        <li class="bc-list-group__list-item">
+          <a href="{{ item.href }}" class="bc-list-group__link">{{ item.label}}</a> 
+        </li>
+      {% endfor %}
+    </ul>
+  </div>
+{% endmacro %}

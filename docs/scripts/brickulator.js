@@ -8,25 +8,172 @@ const ebaySellingFeePercentage = .13, // TODO: Get this from a lookup
       threeMinutes = oneMinute * 3, // in milliseconds
       oneHour = oneMinute * 60,
       currentDomain = window.location.hostname,
+      authTokenKeyName = 'bcUserAuthToken',
+      userSettingsKeyName = 'bcUserSettings',
       apiMapping = {
         'localhost': 'http://localhost:5000',
         'kevinmpowell.github.io': 'https://brickulator-api.herokuapp.com'
+      },
+      apiDomain = apiMapping[currentDomain],
+      customEvents = {
+        userSignedIn: 'bc-user-signed-in'
       }; // in milliseconds
 
+
+      // Headers and params are optional
+      // makeRequest({
+      //   method: 'GET',
+      //   url: 'http://example.com'
+      // })
+      // .then(function (datums) {
+      //   return makeRequest({
+      //     method: 'POST',
+      //     url: datums.url,
+      //     params: {
+      //       score: 9001
+      //     },
+      //     headers: {
+      //       'X-Subliminal-Message': 'Upvote-this-answer'
+      //     }
+      //   });
+      // })
+      // .catch(function (err) {
+      //   console.error('Augh, there was an error!', err.statusText);
+      // });
+
+BC.App = function() {
+  function setSignedInState() {
+    BC.Utils.validateAuthToken().then(function(){
+      BC.Utils.broadcastEvent(customEvents.userSignedIn);
+    }, function() {
+      BC.Overlay.show("Not currently signed in", "This is an annoying message and should not be shown on page load.", true);
+    });
+  }
+
+  const initialize = function initialize() {
+    setSignedInState();
+  }
+
+  return {
+    initialize: initialize
+  };
+}();
+
+BC.API = function() {
+  const makeRequest = function makeRequest (opts) {
+    const apiUrl = apiDomain + opts.url;
+    return new Promise(function (resolve, reject) {
+      var xhr = new XMLHttpRequest();
+      xhr.open(opts.method, apiUrl);
+      xhr.onload = function () {
+        if (this.status >= 200 && this.status < 300) {
+          resolve(xhr.response);
+        } else {
+          reject({
+            status: this.status,
+            statusText: xhr.statusText
+          });
+        }
+      };
+      xhr.onerror = function () {
+        reject({
+          status: this.status,
+          statusText: xhr.statusText
+        });
+      };
+      if (opts.headers) {
+        Object.keys(opts.headers).forEach(function (key) {
+          xhr.setRequestHeader(key, opts.headers[key]);
+        });
+      }
+      var params = opts.params;
+      // We'll need to stringify if we've been given an object
+      // If we have a string, this is skipped.
+      if (params && typeof params === 'object') {
+        params = Object.keys(params).map(function (key) {
+          return encodeURIComponent(key) + '=' + encodeURIComponent(params[key]);
+        }).join('&');
+      }
+      xhr.send(params);
+    });
+  }
+
+  return {
+    makeRequest: makeRequest
+  }
+}();
+
 BC.Utils = function() {
+  const checkAuthTokenEndpoint = '/auth/validate-token';
+
   const formatCurrency = function formatCurrency(number) {
     return number.toLocaleString('en-US', { style: 'currency', currency: 'USD' });
   }
 
+  const getPayPalTransactionFee = function getPayPalTransactionFee(finalValue) {
+    const payPalTransactionPercent = 2.9,
+          payPalPerTransactionCharge = 0.3;
+    return ((payPalTransactionPercent / 100) * finalValue) + payPalPerTransactionCharge;
+  }
+
   const getBrickOwlSellerFees = function getBrickOwlSellerFees(finalValue) {
     const brickOwlCommissionPercent = 2.5,
-          fee = (brickOwlCommissionPercent / 100) * finalValue;
+          payPalTransactionFee = getPayPalTransactionFee(finalValue),
+          fee = ((brickOwlCommissionPercent / 100) * finalValue) + payPalTransactionFee;
     return fee;
+  }
+
+  const saveToLocalStorage = function saveToLocalStorage(key, value) {
+    if (typeof value !== "string") {
+      value = JSON.stringify(value);
+    }
+    localStorage.setItem(key, value);
+  }
+
+  const getFromLocalStorage = function getFromLocalStorage(key) {
+    let value = localStorage.getItem(key);
+    try {
+      value = JSON.parse(value);
+    } catch(e) {
+      // Eat the JSON.parse failure, just return the value
+      // console.log("Value wasn't JSON, just returning as is.");
+    }
+    return value;
+  }
+
+  const validateAuthToken = function validateAuthToken() {
+    const storedToken = getFromLocalStorage(authTokenKeyName);
+    let haveValidToken = false;
+
+    if (storedToken !== null) {
+      return BC.API.makeRequest({
+          method: 'GET', 
+          url: '/auth/validate-token', 
+          headers:{
+            'Authorization': storedToken
+          }});
+      // TODO, maybe wire up default promise.then failure?
+    } else {
+      broadcastEvent('bc-auth-token-invalid');
+      return Promise.reject(new Error('Stored Token does not exist'));
+    }
+  }
+
+  const broadcastEvent = function broadcastEvent(eventName, data, element) {
+    data = typeof data !== 'undefined' ? data : {};
+    element = typeof element !== 'undefined' ? element : document;
+
+    const event = new CustomEvent(eventName, {detail: data});
+    element.dispatchEvent(event);
   }
 
   return {
     formatCurrency: formatCurrency,
-    getBrickOwlSellerFees: getBrickOwlSellerFees
+    getBrickOwlSellerFees: getBrickOwlSellerFees,
+    saveToLocalStorage: saveToLocalStorage,
+    getFromLocalStorage: getFromLocalStorage,
+    validateAuthToken: validateAuthToken,
+    broadcastEvent: broadcastEvent
   }
 }();
 
@@ -52,7 +199,6 @@ BC.SetDatabase = function() {
 
   const retrieveFreshSetData = function retrieveFreshSetData() {
     var request = new XMLHttpRequest();
-    const apiDomain = apiMapping[currentDomain];
 
     showLoadingSpinner();
     try {
@@ -147,8 +293,6 @@ BC.Values = function() {
 
   function calculate(setNumber, purchasePrice) {
     const setData = setDB[setNumber];
-    // BC.PortletPricePerPiece.update(setData, purchasePrice);
-    // BC.PortletPartOutBrickOwl.update(setData, purchasePrice);
 
     if (setData) {
       BC.SetSummary.update(setData);
@@ -191,35 +335,6 @@ BC.Values = function() {
   }
 }();
 
-BC.Form = function() {
-  const formId = "bc-value-lookup-form",
-        setNumberFieldId = "bc-value-lookup-form__set-number-input",
-        purchasePriceFieldId = "bc-value-lookup-form__purchase-price-input";
-
-  function handleFormSubmit(e) {
-    e.preventDefault();
-    const setNumber = document.getElementById(setNumberFieldId).value,
-          purchasePrice = document.getElementById(purchasePriceFieldId).value;
-    BC.Values.calculate(setNumber, purchasePrice);
-  }
-
-  function setEventListeners() {
-    const form = document.getElementById(formId);
-    form.addEventListener("submit", handleFormSubmit);
-  }
-
-
-  let initialize = function initialize() {
-    setEventListeners();
-  };
-
-  return {
-    initialize: initialize
-  }
-}();
-
-
-
 function ready(fn) {
   if (document.attachEvent ? document.readyState === "complete" : document.readyState !== "loading"){
     fn();
@@ -231,13 +346,16 @@ function ready(fn) {
 ready(function(){
   BC.Overlay.initialize();
   BC.SetDatabase.initialize();
-  BC.Form.initialize();
   BC.Values.initialize();
   BC.SetSummary.initialize();
   BC.PortletLayout.initialize();
   BC.PortletLayout.buildLayout();
   BC.SignUpForm.initialize();
   BC.SiteMenu.initialize();
+  BC.UserSettingsPane.initialize();
+  BC.SignInForm.initialize();
+  BC.SetLookupForm.initialize();
+  BC.App.initialize(); // Check auth token, broadcast user state events
 });
 
 'use strict';
@@ -449,7 +567,9 @@ BC.Overlay = function() {
 
 'use strict';
 BC.PortletLayout = function() {
-  const emptyPortletClass = "bc-portlet--empty",
+  const userSettings = BC.Utils.getFromLocalStorage(userSettingsKeyName),
+    setCostLabel = userSettings !== null && userSettings.plus_member && userSettings.taxRate ? "Cost w/tax" : "Cost",
+    emptyPortletClass = "bc-portlet--empty",
     defaultLayout = [
     {
       header: "Complete Set Values (New)",
@@ -465,11 +585,11 @@ BC.PortletLayout = function() {
             },
             {
               key: "boFees",
-              label: "Seller Fees"
+              label: "BrickOwl & PayPal Fees"
             },
             {
               key: "setCost",
-              label: "Cost"
+              label: setCostLabel
             }
           ]
         },
@@ -484,11 +604,11 @@ BC.PortletLayout = function() {
             },
             {
               key: "boFees",
-              label: "Seller Fees"
+              label: "Brick Owl & PayPal Fees"
             },
             {
               key: "setCost",
-              label: "Cost"
+              label: setCostLabel
             }
           ]
         },
@@ -503,11 +623,11 @@ BC.PortletLayout = function() {
             },
             {
               key: "boFees",
-              label: "Seller Fees"
+              label: "Brick Owl & PayPal Fees"
             },
             {
               key: "setCost",
-              label: "Cost"
+              label: setCostLabel
             }
           ]
         },
@@ -522,11 +642,11 @@ BC.PortletLayout = function() {
             },
             {
               key: "boFees",
-              label: "Seller Fees"
+              label: "Brick Owl & PayPal Fees"
             },
             {
               key: "setCost",
-              label: "Cost"
+              label: setCostLabel
             }
           ]
         }
@@ -546,11 +666,11 @@ BC.PortletLayout = function() {
             },
             {
               key: "boFees",
-              label: "Seller Fees"
+              label: "Brick Owl & PayPal Fees"
             },
             {
               key: "setCost",
-              label: "Cost"
+              label: setCostLabel
             }
           ]
         },
@@ -565,11 +685,11 @@ BC.PortletLayout = function() {
             },
             {
               key: "boFees",
-              label: "Seller Fees"
+              label: "Brick Owl & PayPal Fees"
             },
             {
               key: "setCost",
-              label: "Cost"
+              label: setCostLabel
             }
           ]
         },
@@ -584,11 +704,11 @@ BC.PortletLayout = function() {
             },
             {
               key: "boFees",
-              label: "Seller Fees"
+              label: "Brick Owl & PayPal Fees"
             },
             {
               key: "setCost",
-              label: "Cost"
+              label: setCostLabel
             }
           ]
         },
@@ -603,11 +723,11 @@ BC.PortletLayout = function() {
             },
             {
               key: "boFees",
-              label: "Seller Fees"
+              label: "Brick Owl & PayPal Fees"
             },
             {
               key: "setCost",
-              label: "Cost"
+              label: setCostLabel
             }
           ]
         }
@@ -626,11 +746,11 @@ BC.PortletLayout = function() {
           },
           {
             key: "boFees",
-            label: "Seller Fees"
+            label: "Brick Owl & PayPal Fees"
           },
           {
             key: "setCost",
-            label: "Cost"
+            label: setCostLabel
           }
         ]
       },
@@ -644,11 +764,11 @@ BC.PortletLayout = function() {
           },
           {
             key: "boFees",
-            label: "Seller Fees"
+            label: "Brick Owl & PayPal Fees"
           },
           {
             key: "setCost",
-            label: "Cost"
+            label: setCostLabel
           }
         ]
       }
@@ -726,9 +846,8 @@ BC.PortletLayout = function() {
           profitInput = p.querySelector(".bc-portlet__profit-input"),
           portletRetrievedAt = p.querySelector(".bc-portlet__data-retrieved-at"),
           retrievedAtKey = portletRetrievedAt.getAttribute("data-retrieved-at-key"),
-          portletListingsCountAmount = p.querySelector(".bc-portlet__listings-count-amount");
-console.log(portletListingsCountAmount);
-          const listingsCountKey = portletListingsCountAmount === null ? false : portletListingsCountAmount.getAttribute("data-listings-count-key"),
+          portletListingsCountAmount = p.querySelector(".bc-portlet__listings-count-amount"),
+          listingsCountKey = portletListingsCountAmount === null ? false : portletListingsCountAmount.getAttribute("data-listings-count-key"),
           liKeys = lineItemInputs.map(function(li){ return li.getAttribute("data-value-key"); }),
           marketplaceValueKey = liKeys.find(function(k){ return data.hasOwnProperty(k); }),
           marketplaceValue = marketplaceValueKey ? data[marketplaceValueKey] : false,
@@ -771,12 +890,20 @@ console.log(portletListingsCountAmount);
       p.classList.add(emptyPortletClass);
       console.log("Marketplace Value not found", liKeys);
     }
+  }
 
+  function getSetCostWithTaxes(setCost) {
+    setCost = parseFloat(setCost, 10);
+    if (userSettings.plus_member && userSettings.taxRate) {
+      const taxes = parseFloat(userSettings.taxRate / 100, 10) * setCost;
+      setCost += taxes;
+    }
+    return setCost;
   }
 
   const updateAllPortletValues = function updateAllPortletValues(data, setCost) {
     const portlets = document.querySelectorAll(".bc-portlet"),
-          cost = parseFloat(setCost, 10);
+          cost = getSetCostWithTaxes(setCost);
 
     portlets.forEach(function(p){
       updatePortletValues(p, data, cost);
@@ -890,6 +1017,62 @@ BC.PortletPartOutBrickOwl = function() {
 // }();
 
 'use strict';
+BC.SetLookupForm = function() {
+  const formId = 'bc-value-lookup-form',
+        setNumberFieldId = "bc-value-lookup-form__set-number-input",
+        purchasePriceFieldId = "bc-value-lookup-form__purchase-price-input",
+        taxRateSelector = ".bc-set-lookup-form__tax-message",
+        taxRateAmountSelector = ".bc-set-lookup-form__tax-amount",
+        taxRateVisibleClass = "bc-set-lookup-form__tax-message--visible";
+
+  let form,
+      setNumber,
+      purchasePrice,
+      taxRateAmount,
+      taxRate;
+
+  function handleFormSubmit(e) {
+    e.preventDefault();
+    BC.Values.calculate(setNumber.value, purchasePrice.value);
+  }
+
+  function setTaxRateDisplay(userSettings) {
+    if (userSettings.plus_member && userSettings.taxRate) {
+      taxRateAmount.innerHTML = userSettings.taxRate;
+      taxRate.classList.add(taxRateVisibleClass);
+    } else {
+      taxRateAmount.innerHTML = '';
+      taxRate.classList.remove(taxRateVisibleClass);
+    }
+  }
+
+  function updateFormDisplayForSignedInUser() {
+    const userSettings = BC.Utils.getFromLocalStorage(userSettingsKeyName);
+    if (userSettings !== null) {
+      setTaxRateDisplay(userSettings);
+    }
+  }
+
+  function setEventListeners() {
+    form.addEventListener("submit", handleFormSubmit);
+    document.addEventListener(customEvents.userSignedIn, updateFormDisplayForSignedInUser);
+  }
+
+  const initialize = function initialize() {
+    form = document.getElementById(formId);
+    setNumber = document.getElementById(setNumberFieldId);
+    purchasePrice = document.getElementById(purchasePriceFieldId);
+    taxRate = form.querySelector(taxRateSelector);
+    taxRateAmount = form.querySelector(taxRateAmountSelector);
+    setEventListeners();
+  }
+
+  return {
+    initialize: initialize
+  }
+}();
+
+'use strict';
 BC.SetSummary = function() {
   const numberSelector = '.bc-set-summary__number',
         yearSelector = '.bc-set-summary__year',
@@ -927,11 +1110,106 @@ BC.SetSummary = function() {
 }();
 
 'use strict';
+BC.SignInForm = function() {
+  const signInFormId = 'bc-sign-in-form',
+        emailFieldId = 'bc-sign-in-form-email',
+        passwordFieldId = 'bc-sign-in-form-password',
+        submitButtonSelector = '.bc-sign-in-form__submit-button',
+        signInEndpoint = '/auth/signin',
+        signInFormHiddenClass = 'bc-sign-in-form--hidden';
+
+  let form,
+      emailField,
+      passwordField,
+      submitButton;
+
+  function disableForm() {
+    emailField.setAttribute('disabled', true);
+    passwordField.setAttribute('disabled', true);
+    submitButton.setAttribute('disabled', true);
+  }
+
+  function enableForm() {
+    emailField.removeAttribute('disabled');
+    passwordField.removeAttribute('disabled');
+    submitButton.removeAttribute('disabled');
+  }
+
+  function resetForm() {
+    form.reset();
+  }
+
+  function handleFormSignIn(e) {
+    e.preventDefault();
+    disableForm();
+    var request = new XMLHttpRequest();
+    const apiDomain = apiMapping[currentDomain],
+          params = "email=" + emailField.value + "&password=" + passwordField.value,
+          endpointUrl = apiDomain + signInEndpoint;
+    request.open('POST', endpointUrl, true);
+    request.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+    //Send the proper header information along with the request for the POST to work
+    request.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+
+    request.onload = function() {
+      console.log(request);
+      if (request.status >= 200 && request.status < 400) {
+        // Success!
+        var data = JSON.parse(request.responseText);
+        BC.Utils.saveToLocalStorage(authTokenKeyName, data.auth_token);
+        BC.Utils.saveToLocalStorage(userSettingsKeyName, data.preferences);
+        // TODO: Broadcast event that user settings have been loaded
+        BC.Overlay.show("Welcome back!", "Sign in successful.", true);
+        BC.App.setSignedInState();
+        enableForm();
+        resetForm();
+      } else {
+        var data = JSON.parse(request.responseText);
+        BC.Overlay.show("Sign In Failed", data.message, true);
+        enableForm();
+      }
+    };
+
+    request.onerror = function() {
+      // There was a connection error of some sort
+      BC.Overlay.show("Sign In Failed", "Something happened and we couldn't connect to sign you in. Sit tight, we'll fix it.", true);
+      enableForm();
+    };
+
+    request.send(params); // POST params are sent down here
+    return false; // prevent form submission
+  }
+
+
+  function hideSignInForm() {
+    form.classList.add(signInFormHiddenClass);
+  }
+
+  function setEventListeners() {
+    form.addEventListener("submit", handleFormSignIn);
+    document.addEventListener(customEvents.userSignedIn, hideSignInForm);
+  }
+
+  const initialize = function initialize() {
+    form = document.getElementById(signInFormId);
+    emailField = document.getElementById(emailFieldId);
+    passwordField = document.getElementById(passwordFieldId);
+    submitButton = document.querySelector(submitButtonSelector);
+    setEventListeners();
+  }
+
+  return {
+    initialize: initialize
+  }
+}();
+
+'use strict';
 BC.SignUpForm = function() {
   const signUpFormId = 'bc-sign-up-form',
         emailFieldId = 'bc-sign-up-form-email',
         passwordFieldId = 'bc-sign-up-form-password',
-        submitButtonSelector = '.bc-sign-up-form__submit-button';
+        submitButtonSelector = '.bc-sign-up-form__submit-button',
+        signUpEndpoint = '/signup';
 
   let form,
       emailField,
@@ -955,7 +1233,7 @@ BC.SignUpForm = function() {
   }
 
   function saveAuthToken(authToken) {
-    localStorage.setItem('bcUserAuthToken', authToken)
+    localStorage.setItem(authTokenKeyName, authToken)
   }
 
   function handleFormSignup(e) {
@@ -964,7 +1242,7 @@ BC.SignUpForm = function() {
     var request = new XMLHttpRequest();
     const apiDomain = apiMapping[currentDomain],
           params = "email=" + emailField.value + "&password=" + passwordField.value + "&password_confirmation=" + passwordField.value;
-    request.open('POST', apiDomain + '/signup', true);
+    request.open('POST', apiDomain + signUpEndpoint, true);
     request.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
     //Send the proper header information along with the request for the POST to work
     request.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
@@ -1061,5 +1339,46 @@ BC.SiteMenu = function() {
     initialize: initialize,
     showMenu: showMenu,
     hideMenu: hideMenu,
+  }
+}();
+
+'use strict';
+BC.UserSettingsPane = function() {
+  const userTaxRateFieldId = 'bc-user-settings-taxRate',
+        userSettings = BC.Utils.getFromLocalStorage(userSettingsKeyName);
+
+  let taxRate;
+  // TODO, need a way to fetch fresh user settings - probably another endpoint, that way user doesn't have to log out and log back in to get fresh settings
+
+  function updateTaxesSetting(userSettings) {
+    if (userSettings.plus_member) {
+      if (userSettings.taxRate) {
+        taxRate.removeAttribute('disabled');
+        taxRate.value = userSettings.taxRate;
+      } else {
+        taxRate.setAttribute('disabled', true);
+      }
+    }
+  }
+
+  function setEventListeners() {
+    document.addEventListener(customEvents.userSignedIn, update);
+  }
+
+  const update = function update() {
+    if (userSettings !== null) {
+      updateTaxesSetting(userSettings);
+    }
+  }
+
+  const initialize = function initialize() {
+    taxRate = document.getElementById(userTaxRateFieldId);
+    update();
+    setEventListeners();
+  }
+
+  return {
+    initialize: initialize,
+    update: update
   }
 }();

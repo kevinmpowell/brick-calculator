@@ -23,3 +23,17 @@
   padding: $brickulator-space-inset-1-half-x;
   width: auto;
 }
+
+.bc-button--size-m {
+  font-size: $brickulator-font-size-m;
+  padding: $brickulator-space-inset-squish-1-x;
+  width: auto;
+}
+
+.bc-button--link-style {
+  color: $brickulator-color-link;
+  padding-left: 0;
+  padding-right: 0;
+  text-decoration: underline;
+  text-transform: none;
+}

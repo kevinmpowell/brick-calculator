@@ -1,10 +1,11 @@
 'use strict';
-BC.SignUpForm = function() {
-  const signUpFormId = 'bc-sign-up-form',
-        emailFieldId = 'bc-sign-up-form-email',
-        passwordFieldId = 'bc-sign-up-form-password',
-        submitButtonSelector = '.bc-sign-up-form__submit-button',
-        signUpEndpoint = '/signup';
+BC.SignInForm = function() {
+  const signInFormId = 'bc-sign-in-form',
+        emailFieldId = 'bc-sign-in-form-email',
+        passwordFieldId = 'bc-sign-in-form-password',
+        submitButtonSelector = '.bc-sign-in-form__submit-button',
+        signInEndpoint = '/auth/signin',
+        signInFormHiddenClass = 'bc-sign-in-form--hidden';
 
   let form,
       emailField,
@@ -27,48 +28,40 @@ BC.SignUpForm = function() {
     form.reset();
   }
 
-  function saveAuthToken(authToken) {
-    localStorage.setItem(authTokenKeyName, authToken)
-  }
-
-  function handleFormSignup(e) {
+  function handleFormSignIn(e) {
     e.preventDefault();
     disableForm();
     var request = new XMLHttpRequest();
     const apiDomain = apiMapping[currentDomain],
-          params = "email=" + emailField.value + "&password=" + passwordField.value + "&password_confirmation=" + passwordField.value;
-    request.open('POST', apiDomain + signUpEndpoint, true);
+          params = "email=" + emailField.value + "&password=" + passwordField.value,
+          endpointUrl = apiDomain + signInEndpoint;
+    request.open('POST', endpointUrl, true);
     request.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
     //Send the proper header information along with the request for the POST to work
     request.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 
     request.onload = function() {
+      console.log(request);
       if (request.status >= 200 && request.status < 400) {
         // Success!
         var data = JSON.parse(request.responseText);
-        saveAuthToken(data.auth_token);
-        BC.Overlay.show("Welcome!", "User account created successfully.", true);
+        BC.Utils.saveToLocalStorage(authTokenKeyName, data.auth_token);
+        BC.Utils.saveToLocalStorage(userSettingsKeyName, data.preferences);
+        // TODO: Broadcast event that user settings have been loaded
+        BC.Overlay.show("Welcome back!", "Sign in successful.", true);
+        BC.App.setSignedInState();
         enableForm();
         resetForm();
-      } else if (request.status === 422) {
-
-        var data = JSON.parse(request.responseText);
-        if (data.message && data.message.toLowerCase().includes('already exists')) {
-          BC.Overlay.show("Sorry! Can't create that account.", data.message, true);
-        } else if (data.message && data.message.toLowerCase().includes("password can't be blank")) {
-          BC.Overlay.show("Forget something?", "Please enter a password", true);
-        }
-        // We reached our target server, but it returned an error
-        enableForm();
       } else {
-        alert("Sign up failed - connection successful, but data failed");
+        var data = JSON.parse(request.responseText);
+        BC.Overlay.show("Sign In Failed", data.message, true);
         enableForm();
       }
     };
 
     request.onerror = function() {
       // There was a connection error of some sort
-      alert("Could not sign up - connection error");
+      BC.Overlay.show("Sign In Failed", "Something happened and we couldn't connect to sign you in. Sit tight, we'll fix it.", true);
       enableForm();
     };
 
@@ -76,12 +69,18 @@ BC.SignUpForm = function() {
     return false; // prevent form submission
   }
 
+
+  function hideSignInForm() {
+    form.classList.add(signInFormHiddenClass);
+  }
+
   function setEventListeners() {
-    form.addEventListener("submit", handleFormSignup);
+    form.addEventListener("submit", handleFormSignIn);
+    document.addEventListener(customEvents.userSignedIn, hideSignInForm);
   }
 
   const initialize = function initialize() {
-    form = document.getElementById(signUpFormId);
+    form = document.getElementById(signInFormId);
     emailField = document.getElementById(emailFieldId);
     passwordField = document.getElementById(passwordFieldId);
     submitButton = document.querySelector(submitButtonSelector);
