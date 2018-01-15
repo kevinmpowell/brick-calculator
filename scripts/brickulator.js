@@ -160,6 +160,14 @@ BC.Utils = function() {
     return fee;
   }
 
+  const getEbaySellerFees = function getEbaySellerFees(finalValue) {
+    // TODO: Actually make this work
+    const ebayCommissionPercent = 10,
+          payPalTransactionFee = getPayPalTransactionFee(finalValue),
+          fee = Math.min(((ebayCommissionPercent / 100) * finalValue), 750) + payPalTransactionFee;
+    return fee;
+  }
+
   const saveToLocalStorage = function saveToLocalStorage(key, value) {
     if (typeof value !== "string") {
       value = JSON.stringify(value);
@@ -211,6 +219,7 @@ BC.Utils = function() {
   return {
     formatCurrency: formatCurrency,
     getBrickOwlSellerFees: getBrickOwlSellerFees,
+    getEbaySellerFees: getEbaySellerFees,
     saveToLocalStorage: saveToLocalStorage,
     getFromLocalStorage: getFromLocalStorage,
     removeFromLocalStorage: removeFromLocalStorage,

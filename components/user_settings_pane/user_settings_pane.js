@@ -37,7 +37,6 @@ BC.UserSettingsPane = function() {
   }
 
   const showPane = function showPane() {
-    console.log("SHOW IT");
     settingsPane.classList.add(paneVisibleClass);
   }
 
@@ -47,7 +46,6 @@ BC.UserSettingsPane = function() {
 
   const update = function update() {
     const userSettings = BC.Utils.getFromLocalStorage(localStorageKeys.userSettings);
-    console.log("USER SETTINGS", userSettings);
     updateTaxesSetting(userSettings);
   }
 
