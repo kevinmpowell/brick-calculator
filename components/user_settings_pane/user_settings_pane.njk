@@ -1,5 +1,8 @@
 {% macro user_settings_pane(class) %}
   <div class="bc-user-settings-pane{{ ' ' + class if class }}">
+    <div class="bc-user-settings-pane__actions">
+      {{ button(text="< Back", class="bc-button--primary bc-button--size-s bc-user-settings-pane-hide-trigger") }}
+    </div>
     <form action="" id="bc-user-settings-form">
       {% call form_field_group() %}
         {{ form_label(label="Tax Rate", class="bc-form-label--on-dark", for="bc-user-settings-taxRate") }}

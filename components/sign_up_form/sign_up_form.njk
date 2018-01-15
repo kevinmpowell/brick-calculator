@@ -1,15 +1,21 @@
 {% macro sign_up_form() %}
-  <form action="" method="POST" id="bc-sign-up-form">
-    <div class="bc-field-group">
-      {{ form_label(for="bc-sign-up-form-email", label="Email", class="bc-form-label--on-dark") }}
-      <input autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" name="bc-sign-up-form-email" id="bc-sign-up-form-email" type="email">
+  <div class="bc-sign-up-form-pane">
+    <div class="bc-sign-up-form-pane__actions">
+      {{ button(text="&times; Close", class="bc-button--primary bc-button--size-s bc-sign-up-form-pane-hide-trigger") }}
     </div>
 
-    <div class="bc-field-group">
-      {{ form_label(for="bc-sign-up-form-password", label="Create Password", class="bc-form-label--on-dark") }}
-      <input name="bc-sign-up-form-password" id="bc-sign-up-form-password" type="password">
-    </div>
+    <form action="" method="POST" id="bc-sign-up-form">
+      <div class="bc-field-group">
+        {{ form_label(for="bc-sign-up-form-email", label="Email", class="bc-form-label--on-dark") }}
+        <input autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" name="bc-sign-up-form-email" id="bc-sign-up-form-email" type="email">
+      </div>
 
-    {{ button(type="submit", text="Sign Up", class="bc-button--primary bc-sign-up-form__submit-button") }}
-  </form>
+      <div class="bc-field-group">
+        {{ form_label(for="bc-sign-up-form-password", label="Create Password", class="bc-form-label--on-dark") }}
+        <input name="bc-sign-up-form-password" id="bc-sign-up-form-password" type="password">
+      </div>
+
+      {{ button(type="submit", text="Sign Up", class="bc-button--primary bc-sign-up-form__submit-button") }}
+    </form>
+  </div>
 {% endmacro %}

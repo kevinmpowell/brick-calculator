@@ -5,12 +5,14 @@ BC.SignInForm = function() {
         passwordFieldId = 'bc-sign-in-form-password',
         submitButtonSelector = '.bc-sign-in-form__submit-button',
         signInEndpoint = '/auth/signin',
-        signInFormHiddenClass = 'bc-sign-in-form--hidden';
+        signInFormHiddenClass = 'bc-sign-in-form--hidden',
+        signUpLinkSelector = '.bc-show-sign-up-form';
 
   let form,
       emailField,
       passwordField,
-      submitButton;
+      submitButton,
+      signUpLink;
 
   function disableForm() {
     emailField.setAttribute('disabled', true);
@@ -45,8 +47,8 @@ BC.SignInForm = function() {
       if (request.status >= 200 && request.status < 400) {
         // Success!
         var data = JSON.parse(request.responseText);
-        BC.Utils.saveToLocalStorage(authTokenKeyName, data.auth_token);
-        BC.Utils.saveToLocalStorage(userSettingsKeyName, data.preferences);
+        BC.Utils.saveToLocalStorage(localStorageKeys.authToken, data.auth_token);
+        BC.Utils.saveToLocalStorage(localStorageKeys.userSettings, data.preferences);
         // TODO: Broadcast event that user settings have been loaded
         BC.Overlay.show("Welcome back!", "Sign in successful.", true);
         BC.App.setSignedInState();
@@ -69,14 +71,19 @@ BC.SignInForm = function() {
     return false; // prevent form submission
   }
 
-
   function hideSignInForm() {
     form.classList.add(signInFormHiddenClass);
   }
 
+  function showSignInForm() {
+    form.classList.remove(signInFormHiddenClass);
+  }
+
   function setEventListeners() {
     form.addEventListener("submit", handleFormSignIn);
+    signUpLink.addEventListener("click", BC.SignUpForm.showFormPane);
     document.addEventListener(customEvents.userSignedIn, hideSignInForm);
+    document.addEventListener(customEvents.userSignedOut, showSignInForm);
   }
 
   const initialize = function initialize() {
@@ -84,6 +91,7 @@ BC.SignInForm = function() {
     emailField = document.getElementById(emailFieldId);
     passwordField = document.getElementById(passwordFieldId);
     submitButton = document.querySelector(submitButtonSelector);
+    signUpLink = document.querySelector(signUpLinkSelector);
     setEventListeners();
   }
 

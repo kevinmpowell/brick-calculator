@@ -32,6 +32,11 @@ $bc-site-menu-max-width: 320px;
   
   }
 }
+
+.bc--user-signed-out .bc-site-menu__list-item--sign-out {
+  display: none; // Don't show the sign out link no one's signed in
+}
+
 @media screen and (min-width: ($bc-site-menu-max-width / .7)) {
   .bc-site-menu--visible .bc-site-menu__inner {
     transform: translateX(calc(100vw - #{$bc-site-menu-max-width}));

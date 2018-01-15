@@ -1,9 +1,8 @@
-.bc-sign-up-form-pane {
+.bc-user-settings-pane {
   background: red;
   height: 100%;
   left: 0;
   overflow-y: auto;
-  padding: $brickulator-space-inset-2-x;
   position: absolute;
   top: 0;
   transform: translateX(100%);
@@ -13,7 +12,20 @@
   z-index: $brickulator-z-index-overlay + 1;
 }
 
-.bc-sign-up-form-pane--visible {
+.bc-user-settings-pane--visible {
   transform: translateX(0);
   transition: transform .2s ease-in;
+}
+
+.bc-user-settings-pane__actions {
+  display: flex;
+  padding: $brickulator-space-inset-squish-2-x;
+}
+
+#bc-user-settings-form {
+  padding: $brickulator-space-inset-2-x;
+}
+
+#bc-user-settings-taxRate {
+  max-width: 80px;
 }

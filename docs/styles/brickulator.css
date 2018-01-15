@@ -284,6 +284,11 @@ input {
   font-size: 10px;
   padding: 0; }
 
+.bc-portlet__line-item-label-plus-member-snippet {
+  display: none; }
+  .bc--plus-member-signed-in .bc-portlet__line-item-label-plus-member-snippet {
+    display: inline; }
+
 .bc-portlet__listings-count,
 .bc-portlet__data-timestamp {
   color: #959999;
@@ -362,6 +367,9 @@ input {
     transition: -webkit-transform .2s ease-in;
     transition: transform .2s ease-in;
     transition: transform .2s ease-in, -webkit-transform .2s ease-in; }
+
+.bc--user-signed-out .bc-site-menu__list-item--sign-out {
+  display: none; }
 
 @media screen and (min-width: 457.14286px) {
   .bc-site-menu--visible .bc-site-menu__inner {
@@ -463,8 +471,31 @@ input {
   display: -ms-flexbox;
   display: flex; }
 
-#bc-sign-up-form {
-  padding: 16px; }
+.bc-sign-up-form-pane {
+  background: red;
+  height: 100%;
+  left: 0;
+  overflow-y: auto;
+  padding: 16px;
+  position: absolute;
+  top: 0;
+  -webkit-transform: translateX(100%);
+          transform: translateX(100%);
+  -webkit-transition: -webkit-transform .2s ease-out;
+  transition: -webkit-transform .2s ease-out;
+  transition: transform .2s ease-out;
+  transition: transform .2s ease-out, -webkit-transform .2s ease-out;
+  width: 100%;
+  will-change: transform;
+  z-index: 501; }
+
+.bc-sign-up-form-pane--visible {
+  -webkit-transform: translateX(0);
+          transform: translateX(0);
+  -webkit-transition: -webkit-transform .2s ease-in;
+  transition: -webkit-transform .2s ease-in;
+  transition: transform .2s ease-in;
+  transition: transform .2s ease-in, -webkit-transform .2s ease-in; }
 
 #bc-sign-in-form {
   border-bottom: solid 1px #EEF5F4;
@@ -494,6 +525,43 @@ input {
 
 .bc-set-lookup-form__tax-message--visible {
   display: inline; }
+
+.bc-user-settings-pane {
+  background: red;
+  height: 100%;
+  left: 0;
+  overflow-y: auto;
+  position: absolute;
+  top: 0;
+  -webkit-transform: translateX(100%);
+          transform: translateX(100%);
+  -webkit-transition: -webkit-transform .2s ease-out;
+  transition: -webkit-transform .2s ease-out;
+  transition: transform .2s ease-out;
+  transition: transform .2s ease-out, -webkit-transform .2s ease-out;
+  width: 100%;
+  will-change: transform;
+  z-index: 501; }
+
+.bc-user-settings-pane--visible {
+  -webkit-transform: translateX(0);
+          transform: translateX(0);
+  -webkit-transition: -webkit-transform .2s ease-in;
+  transition: -webkit-transform .2s ease-in;
+  transition: transform .2s ease-in;
+  transition: transform .2s ease-in, -webkit-transform .2s ease-in; }
+
+.bc-user-settings-pane__actions {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  padding: 8px 16px; }
+
+#bc-user-settings-form {
+  padding: 16px; }
+
+#bc-user-settings-taxRate {
+  max-width: 80px; }
 
 body {
   background: #EEF5F4;

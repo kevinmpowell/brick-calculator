@@ -7,15 +7,18 @@ const ebaySellingFeePercentage = .13, // TODO: Get this from a lookup
       threeMinutes = oneMinute * 3, // in milliseconds
       oneHour = oneMinute * 60,
       currentDomain = window.location.hostname,
-      authTokenKeyName = 'bcUserAuthToken',
-      userSettingsKeyName = 'bcUserSettings',
+      localStorageKeys = {
+        authToken: 'bcUserAuthToken',
+        userSettings: 'bcUserSettings'
+      },
       apiMapping = {
         'localhost': 'http://localhost:5000',
         'kevinmpowell.github.io': 'https://brickulator-api.herokuapp.com'
       },
       apiDomain = apiMapping[currentDomain],
       customEvents = {
-        userSignedIn: 'bc-user-signed-in'
+        userSignedIn: 'bc-user-signed-in',
+        userSignedOut: 'bc-user-signed-out'
       }; // in milliseconds
 
 
@@ -41,20 +44,55 @@ const ebaySellingFeePercentage = .13, // TODO: Get this from a lookup
       // });
 
 BC.App = function() {
-  function setSignedInState() {
+  const userSignedInClass = 'bc--user-signed-in',
+        userSignedOutClass = 'bc--user-signed-out',
+        plusMemberSignedInClass = 'bc--plus-member-signed-in';
+  let body;
+
+  function setBodyClass(userState) {
+    const userSettings = BC.Utils.getFromLocalStorage(localStorageKeys.userSettings);
+
+    if (userState === 'signedIn') {
+      body.classList.remove(userSignedOutClass);
+      body.classList.add(userSignedInClass); 
+    } else {
+      body.classList.remove(userSignedInClass); 
+      body.classList.add(userSignedOutClass);
+    }
+
+    if (userSettings !== null && userSettings.plus_member) {
+      body.classList.add(plusMemberSignedInClass);
+    } else {
+      body.classList.remove(plusMemberSignedInClass);
+    }
+  }
+
+  const setSignedInState = function setSignedInState() {
     BC.Utils.validateAuthToken().then(function(){
+      setBodyClass('signedIn');
       BC.Utils.broadcastEvent(customEvents.userSignedIn);
     }, function() {
-      BC.Overlay.show("Not currently signed in", "This is an annoying message and should not be shown on page load.", true);
+      setBodyClass('signedOut');
+      BC.Utils.broadcastEvent(customEvents.userSignedOut);
+      // BC.Overlay.show("Not currently signed in", "This is an annoying message and should not be shown on page load.", true);
     });
   }
 
+  const signOut = function signOut() {
+    BC.Utils.removeFromLocalStorage(localStorageKeys.authToken);
+    BC.Utils.removeFromLocalStorage(localStorageKeys.userSettings);
+    setSignedInState();
+  }
+
   const initialize = function initialize() {
+    body = document.body;
     setSignedInState();
   }
 
   return {
-    initialize: initialize
+    initialize: initialize,
+    signOut: signOut,
+    setSignedInState: setSignedInState
   };
 }();
 
@@ -129,6 +167,10 @@ BC.Utils = function() {
     localStorage.setItem(key, value);
   }
 
+  const removeFromLocalStorage = function removeFromLocalStorage(key) {
+    localStorage.removeItem(key);
+  }
+
   const getFromLocalStorage = function getFromLocalStorage(key) {
     let value = localStorage.getItem(key);
     try {
@@ -141,7 +183,7 @@ BC.Utils = function() {
   }
 
   const validateAuthToken = function validateAuthToken() {
-    const storedToken = getFromLocalStorage(authTokenKeyName);
+    const storedToken = getFromLocalStorage(localStorageKeys.authToken);
     let haveValidToken = false;
 
     if (storedToken !== null) {
@@ -171,6 +213,7 @@ BC.Utils = function() {
     getBrickOwlSellerFees: getBrickOwlSellerFees,
     saveToLocalStorage: saveToLocalStorage,
     getFromLocalStorage: getFromLocalStorage,
+    removeFromLocalStorage: removeFromLocalStorage,
     validateAuthToken: validateAuthToken,
     broadcastEvent: broadcastEvent
   }
