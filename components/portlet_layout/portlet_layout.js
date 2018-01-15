@@ -267,9 +267,7 @@ BC.PortletLayout = function() {
     let pliNode = portletLineItemTemplate.cloneNode(true),
         input = pliNode.querySelector(".bc-portlet__line-item-input"),
         label = pliNode.querySelector(".bc-portlet__line-item-label");
-    console.log(lineItem.label);
     label.innerHTML = lineItem.label;
-    console.log(label);
     input.setAttribute("data-value-key", lineItem.key);
     return pliNode;
   }
