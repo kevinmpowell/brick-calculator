@@ -284,6 +284,11 @@ input {
   font-size: 10px;
   padding: 0; }
 
+.bc-portlet__line-item-label-plus-member-snippet {
+  display: none; }
+  .bc--plus-member-signed-in .bc-portlet__line-item-label-plus-member-snippet {
+    display: inline; }
+
 .bc-portlet__listings-count,
 .bc-portlet__data-timestamp {
   color: #959999;
@@ -362,6 +367,9 @@ input {
     transition: -webkit-transform .2s ease-in;
     transition: transform .2s ease-in;
     transition: transform .2s ease-in, -webkit-transform .2s ease-in; }
+
+.bc--user-signed-out .bc-site-menu__list-item--sign-out {
+  display: none; }
 
 @media screen and (min-width: 457.14286px) {
   .bc-site-menu--visible .bc-site-menu__inner {

@@ -19,7 +19,7 @@ BC.SetLookupForm = function() {
   }
 
   function setTaxRateDisplay(userSettings) {
-    if (userSettings.plus_member && userSettings.taxRate) {
+    if (userSettings !== null && userSettings.plus_member && userSettings.taxRate) {
       taxRateAmount.innerHTML = userSettings.taxRate;
       taxRate.classList.add(taxRateVisibleClass);
     } else {
@@ -30,14 +30,13 @@ BC.SetLookupForm = function() {
 
   function updateFormDisplayForSignedInUser() {
     const userSettings = BC.Utils.getFromLocalStorage(localStorageKeys.userSettings);
-    if (userSettings !== null) {
-      setTaxRateDisplay(userSettings);
-    }
+    setTaxRateDisplay(userSettings);
   }
 
   function setEventListeners() {
     form.addEventListener("submit", handleFormSubmit);
     document.addEventListener(customEvents.userSignedIn, updateFormDisplayForSignedInUser);
+    document.addEventListener(customEvents.userSignedOut, updateFormDisplayForSignedInUser);
   }
 
   const initialize = function initialize() {

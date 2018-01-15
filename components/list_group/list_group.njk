@@ -2,7 +2,7 @@
   <div class="bc-list-group{{ ' ' + class if class }}">
     <ul class="bc-list-group__list">
       {% for item in items %}
-        <li class="bc-list-group__list-item">
+        <li class="bc-list-group__list-item{{ ' ' + item.class if item.class }}">
           <a href="{{ item.href }}" class="bc-list-group__link">{{ item.label}}</a> 
         </li>
       {% endfor %}

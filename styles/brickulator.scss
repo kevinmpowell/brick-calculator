@@ -64,12 +64,12 @@ input {
 }
 
 #bc-results {
-  display: none;
+  display: none; // Comment out to display results for debugging
   padding-top: 0;
 }
 
 #bc-lookup {
-  // display: none;
+  // display: none; // Hide form for debugging
   padding: $brickulator-space-inset-1-x;
 }
 

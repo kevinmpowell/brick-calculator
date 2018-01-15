@@ -39,9 +39,7 @@
 
 'use strict';
 BC.PortletLayout = function() {
-  const userSettings = BC.Utils.getFromLocalStorage(localStorageKeys.userSettings),
-    setCostLabel = userSettings !== null && userSettings.plus_member && userSettings.taxRate ? "Cost w/tax" : "Cost",
-    emptyPortletClass = "bc-portlet--empty",
+  const emptyPortletClass = "bc-portlet--empty",
     defaultLayout = [
     {
       header: "Complete Set Values (New)",
@@ -61,7 +59,7 @@ BC.PortletLayout = function() {
             },
             {
               key: "setCost",
-              label: setCostLabel
+              label: "Cost<span class='bc-portlet__line-item-label-plus-member-snippet'> w/taxes</span>"
             }
           ]
         },
@@ -80,7 +78,7 @@ BC.PortletLayout = function() {
             },
             {
               key: "setCost",
-              label: setCostLabel
+              label: "Cost<span class='bc-portlet__line-item-label-plus-member-snippet'> w/taxes</span>"
             }
           ]
         },
@@ -99,7 +97,7 @@ BC.PortletLayout = function() {
             },
             {
               key: "setCost",
-              label: setCostLabel
+              label: "Cost<span class='bc-portlet__line-item-label-plus-member-snippet'> w/taxes</span>"
             }
           ]
         },
@@ -118,7 +116,7 @@ BC.PortletLayout = function() {
             },
             {
               key: "setCost",
-              label: setCostLabel
+              label: "Cost<span class='bc-portlet__line-item-label-plus-member-snippet'> w/taxes</span>"
             }
           ]
         }
@@ -142,7 +140,7 @@ BC.PortletLayout = function() {
             },
             {
               key: "setCost",
-              label: setCostLabel
+              label: "Cost<span class='bc-portlet__line-item-label-plus-member-snippet'> w/taxes</span>"
             }
           ]
         },
@@ -161,7 +159,7 @@ BC.PortletLayout = function() {
             },
             {
               key: "setCost",
-              label: setCostLabel
+              label: "Cost<span class='bc-portlet__line-item-label-plus-member-snippet'> w/taxes</span>"
             }
           ]
         },
@@ -180,7 +178,7 @@ BC.PortletLayout = function() {
             },
             {
               key: "setCost",
-              label: setCostLabel
+              label: "Cost<span class='bc-portlet__line-item-label-plus-member-snippet'> w/taxes</span>"
             }
           ]
         },
@@ -199,7 +197,7 @@ BC.PortletLayout = function() {
             },
             {
               key: "setCost",
-              label: setCostLabel
+              label: "Cost<span class='bc-portlet__line-item-label-plus-member-snippet'> w/taxes</span>"
             }
           ]
         }
@@ -222,7 +220,7 @@ BC.PortletLayout = function() {
           },
           {
             key: "setCost",
-            label: setCostLabel
+            label: "Cost<span class='bc-portlet__line-item-label-plus-member-snippet'> w/taxes</span>"
           }
         ]
       },
@@ -240,7 +238,7 @@ BC.PortletLayout = function() {
           },
           {
             key: "setCost",
-            label: setCostLabel
+            label: "Cost<span class='bc-portlet__line-item-label-plus-member-snippet'> w/taxes</span>"
           }
         ]
       }
@@ -269,7 +267,9 @@ BC.PortletLayout = function() {
     let pliNode = portletLineItemTemplate.cloneNode(true),
         input = pliNode.querySelector(".bc-portlet__line-item-input"),
         label = pliNode.querySelector(".bc-portlet__line-item-label");
+    console.log(lineItem.label);
     label.innerHTML = lineItem.label;
+    console.log(label);
     input.setAttribute("data-value-key", lineItem.key);
     return pliNode;
   }
@@ -365,8 +365,9 @@ BC.PortletLayout = function() {
   }
 
   function getSetCostWithTaxes(setCost) {
+    const userSettings = BC.Utils.getFromLocalStorage(localStorageKeys.userSettings);
     setCost = parseFloat(setCost, 10);
-    if (userSettings.plus_member && userSettings.taxRate) {
+    if (userSettings !== null && userSettings.plus_member && userSettings.taxRate) {
       const taxes = parseFloat(userSettings.taxRate / 100, 10) * setCost;
       setCost += taxes;
     }

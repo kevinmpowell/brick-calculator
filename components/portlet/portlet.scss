@@ -58,6 +58,14 @@
   padding: 0;
 }
 
+.bc-portlet__line-item-label-plus-member-snippet {
+  display: none;
+
+  .bc--plus-member-signed-in & {
+    display: inline;
+  }
+}
+
 .bc-portlet__listings-count,
 .bc-portlet__data-timestamp {
   color: $brickulator-color-text-on-light-tertiary;

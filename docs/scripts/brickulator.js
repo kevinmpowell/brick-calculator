@@ -45,12 +45,37 @@ const ebaySellingFeePercentage = .13, // TODO: Get this from a lookup
       // });
 
 BC.App = function() {
+  const userSignedInClass = 'bc--user-signed-in',
+        userSignedOutClass = 'bc--user-signed-out',
+        plusMemberSignedInClass = 'bc--plus-member-signed-in';
+  let body;
+
+  function setBodyClass(userState) {
+    const userSettings = BC.Utils.getFromLocalStorage(localStorageKeys.userSettings);
+
+    if (userState === 'signedIn') {
+      body.classList.remove(userSignedOutClass);
+      body.classList.add(userSignedInClass); 
+    } else {
+      body.classList.remove(userSignedInClass); 
+      body.classList.add(userSignedOutClass);
+    }
+
+    if (userSettings !== null && userSettings.plus_member) {
+      body.classList.add(plusMemberSignedInClass);
+    } else {
+      body.classList.remove(plusMemberSignedInClass);
+    }
+  }
+
   const setSignedInState = function setSignedInState() {
     BC.Utils.validateAuthToken().then(function(){
+      setBodyClass('signedIn');
       BC.Utils.broadcastEvent(customEvents.userSignedIn);
     }, function() {
+      setBodyClass('signedOut');
       BC.Utils.broadcastEvent(customEvents.userSignedOut);
-      BC.Overlay.show("Not currently signed in", "This is an annoying message and should not be shown on page load.", true);
+      // BC.Overlay.show("Not currently signed in", "This is an annoying message and should not be shown on page load.", true);
     });
   }
 
@@ -61,6 +86,7 @@ BC.App = function() {
   }
 
   const initialize = function initialize() {
+    body = document.body;
     setSignedInState();
   }
 
@@ -584,9 +610,7 @@ BC.Overlay = function() {
 
 'use strict';
 BC.PortletLayout = function() {
-  const userSettings = BC.Utils.getFromLocalStorage(localStorageKeys.userSettings),
-    setCostLabel = userSettings !== null && userSettings.plus_member && userSettings.taxRate ? "Cost w/tax" : "Cost",
-    emptyPortletClass = "bc-portlet--empty",
+  const emptyPortletClass = "bc-portlet--empty",
     defaultLayout = [
     {
       header: "Complete Set Values (New)",
@@ -606,7 +630,7 @@ BC.PortletLayout = function() {
             },
             {
               key: "setCost",
-              label: setCostLabel
+              label: "Cost<span class='bc-portlet__line-item-label-plus-member-snippet'> w/taxes</span>"
             }
           ]
         },
@@ -625,7 +649,7 @@ BC.PortletLayout = function() {
             },
             {
               key: "setCost",
-              label: setCostLabel
+              label: "Cost<span class='bc-portlet__line-item-label-plus-member-snippet'> w/taxes</span>"
             }
           ]
         },
@@ -644,7 +668,7 @@ BC.PortletLayout = function() {
             },
             {
               key: "setCost",
-              label: setCostLabel
+              label: "Cost<span class='bc-portlet__line-item-label-plus-member-snippet'> w/taxes</span>"
             }
           ]
         },
@@ -663,7 +687,7 @@ BC.PortletLayout = function() {
             },
             {
               key: "setCost",
-              label: setCostLabel
+              label: "Cost<span class='bc-portlet__line-item-label-plus-member-snippet'> w/taxes</span>"
             }
           ]
         }
@@ -687,7 +711,7 @@ BC.PortletLayout = function() {
             },
             {
               key: "setCost",
-              label: setCostLabel
+              label: "Cost<span class='bc-portlet__line-item-label-plus-member-snippet'> w/taxes</span>"
             }
           ]
         },
@@ -706,7 +730,7 @@ BC.PortletLayout = function() {
             },
             {
               key: "setCost",
-              label: setCostLabel
+              label: "Cost<span class='bc-portlet__line-item-label-plus-member-snippet'> w/taxes</span>"
             }
           ]
         },
@@ -725,7 +749,7 @@ BC.PortletLayout = function() {
             },
             {
               key: "setCost",
-              label: setCostLabel
+              label: "Cost<span class='bc-portlet__line-item-label-plus-member-snippet'> w/taxes</span>"
             }
           ]
         },
@@ -744,7 +768,7 @@ BC.PortletLayout = function() {
             },
             {
               key: "setCost",
-              label: setCostLabel
+              label: "Cost<span class='bc-portlet__line-item-label-plus-member-snippet'> w/taxes</span>"
             }
           ]
         }
@@ -767,7 +791,7 @@ BC.PortletLayout = function() {
           },
           {
             key: "setCost",
-            label: setCostLabel
+            label: "Cost<span class='bc-portlet__line-item-label-plus-member-snippet'> w/taxes</span>"
           }
         ]
       },
@@ -785,7 +809,7 @@ BC.PortletLayout = function() {
           },
           {
             key: "setCost",
-            label: setCostLabel
+            label: "Cost<span class='bc-portlet__line-item-label-plus-member-snippet'> w/taxes</span>"
           }
         ]
       }
@@ -814,7 +838,9 @@ BC.PortletLayout = function() {
     let pliNode = portletLineItemTemplate.cloneNode(true),
         input = pliNode.querySelector(".bc-portlet__line-item-input"),
         label = pliNode.querySelector(".bc-portlet__line-item-label");
+    console.log(lineItem.label);
     label.innerHTML = lineItem.label;
+    console.log(label);
     input.setAttribute("data-value-key", lineItem.key);
     return pliNode;
   }
@@ -910,8 +936,9 @@ BC.PortletLayout = function() {
   }
 
   function getSetCostWithTaxes(setCost) {
+    const userSettings = BC.Utils.getFromLocalStorage(localStorageKeys.userSettings);
     setCost = parseFloat(setCost, 10);
-    if (userSettings.plus_member && userSettings.taxRate) {
+    if (userSettings !== null && userSettings.plus_member && userSettings.taxRate) {
       const taxes = parseFloat(userSettings.taxRate / 100, 10) * setCost;
       setCost += taxes;
     }
@@ -1034,6 +1061,61 @@ BC.PortletPartOutBrickOwl = function() {
 // }();
 
 'use strict';
+BC.SetLookupForm = function() {
+  const formId = 'bc-value-lookup-form',
+        setNumberFieldId = "bc-value-lookup-form__set-number-input",
+        purchasePriceFieldId = "bc-value-lookup-form__purchase-price-input",
+        taxRateSelector = ".bc-set-lookup-form__tax-message",
+        taxRateAmountSelector = ".bc-set-lookup-form__tax-amount",
+        taxRateVisibleClass = "bc-set-lookup-form__tax-message--visible";
+
+  let form,
+      setNumber,
+      purchasePrice,
+      taxRateAmount,
+      taxRate;
+
+  function handleFormSubmit(e) {
+    e.preventDefault();
+    BC.Values.calculate(setNumber.value, purchasePrice.value);
+  }
+
+  function setTaxRateDisplay(userSettings) {
+    if (userSettings !== null && userSettings.plus_member && userSettings.taxRate) {
+      taxRateAmount.innerHTML = userSettings.taxRate;
+      taxRate.classList.add(taxRateVisibleClass);
+    } else {
+      taxRateAmount.innerHTML = '';
+      taxRate.classList.remove(taxRateVisibleClass);
+    }
+  }
+
+  function updateFormDisplayForSignedInUser() {
+    const userSettings = BC.Utils.getFromLocalStorage(localStorageKeys.userSettings);
+    setTaxRateDisplay(userSettings);
+  }
+
+  function setEventListeners() {
+    form.addEventListener("submit", handleFormSubmit);
+    document.addEventListener(customEvents.userSignedIn, updateFormDisplayForSignedInUser);
+    document.addEventListener(customEvents.userSignedOut, updateFormDisplayForSignedInUser);
+  }
+
+  const initialize = function initialize() {
+    form = document.getElementById(formId);
+    setNumber = document.getElementById(setNumberFieldId);
+    purchasePrice = document.getElementById(purchasePriceFieldId);
+    taxRate = form.querySelector(taxRateSelector);
+    taxRateAmount = form.querySelector(taxRateAmountSelector);
+    setEventListeners();
+  }
+
+  return {
+    initialize: initialize
+  }
+}();
+
+'use strict';
 BC.SetSummary = function() {
   const numberSelector = '.bc-set-summary__number',
         yearSelector = '.bc-set-summary__year',
@@ -1067,62 +1149,6 @@ BC.SetSummary = function() {
   return {
     initialize: initialize,
     update: update
-  }
-}();
-
-'use strict';
-BC.SetLookupForm = function() {
-  const formId = 'bc-value-lookup-form',
-        setNumberFieldId = "bc-value-lookup-form__set-number-input",
-        purchasePriceFieldId = "bc-value-lookup-form__purchase-price-input",
-        taxRateSelector = ".bc-set-lookup-form__tax-message",
-        taxRateAmountSelector = ".bc-set-lookup-form__tax-amount",
-        taxRateVisibleClass = "bc-set-lookup-form__tax-message--visible";
-
-  let form,
-      setNumber,
-      purchasePrice,
-      taxRateAmount,
-      taxRate;
-
-  function handleFormSubmit(e) {
-    e.preventDefault();
-    BC.Values.calculate(setNumber.value, purchasePrice.value);
-  }
-
-  function setTaxRateDisplay(userSettings) {
-    if (userSettings.plus_member && userSettings.taxRate) {
-      taxRateAmount.innerHTML = userSettings.taxRate;
-      taxRate.classList.add(taxRateVisibleClass);
-    } else {
-      taxRateAmount.innerHTML = '';
-      taxRate.classList.remove(taxRateVisibleClass);
-    }
-  }
-
-  function updateFormDisplayForSignedInUser() {
-    const userSettings = BC.Utils.getFromLocalStorage(localStorageKeys.userSettings);
-    if (userSettings !== null) {
-      setTaxRateDisplay(userSettings);
-    }
-  }
-
-  function setEventListeners() {
-    form.addEventListener("submit", handleFormSubmit);
-    document.addEventListener(customEvents.userSignedIn, updateFormDisplayForSignedInUser);
-  }
-
-  const initialize = function initialize() {
-    form = document.getElementById(formId);
-    setNumber = document.getElementById(setNumberFieldId);
-    purchasePrice = document.getElementById(purchasePriceFieldId);
-    taxRate = form.querySelector(taxRateSelector);
-    taxRateAmount = form.querySelector(taxRateAmountSelector);
-    setEventListeners();
-  }
-
-  return {
-    initialize: initialize
   }
 }();
 

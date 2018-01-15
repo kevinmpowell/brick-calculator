@@ -44,12 +44,37 @@ const ebaySellingFeePercentage = .13, // TODO: Get this from a lookup
       // });
 
 BC.App = function() {
+  const userSignedInClass = 'bc--user-signed-in',
+        userSignedOutClass = 'bc--user-signed-out',
+        plusMemberSignedInClass = 'bc--plus-member-signed-in';
+  let body;
+
+  function setBodyClass(userState) {
+    const userSettings = BC.Utils.getFromLocalStorage(localStorageKeys.userSettings);
+
+    if (userState === 'signedIn') {
+      body.classList.remove(userSignedOutClass);
+      body.classList.add(userSignedInClass); 
+    } else {
+      body.classList.remove(userSignedInClass); 
+      body.classList.add(userSignedOutClass);
+    }
+
+    if (userSettings !== null && userSettings.plus_member) {
+      body.classList.add(plusMemberSignedInClass);
+    } else {
+      body.classList.remove(plusMemberSignedInClass);
+    }
+  }
+
   const setSignedInState = function setSignedInState() {
     BC.Utils.validateAuthToken().then(function(){
+      setBodyClass('signedIn');
       BC.Utils.broadcastEvent(customEvents.userSignedIn);
     }, function() {
+      setBodyClass('signedOut');
       BC.Utils.broadcastEvent(customEvents.userSignedOut);
-      BC.Overlay.show("Not currently signed in", "This is an annoying message and should not be shown on page load.", true);
+      // BC.Overlay.show("Not currently signed in", "This is an annoying message and should not be shown on page load.", true);
     });
   }
 
@@ -60,6 +85,7 @@ BC.App = function() {
   }
 
   const initialize = function initialize() {
+    body = document.body;
     setSignedInState();
   }
 
