@@ -579,53 +579,6 @@ BC.Overlay = function() {
 }();
 
 'use strict';
-BC.PortletPartOutBrickOwl = function() {
-  const boPoNewInputId = 'bo-po-new',
-        boPoUsedInputId = 'bo-po-used',
-        boPoNewProfitInputId = 'bo-po-profit-new',
-        boPoUsedProfitInputId = 'bo-po-profit-used',
-        boPoCostNewInputId = 'bo-po-cost-new',
-        boPoCostUsedInputId = 'bo-po-cost-used';
-
-  let boPoNew,
-      boPoUsed,
-      boPoNewProfit,
-      boPoUsedProfit,
-      boPoCostNew,
-      boPoCostUsed;
-
-  const update = function update(setData, purchasePrice) {
-    boPoNew = document.getElementById(boPoNewInputId);
-    boPoUsed = document.getElementById(boPoUsedInputId);
-    boPoNewProfit = document.getElementById(boPoNewProfitInputId);
-    boPoUsedProfit = document.getElementById(boPoUsedProfitInputId);
-    boPoCostNew = document.getElementById(boPoCostNewInputId);
-    boPoCostUsed = document.getElementById(boPoCostUsedInputId);
-
-    if (setData.boPON) {
-      const newValue = setData.boPON,
-            usedValue = setData.boPOU;
-
-      if (newValue !== null) {
-        boPoNew.value = BC.Utils.formatCurrency(newValue);
-        boPoCostNew.value = BC.Utils.formatCurrency(purchasePrice);
-        boPoNewProfit.value = BC.Utils.formatCurrency(newValue - purchasePrice);
-      }
-
-      if (usedValue !== null) {
-        boPoUsed.value = BC.Utils.formatCurrency(usedValue);
-        boPoCostUsed.value = BC.Utils.formatCurrency(purchasePrice);
-        boPoUsedProfit.value = BC.Utils.formatCurrency(usedValue - purchasePrice);
-      }
-    }
-  }
-
-  return {
-    update: update
-  }
-}();
-
-'use strict';
 BC.PortletLayout = function() {
   const emptyPortletClass = "bc-portlet--empty",
         defaultLayout = [
@@ -1092,6 +1045,53 @@ BC.PortletLayout = function() {
   }
 }();
 
+'use strict';
+BC.PortletPartOutBrickOwl = function() {
+  const boPoNewInputId = 'bo-po-new',
+        boPoUsedInputId = 'bo-po-used',
+        boPoNewProfitInputId = 'bo-po-profit-new',
+        boPoUsedProfitInputId = 'bo-po-profit-used',
+        boPoCostNewInputId = 'bo-po-cost-new',
+        boPoCostUsedInputId = 'bo-po-cost-used';
+
+  let boPoNew,
+      boPoUsed,
+      boPoNewProfit,
+      boPoUsedProfit,
+      boPoCostNew,
+      boPoCostUsed;
+
+  const update = function update(setData, purchasePrice) {
+    boPoNew = document.getElementById(boPoNewInputId);
+    boPoUsed = document.getElementById(boPoUsedInputId);
+    boPoNewProfit = document.getElementById(boPoNewProfitInputId);
+    boPoUsedProfit = document.getElementById(boPoUsedProfitInputId);
+    boPoCostNew = document.getElementById(boPoCostNewInputId);
+    boPoCostUsed = document.getElementById(boPoCostUsedInputId);
+
+    if (setData.boPON) {
+      const newValue = setData.boPON,
+            usedValue = setData.boPOU;
+
+      if (newValue !== null) {
+        boPoNew.value = BC.Utils.formatCurrency(newValue);
+        boPoCostNew.value = BC.Utils.formatCurrency(purchasePrice);
+        boPoNewProfit.value = BC.Utils.formatCurrency(newValue - purchasePrice);
+      }
+
+      if (usedValue !== null) {
+        boPoUsed.value = BC.Utils.formatCurrency(usedValue);
+        boPoCostUsed.value = BC.Utils.formatCurrency(purchasePrice);
+        boPoUsedProfit.value = BC.Utils.formatCurrency(usedValue - purchasePrice);
+      }
+    }
+  }
+
+  return {
+    update: update
+  }
+}();
+
 // 'use strict';
 // BC.PortletPricePerPiece = function() {
 //   const msrpPPPInputId = 'ppp-msrp',
@@ -1119,43 +1119,6 @@ BC.PortletLayout = function() {
 //     update: update
 //   }
 // }();
-
-'use strict';
-BC.SetSummary = function() {
-  const numberSelector = '.bc-set-summary__number',
-        yearSelector = '.bc-set-summary__year',
-        titleSelector = '.bc-set-summary__title',
-        pcsSelector = '.bc-set-summary__pcs-count',
-        msrpSelector = '.bc-set-summary__msrp-value';
-
-  let number,
-      year,
-      title,
-      pcs,
-      msrp;
-
-  const initialize = function initialize() {
-    number = document.querySelector(numberSelector);
-    year = document.querySelector(yearSelector);
-    title = document.querySelector(titleSelector);
-    pcs = document.querySelector(pcsSelector);
-    msrp = document.querySelector(msrpSelector);
-  }
-
-  const update = function update(setData) {
-    const setNumber = typeof setData.nv === 'undefined' ? setData.n : setData.n + '-' + setData.nv;
-    number.innerHTML = setNumber;
-    year.innerHTML = setData.y;
-    title.innerHTML = setData.t;
-    pcs.innerHTML = setData.pcs;
-    msrp.innerHTML = parseFloat(setData.msrp, 10) > 0 ? "$" + setData.msrp : "Unknown";
-  }
-
-  return {
-    initialize: initialize,
-    update: update
-  }
-}();
 
 'use strict';
 BC.SetLookupForm = function() {
@@ -1209,6 +1172,43 @@ BC.SetLookupForm = function() {
 
   return {
     initialize: initialize
+  }
+}();
+
+'use strict';
+BC.SetSummary = function() {
+  const numberSelector = '.bc-set-summary__number',
+        yearSelector = '.bc-set-summary__year',
+        titleSelector = '.bc-set-summary__title',
+        pcsSelector = '.bc-set-summary__pcs-count',
+        msrpSelector = '.bc-set-summary__msrp-value';
+
+  let number,
+      year,
+      title,
+      pcs,
+      msrp;
+
+  const initialize = function initialize() {
+    number = document.querySelector(numberSelector);
+    year = document.querySelector(yearSelector);
+    title = document.querySelector(titleSelector);
+    pcs = document.querySelector(pcsSelector);
+    msrp = document.querySelector(msrpSelector);
+  }
+
+  const update = function update(setData) {
+    const setNumber = typeof setData.nv === 'undefined' ? setData.n : setData.n + '-' + setData.nv;
+    number.innerHTML = setNumber;
+    year.innerHTML = setData.y;
+    title.innerHTML = setData.t;
+    pcs.innerHTML = setData.pcs;
+    msrp.innerHTML = parseFloat(setData.msrp, 10) > 0 ? "$" + setData.msrp : "Unknown";
+  }
+
+  return {
+    initialize: initialize,
+    update: update
   }
 }();
 

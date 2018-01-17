@@ -53,6 +53,8 @@ space:
 border:
   control: "solid 1px #C6CDCC" 
   separator: 
+    on-light:
+      primary: "solid 1px #535555"
     on-dark:
       primary: "solid 1px #FFFFFF"
       secondary: "solid 1px #EEF5F4" 

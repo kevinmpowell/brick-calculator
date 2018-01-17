@@ -1,0 +1,12 @@
+.bc-list-group__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.bc-list-group__link {
+  color: $brickulator-color-link;
+  display: block;
+  padding: $brickulator-space-inset-squish-1-x;
+}
+
