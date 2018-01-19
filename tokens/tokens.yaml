@@ -31,6 +31,12 @@ font:
 line-height:
   body: 1.2
 space:
+  generic:
+    1-half-x: 4px
+    1-x: 8px
+    2-x: 16px
+    3-x: 24px
+    4-x: 32px
   inset:
     1-half-x: 4px
     1-x: 8px

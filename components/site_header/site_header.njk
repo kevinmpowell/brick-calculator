@@ -1,0 +1,9 @@
+{% macro site_header() %}
+  <div class="bc-site-header">
+    {{ button(text="Back", class="bc-show-lookup-form bc-button--size-s") }}
+    {{ button(text="Sign In", class="bc-button--size-s bc-button--link-style bc-site-header__sign-in bc-site-menu-show-trigger") }}
+    <span class="bc-site-header__signed-in-indicator"></span>
+    <h1 class="bc-site-header__title">BRICKULATOR</h1>
+    {{ button(text="Menu", class="bc-button--size-s bc-site-menu-show-trigger") }}
+  </div>
+{% endmacro %}

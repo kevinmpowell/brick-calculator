@@ -1,5 +1,6 @@
 @import '../tokens/tokens.scss';
 @import 'shared/utils.scss';
+@import '../components/ad_header/ad_header';
 @import '../components/autocomplete/autocomplete';
 @import '../components/button/button';
 @import '../components/form/form';
@@ -14,6 +15,7 @@
 @import '../components/overlay/overlay';
 @import '../components/sign_up_form/sign_up_form';
 @import '../components/sign_in_form/sign_in_form';
+@import '../components/site_header/site_header';
 @import '../components/set_lookup_form/set_lookup_form';
 @import '../components/user_settings_pane/user_settings_pane';
 
@@ -30,24 +32,6 @@ body {
   box-sizing: border-box;
 }
 
-.bc-site-header {
-  align-items: center;
-  border-bottom: $brickulator-border-control;
-  display: flex;
-  padding: $brickulator-space-inset-1-half-x;
-  justify-content: space-between;
-  margin-bottom: $brickulator-space-stack-1-half-x;
-}
-
-.bc-site-header__title {
-  color: $brickulator-color-brand;
-  font-family: $brickulator-font-family-monospace;
-  font-size: $brickulator-font-size-m;
-  letter-spacing: 0.05em;
-  margin: 0;
-  text-align: center;
-}
-
 #bc-lookup,
 #bc-results {
   max-width: 500px;
@@ -60,8 +44,7 @@ input {
 }
 
 input {
-  font-size: 24px;
-  margin-bottom: 24px;
+  font-size: $brickulator-font-size-xl;
   width: 100%;
 }
 
@@ -76,7 +59,7 @@ input {
 }
 
 .bc-show-lookup-form {
-  visibility: hidden;
+  display: none;
 }
 
 .bc--show-values {
@@ -89,7 +72,7 @@ input {
   }
 
   .bc-show-lookup-form {
-    visibility: visible;
+    display: block;
   }
 }
 

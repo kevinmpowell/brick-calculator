@@ -1,0 +1,8 @@
+{% macro newsletter_sign_up_form(class) %}
+  <div class="bc-newsletter-sign-up-form{{ ' ' + class if class }}">
+    {% call form_field_group() %}
+      {{ form_label(label="Subscribe for updates") }}
+      {{ form_input(placeholder="Your email address") }}
+    {% endcall %}
+  </div>
+{% endmacro %}

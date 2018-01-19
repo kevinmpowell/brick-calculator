@@ -14,7 +14,8 @@
               step,
               prefix,
               suffix,
-              disabled=false) %}
+              disabled=false,
+              placeholder) %}
   {% if prefix or suffix %}
     <div class="bc-form-input-wrap">
   {% endif %}
@@ -40,6 +41,9 @@
               {% endif %}
               {% if disabled %}
                 disabled
+              {% endif %}
+              {% if placeholder %}
+                placeholder="{{ placeholder }}"
               {% endif %}
               >
   {% if prefix or suffix %}

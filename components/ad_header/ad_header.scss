@@ -1,0 +1,17 @@
+.bc-ad-header {
+  display: none;
+}
+
+.bc-ad-header__content {
+  background: lightgray;
+  height: 40px;
+  margin: $brickulator-space-stack-1-half-x;
+  width: 100%;
+}
+
+.bc-ad-header__label {
+  display: block;
+  font-size: $brickulator-font-size-xs;
+  text-align: center;
+  text-transform: uppercase;
+}

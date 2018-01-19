@@ -406,5 +406,6 @@ ready(function(){
   BC.UserSettingsPane.initialize();
   BC.SignInForm.initialize();
   BC.SetLookupForm.initialize();
+  BC.AdHeader.initialize();
   BC.App.initialize(); // Check auth token, broadcast user state events
 });

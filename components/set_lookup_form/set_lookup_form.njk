@@ -10,24 +10,26 @@
       </div>
       {{ button(text="Reset Form", type="reset", class="bc-button--size-s") }}
     </div>
-    <div class="bc-field-group">
+    {% call form_field_group() %}
       <label class="bc-form-label" for="bc-value-lookup-form__set-number-input">Set Number</label>
       <input autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" name="setNumber" id="bc-value-lookup-form__set-number-input" type="text" pattern="[0-9]*">
       {{ autocomplete() }}
-    </div>
+    {% endcall %}
 
-    <label class="bc-form-label" for="bc-value-lookup-form__purchase-price-input">
-      Purchase Price
-      <span class="bc-set-lookup-form__tax-message">
-        (<span class="bc-set-lookup-form__tax-amount"></span>% sales tax will be added)
-      </span>
-    </label>
-    <div class="bc-form-input-wrap">
-      <div class="bc-form-input-prefix">
-        $
+    {% call form_field_group() %}
+      <label class="bc-form-label" for="bc-value-lookup-form__purchase-price-input">
+        Purchase Price
+        <span class="bc-set-lookup-form__tax-message">
+          (<span class="bc-set-lookup-form__tax-amount"></span>% sales tax will be added)
+        </span>
+      </label>
+      <div class="bc-form-input-wrap">
+        <div class="bc-form-input-prefix">
+          $
+        </div>
+        <input step="0.01" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" type="number" id="bc-value-lookup-form__purchase-price-input" name="purchasePrice">
       </div>
-      <input step="0.01" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" type="number" id="bc-value-lookup-form__purchase-price-input" name="purchasePrice">
-    </div>
+    {% endcall %}
 
     {{ button(text="Brickulate!", type="submit", class="bc-button--primary") }}
   </form>
