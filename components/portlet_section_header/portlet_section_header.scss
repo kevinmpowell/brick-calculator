@@ -8,6 +8,15 @@
   padding: $brickulator-space-inset-squish-1-x;
   text-transform: uppercase;
   text-align: center;
+
+  .bc-tag {
+    display: none;
+    margin-right: $brickulator-space-generic-1-half-x;
+  }
+
+  &.bc-portlet-section-header--plus-member .bc-tag {
+    display: block;
+  }
 }
 
 .bc-portlet-section-header__text {

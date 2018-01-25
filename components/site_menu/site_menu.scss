@@ -1,6 +1,7 @@
 $bc-site-menu-max-width: 320px;
 
 .bc-site-menu {
+  background: rgba($brickulator-color-background-dark, 0);
   position: fixed;
   left: 0;
   top: 0;
@@ -8,7 +9,13 @@ $bc-site-menu-max-width: 320px;
   height: 100%;
   overflow: hidden;
   pointer-events: none;
+  transition: background .2s ease-out;
   z-index: $brickulator-z-index-overlay;
+}
+
+.bc-site-menu--visible {
+  background: rgba($brickulator-color-background-dark, 0.8);
+  transition: background .2s ease-in;
 }
 
 .bc-site-menu__inner {
@@ -23,11 +30,11 @@ $bc-site-menu-max-width: 320px;
   // transform: translateX(30vw); //Make menu visible on reload for debugging
   transition: transform .2s ease-out;
   will-change: transform;
-  width: 70vw;
+  width: 100vw;
   z-index: $brickulator-z-index-overlay + 1;
   
   .bc-site-menu--visible & {
-    transform: translateX(30vw);
+    transform: translateX(0vw);
     transition: transform .2s ease-in;
   
   }
@@ -37,7 +44,7 @@ $bc-site-menu-max-width: 320px;
   display: none; // Don't show the sign out link no one's signed in
 }
 
-@media screen and (min-width: ($bc-site-menu-max-width / .7)) {
+@media screen and (min-width: ($bc-site-menu-max-width / 1)) {
   .bc-site-menu--visible .bc-site-menu__inner {
     transform: translateX(calc(100vw - #{$bc-site-menu-max-width}));
   }

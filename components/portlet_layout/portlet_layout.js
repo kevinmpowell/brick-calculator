@@ -3,27 +3,8 @@ BC.PortletLayout = function() {
   const emptyPortletClass = "bc-portlet--empty",
         defaultLayout = [
           {
-            header: "Complete Set Values (New)",
+            header: "Current Listings (New)",
             portlets: [
-              {
-                title: "Brick Owl",
-                retrievedAtKey: "boRA",
-                listingsCountKey: "boCSNLC",
-                lineItems: [
-                  {
-                    key: "boCSNM",
-                    label: "Median Listing"
-                  },
-                  {
-                    key: "boFees",
-                    label: "BrickOwl & PayPal Fees"
-                  },
-                  {
-                    key: "setCost",
-                    label: "Cost<span class='bc-portlet__line-item-label-plus-member-snippet'> w/taxes</span>"
-                  }
-                ]
-              },
               {
                 title: "Brick Owl",
                 retrievedAtKey: "boRA",
@@ -44,36 +25,17 @@ BC.PortletLayout = function() {
                 ]
               },
               {
-                title: "Brick Owl",
-                retrievedAtKey: "boRA",
-                listingsCountKey: "boCSNLC",
+                title: "Bricklink",
+                retrievedAtKey: "blRA",
+                listingsCountKey: "blCSNLC",
                 lineItems: [
                   {
-                    key: "boCSNL",
-                    label: "Lowest Listing"
+                    key: "blCSNA",
+                    label: "Avg Listing"
                   },
                   {
-                    key: "boFees",
-                    label: "Brick Owl & PayPal Fees"
-                  },
-                  {
-                    key: "setCost",
-                    label: "Cost<span class='bc-portlet__line-item-label-plus-member-snippet'> w/taxes</span>"
-                  }
-                ]
-              },
-              {
-                title: "Brick Owl",
-                retrievedAtKey: "boRA",
-                listingsCountKey: "boCSNLC",
-                lineItems: [
-                  {
-                    key: "boCSNH",
-                    label: "High Listing"
-                  },
-                  {
-                    key: "boFees",
-                    label: "Brick Owl & PayPal Fees"
+                    key: "blFees",
+                    label: "Bricklink & PayPal Fees"
                   },
                   {
                     key: "setCost",
@@ -84,27 +46,8 @@ BC.PortletLayout = function() {
             ]
           },
           {
-            header: "Complete Set Values (Used)",
+            header: "Current Listings (Used)",
             portlets: [
-              {
-                title: "Brick Owl",
-                retrievedAtKey: "boRA",
-                listingsCountKey: "boCSULC",
-                lineItems: [
-                  {
-                    key: "boCSUM",
-                    label: "Median Listing"
-                  },
-                  {
-                    key: "boFees",
-                    label: "Brick Owl & PayPal Fees"
-                  },
-                  {
-                    key: "setCost",
-                    label: "Cost<span class='bc-portlet__line-item-label-plus-member-snippet'> w/taxes</span>"
-                  }
-                ]
-              },
               {
                 title: "Brick Owl",
                 retrievedAtKey: "boRA",
@@ -125,77 +68,17 @@ BC.PortletLayout = function() {
                 ]
               },
               {
-                title: "Brick Owl",
-                retrievedAtKey: "boRA",
-                listingsCountKey: "boCSULC",
+                title: "Bricklink",
+                retrievedAtKey: "blRA",
+                listingsCountKey: "blCSULC",
                 lineItems: [
                   {
-                    key: "boCSUL",
-                    label: "Low Listing"
-                  },
-                  {
-                    key: "boFees",
-                    label: "Brick Owl & PayPal Fees"
-                  },
-                  {
-                    key: "setCost",
-                    label: "Cost<span class='bc-portlet__line-item-label-plus-member-snippet'> w/taxes</span>"
-                  }
-                ]
-              },
-              {
-                title: "Brick Owl",
-                retrievedAtKey: "boRA",
-                listingsCountKey: "boCSULC",
-                lineItems: [
-                  {
-                    key: "boCSUH",
-                    label: "High Listing"
-                  },
-                  {
-                    key: "boFees",
-                    label: "Brick Owl & PayPal Fees"
-                  },
-                  {
-                    key: "setCost",
-                    label: "Cost<span class='bc-portlet__line-item-label-plus-member-snippet'> w/taxes</span>"
-                  }
-                ]
-              }
-            ]
-          },
-          {
-            header: "Part Out Values",
-            portlets: [
-              {
-                title: "Brick Owl (Used)",
-                retrievedAtKey: "boRA",
-                lineItems: [
-                  {
-                    key: "boPOU",
-                    label: "Avg Value"
-                  },
-                  {
-                    key: "boFees",
-                    label: "Brick Owl & PayPal Fees"
-                  },
-                  {
-                    key: "setCost",
-                    label: "Cost<span class='bc-portlet__line-item-label-plus-member-snippet'> w/taxes</span>"
-                  }
-                ]
-              },
-              {
-                title: "Brick Owl (New)",
-                retrievedAtKey: "boRA",
-                lineItems: [
-                  {
-                    key: "boPON",
+                    key: "blCSUA",
                     label: "Avg Listing"
                   },
                   {
-                    key: "boFees",
-                    label: "Brick Owl & PayPal Fees"
+                    key: "blFees",
+                    label: "Bricklink & PayPal Fees"
                   },
                   {
                     key: "setCost",
@@ -208,7 +91,8 @@ BC.PortletLayout = function() {
         ],
         plusMemberPortlets = [
           {
-            header: "Sold Complete Sets (New)",
+            header: "Sold Listings (New)",
+            headerClass: "bc-portlet-section-header--plus-member",
             portlets: [
               {
                 title: "eBay",
@@ -230,11 +114,33 @@ BC.PortletLayout = function() {
                     label: "Cost<span class='bc-portlet__line-item-label-plus-member-snippet'> w/taxes</span>"
                   }
                 ]
+              },
+              {
+                title: "Bricklink",
+                retrievedAtKey: "blRA",
+                listingsCountKey: "blCSCLNLC",
+                timestampLabel: "In the last 6 months",
+                listingsCountSuffix: "sold",
+                lineItems: [
+                  {
+                    key: "blCSCLNM",
+                    label: "Median Value"
+                  },
+                  {
+                    key: "blFees",
+                    label: "Bricklink & PayPal Fees"
+                  },
+                  {
+                    key: "setCost",
+                    label: "Cost<span class='bc-portlet__line-item-label-plus-member-snippet'> w/taxes</span>"
+                  }
+                ]
               }
             ]
           },
           {
-            header: "Sold Complete Sets (Used)",
+            header: "Sold Listings (Used)",
+            headerClass: "bc-portlet-section-header--plus-member",
             portlets: [
               {
                 title: "eBay",
@@ -250,6 +156,27 @@ BC.PortletLayout = function() {
                   {
                     key: "eFees",
                     label: "eBay & PayPal Fees"
+                  },
+                  {
+                    key: "setCost",
+                    label: "Cost<span class='bc-portlet__line-item-label-plus-member-snippet'> w/taxes</span>"
+                  }
+                ]
+              },
+              {
+                title: "Bricklink",
+                retrievedAtKey: "blRA",
+                listingsCountKey: "blCSCLULC",
+                timestampLabel: "In the last 6 months",
+                listingsCountSuffix: "sold",
+                lineItems: [
+                  {
+                    key: "blCSCLUM",
+                    label: "Median Value"
+                  },
+                  {
+                    key: "blFees",
+                    label: "Bricklink & PayPal Fees"
                   },
                   {
                     key: "setCost",
@@ -278,10 +205,13 @@ BC.PortletLayout = function() {
     return layout;
   }
 
-  function getSectionHeader(text) {
+  function getSectionHeader(text, headerClass) {
     let headerNode = headerTemplate.cloneNode(true),
         headerNodeText = headerNode.querySelector(".bc-portlet-section-header__text");
     headerNodeText.innerHTML = text;
+    if (headerClass) {
+      headerNode.classList.add(headerClass);
+    }
     return headerNode;
   }
 
@@ -347,6 +277,9 @@ BC.PortletLayout = function() {
 
   function getMarketplaceFees(salePrice, feesKey) {
     switch(feesKey) {
+      case 'blFees':
+        return BC.Utils.getBricklinkSellerFees(salePrice);
+        break;
       case 'boFees':
         return BC.Utils.getBrickOwlSellerFees(salePrice);
         break;
@@ -437,7 +370,7 @@ BC.PortletLayout = function() {
     const layout = getLayout();
     portletWrapper.innerHTML = ''; // Clear the portlet wrapper
     layout.forEach(function(portletSection){
-      portletWrapper.append(getSectionHeader(portletSection.header));
+      portletWrapper.append(getSectionHeader(portletSection.header, portletSection.headerClass));
       portletWrapper.append(getPortletGrid(portletSection.portlets));
     });
   }

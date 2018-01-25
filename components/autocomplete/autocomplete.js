@@ -1,6 +1,6 @@
 'use strict';
 BC.Autocomplete = function() {
-  const autocompleteSelector = ".bc-autocomplete",
+  const autocompleteSelector = ".bc-autocomplete__list",
         autocompleteVisibleClass = "bc-autocomplete--visible",
         autocompleteItemTemplateClass = "bc-autocomplete__item--template",
         itemLinkClass = "bc-autocomplete__item-link",
@@ -32,6 +32,7 @@ BC.Autocomplete = function() {
     // console.log(results);
 
     clearAutocompleteResults();
+    console.log(autocomplete);
     results.forEach(function(r) {
       const result = itemTemplate.cloneNode(true),
             setNumber = result.querySelector(`.${itemLinkTextClass}`),
@@ -55,7 +56,6 @@ BC.Autocomplete = function() {
   function triggerAutocomplete() {
     const currentValue = this.value,
           matches = findMatchesInDataset(currentValue);
-
     if (currentValue.length > 1) {
       if (matches.length > 0) {
         buildAutocompleteResults(matches);
@@ -94,11 +94,12 @@ BC.Autocomplete = function() {
 
 
   const initialize = function initialize(targetSelector, data) {
-    triggerInput = document.querySelector(targetSelector);
     updateDataset(data);
-    triggerInput.addEventListener('keyup', triggerAutocomplete);
+    triggerInput = document.querySelector(targetSelector);
+    console.log(triggerInput);
     autocomplete = triggerInput.parentNode.querySelector(autocompleteSelector);
     autocomplete.addEventListener('click', handleAutocompleteClick);
+    triggerInput.addEventListener('keyup', triggerAutocomplete);
     itemTemplate = autocomplete.querySelector(`.${autocompleteItemTemplateClass}`);
     itemTemplate.classList.remove(autocompleteItemTemplateClass);
     itemTemplate.parentNode.removeChild(itemTemplate);
@@ -119,5 +120,5 @@ function ready(fn) {
 }
 
 ready(function(){
-  BC.Autocomplete.initialize("#bc-value-lookup-form__set-number-input", setDB);
+  BC.Autocomplete.initialize("#bc-set-lookup-form__set-number-input", setDB);
 });

@@ -5,7 +5,9 @@
         {{ button(text="&times; Close", class="bc-button--primary bc-button--size-s bc-site-menu-hide-trigger") }}
       </div>
       {{ sign_in_form() }}
-      {{ list_group(items=[
+      {{ list_group(
+        class="bc-list-group--on-dark",
+        items=[
         {
           href: "#user-settings",
           label: "Settings"

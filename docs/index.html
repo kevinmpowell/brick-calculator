@@ -12,8 +12,9 @@
     </head>
     <body>
         
-    <div class="bc-site-header">
-      
+    
+  <div class="bc-site-header">
+    
   
   
 
@@ -25,8 +26,21 @@
     Back
   </button>
 
-      <h1 class="bc-site-header__title">BRICKULATOR</h1>
-      
+    
+  
+  
+
+  <button
+    
+     type="button" 
+    
+    class="bc-button bc-button--size-s bc-button--link-style bc-site-header__sign-in bc-site-menu-show-trigger">
+    Sign In
+  </button>
+
+    <span class="bc-site-header__signed-in-indicator"></span>
+    <h1 class="bc-site-header__title">BRICKULATOR</h1>
+    
   
   
 
@@ -38,11 +52,20 @@
     Menu
   </button>
 
+  </div>
+
+    
+  <div class="bc-ad-header">
+    <div class="bc-ad-header__content">
+      
     </div>
+    <span class="bc-ad-header__label">Advertisement</span>
+  </div>
+
     <div id="bc-lookup">
       
-  <form action="" class="bc-value-lookup-form" id="bc-value-lookup-form" novalidate>
-    <div class="bc-value-lookup-form__actions">
+  <form action="" class="bc-set-lookup-form" id="bc-set-lookup-form" novalidate>
+    <div class="bc-set-lookup-form__actions">
       <div class="bc-lookup-set-data-status">
         
   <div
@@ -76,35 +99,49 @@
   </button>
 
     </div>
-    <div class="bc-field-group">
-      <label class="bc-form-label" for="bc-value-lookup-form__set-number-input">Set Number</label>
-      <input autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" name="setNumber" id="bc-value-lookup-form__set-number-input" type="text" pattern="[0-9]*">
+    
+  <div class="bc-form-field-group">
+    
+      <label class="bc-form-label" for="bc-set-lookup-form__set-number-input">Set Number</label>
       
-  <ul class="bc-autocomplete">
-    <li class="bc-autocomplete__item bc-autocomplete__item--template">
-      <a href="" class="bc-autocomplete__item-link">
-        <span class="bc-autocomplete__item-link-text">
-          Suggest Something Here
+  <div class="bc-autocomplete">
+    
+        <input autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" name="setNumber" id="bc-set-lookup-form__set-number-input" type="text" pattern="[0-9]*">
+      
+    <ul class="bc-autocomplete__list">
+      <li class="bc-autocomplete__item bc-autocomplete__item--template">
+        <a href="" class="bc-autocomplete__item-link">
+          <span class="bc-autocomplete__item-link-text">
+            Suggest Something Here
+          </span>
+          <small class="bc-autocomplete__item-metadata">And something smaller here</small>
+        </a>
+      </li>
+    </ul>
+  </div>
+
+    
+  </div>
+
+
+    
+  <div class="bc-form-field-group">
+    
+      <label class="bc-form-label" for="bc-set-lookup-form__purchase-price-input">
+        Purchase Price
+        <span class="bc-set-lookup-form__tax-message">
+          (<span class="bc-set-lookup-form__tax-amount"></span>% sales tax will be added)
         </span>
-        <small class="bc-autocomplete__item-metadata">And something smaller here</small>
-      </a>
-    </li>
-  </ul>
-
-    </div>
-
-    <label class="bc-form-label" for="bc-value-lookup-form__purchase-price-input">
-      Purchase Price
-      <span class="bc-set-lookup-form__tax-message">
-        (<span class="bc-set-lookup-form__tax-amount"></span>% sales tax will be added)
-      </span>
-    </label>
-    <div class="bc-form-input-wrap">
-      <div class="bc-form-input-prefix">
-        $
+      </label>
+      <div class="bc-form-input-wrap">
+        <div class="bc-form-input-prefix">
+          $
+        </div>
+        <input step="0.01" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" type="number" id="bc-set-lookup-form__purchase-price-input" name="purchasePrice">
       </div>
-      <input step="0.01" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" type="number" id="bc-value-lookup-form__purchase-price-input" name="purchasePrice">
-    </div>
+    
+  </div>
+
 
     
   
@@ -120,6 +157,64 @@
 
   </form>
   
+
+      
+  <div class="bc-newsletter-sign-up-form">
+    
+  <form action="" class="bc-form">
+    
+      
+  <div class="bc-form-field-group">
+    
+        
+  <label for="" class="bc-form-label bc-form-label--size-s">Subscribe for updates</label>
+
+        
+        
+  
+    <div class="bc-form-input-wrap bc-form-input-wrap--size-m bc-form-input-wrap--button-suffix">
+  
+    
+    
+      <div class="bc-form-input-suffix">
+  
+  
+
+  <button
+    
+     type="submit" 
+    
+    class="bc-button bc-button--size-m">
+    Subscribe
+  </button>
+</div>
+    
+      <input type="text" 
+              class="bc-form-input bc-form-input--size-m"
+              id="" 
+              name=""
+              autocomplete="off" 
+              autocorrect="off" 
+              autocapitalize="off" 
+              spellcheck="false"
+              
+              
+              
+              
+                placeholder="Your email address"
+              
+              >
+  
+    </div>
+  
+
+      
+  </div>
+
+    
+  </form>
+
+  </div>
 
     </div>
     <div id="bc-results">
@@ -178,6 +273,11 @@
     <span class="bc-portlet-section-header__text">
       Complete Set Values
     </span>
+    
+  <span class="bc-tag">
+    <span class='bc-tag__brand-plus'>&plus;</span> <span class='bc-tag__text'>Member</span>
+  </span>
+
     <span class="bc-portlet-section-header__post"></span>
   </div>
 
@@ -222,7 +322,9 @@
       </div>
       
   <form action="" method="POST" id="bc-sign-in-form">
-    <div class="bc-field-group">
+    
+  <div class="bc-form-field-group">
+    
       
   <label for="bc-sign-in-form-email" class="bc-form-label bc-form-label--on-dark bc-form-label--size-m">Email</label>
 
@@ -241,12 +343,17 @@
               
               
               
+              
               >
   
 
-    </div>
+    
+  </div>
 
-    <div class="bc-field-group">
+
+    
+  <div class="bc-form-field-group">
+    
       
   <label for="bc-sign-in-form-password" class="bc-form-label bc-form-label--on-dark bc-form-label--size-m">Password</label>
 
@@ -265,10 +372,13 @@
               
               
               
+              
               >
   
 
-    </div>
+    
+  </div>
+
 
     <div class="bc-sign-in-form__actions">
       
@@ -302,7 +412,7 @@
   </form>
 
       
-  <div class="bc-list-group">
+  <div class="bc-list-group bc-list-group--on-dark">
     <ul class="bc-list-group__list">
       
         <li class="bc-list-group__list-item">
@@ -339,7 +449,7 @@
   <div class="bc-form-field-group">
     
         
-  <label for="bc-user-settings-taxRate" class="bc-form-label bc-form-label--on-dark">Tax Rate</label>
+  <label for="bc-user-settings-taxRate" class="bc-form-label">Tax Rate</label>
 
         
   
@@ -364,6 +474,7 @@
               
                 disabled
               
+              
               >
   
     </div>
@@ -386,23 +497,79 @@
     
      type="button" 
     
-    class="bc-button bc-button--primary bc-button--size-s bc-sign-up-form-pane-hide-trigger">
+    class="bc-button bc-button--size-s bc-sign-up-form-pane-hide-trigger">
     &times; Close
+  </button>
+
+    </div>
+    <div class="bc-sign-up-form-pane__brickulator-plus-details bc-long-form-text">
+      <h2 id="brickulator-plus">Brickulator Plus</h2>
+<p>Sign up for a Brickulator Plus membership to enjoy the following benefits:</p>
+<ul>
+<li>Remove All Ads</li>
+<li>Automatically add sales tax to purchase price</li>
+<li>Customize results screen</li>
+<li>Add eBay sold listing values to results</li>
+<li>Add Brick Owl minifig total value to results</li>
+</ul>
+<p class="bc-long-form-text__cta">
+  Special introductory price: 
+  <span class="bc-long-form-text__cta-price">
+    <strike>$6.99</strike> $4.99 / mo.
+  </span>
+</p>
+
+      
+  
+  
+
+  <button
+    
+     type="button" 
+    
+    class="bc-button bc-button--primary">
+    Join Now
+  </button>
+
+    </div>
+
+    <div class="bc-sign-up-form-pane__brickulator-free-details bc-long-form-text">
+      <h2 id="brickulator-free">Brickulator Free</h2>
+<p>A free brickulator account features the following benefits:</p>
+<ul>
+<li>One ad every 10 lookups (instead of every 3 without an account)</li>
+<li>Add Brick Owl minifig total value to results</li>
+</ul>
+
+      
+  
+  
+
+  <button
+    
+     type="button" 
+    
+    class="bc-button bc-button--primary">
+    Sign Up
   </button>
 
     </div>
 
     <form action="" method="POST" id="bc-sign-up-form">
+      <div class="bc-long-form-text">
+        <h3 id="create-your-account">Create your account</h3>
+
+      </div>
       <div class="bc-field-group">
         
-  <label for="bc-sign-up-form-email" class="bc-form-label bc-form-label--on-dark">Email</label>
+  <label for="bc-sign-up-form-email" class="bc-form-label">Email</label>
 
         <input autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" name="bc-sign-up-form-email" id="bc-sign-up-form-email" type="email">
       </div>
 
       <div class="bc-field-group">
         
-  <label for="bc-sign-up-form-password" class="bc-form-label bc-form-label--on-dark">Create Password</label>
+  <label for="bc-sign-up-form-password" class="bc-form-label">Create Password</label>
 
         <input name="bc-sign-up-form-password" id="bc-sign-up-form-password" type="password">
       </div>

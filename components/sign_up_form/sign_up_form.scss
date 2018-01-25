@@ -1,12 +1,11 @@
 .bc-sign-up-form-pane {
-  background: red;
-  height: 100%;
+  background: $brickulator-color-background-light;
+  height: 100vh;
   left: 0;
-  overflow-y: auto;
-  padding: $brickulator-space-inset-2-x;
+  overflow-y: scroll;
   position: absolute;
   top: 0;
-  transform: translateX(100%);
+  transform: translateY(100%);
   transition: transform .2s ease-out;
   width: 100%;
   will-change: transform;
@@ -14,6 +13,25 @@
 }
 
 .bc-sign-up-form-pane--visible {
-  transform: translateX(0);
+  transform: translateY(0);
   transition: transform .2s ease-in;
+}
+
+.bc-sign-up-form-pane__actions {
+  padding: $brickulator-space-inset-squish-2-x;
+}
+
+#bc-sign-up-form {
+  display: none;
+  padding: $brickulator-space-inset-squish-2-x;
+}
+
+.bc-sign-up-form-pane__brickulator-plus-details {
+  border-bottom: $brickulator-border-separator-on-light-primary;
+}
+
+.bc-sign-up-form-pane__brickulator-plus-details,
+.bc-sign-up-form-pane__brickulator-free-details {
+  margin: $brickulator-space-stack-3-x;
+  padding: $brickulator-space-inset-2-x;
 }

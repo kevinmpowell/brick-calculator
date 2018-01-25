@@ -1,12 +1,10 @@
 {% extends 'templates/base.njk' %}
   {% block body %}
-    <div class="bc-site-header">
-      {{ bc.button(text="Back", class="bc-show-lookup-form bc-button--size-s") }}
-      <h1 class="bc-site-header__title">BRICKULATOR</h1>
-      {{ bc.button(text="Menu", class="bc-button--size-s bc-site-menu-show-trigger") }}
-    </div>
+    {{ bc.site_header() }}
+    {{ bc.ad_header() }}
     <div id="bc-lookup">
       {{ bc.set_lookup_form() }}
+      {{ bc.newsletter_sign_up_form() }}
     </div>
     <div id="bc-results">
       {{ bc.set_summary(

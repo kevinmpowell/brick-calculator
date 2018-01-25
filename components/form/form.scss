@@ -1,9 +1,15 @@
 $bc-form-field-height: 40px;
+$bc-form-field-height-s: 36px;
 
 
 .bc-form-label {
   color: $brickulator-color-text-on-light-primary;
   font-size: $brickulator-font-size-m;
+  margin: $brickulator-space-stack-1-half-x;
+}
+
+.bc-form-label--size-s {
+  font-size: $brickulator-font-size-s;
 }
 
 .bc-form-label--size-m {
@@ -28,6 +34,19 @@ input {
   font-family: $brickulator-font-family-sans-serif;
   height: $bc-form-field-height;
   padding: $brickulator-space-inset-1-half-x;
+  margin: 0;
+}
+
+.bc-form-input-wrap--button-suffix {
+  .bc-form-input-suffix {
+    padding: 0;
+  }
+
+  .bc-button {
+    border-bottom-left-radius: 0;
+    border-top-left-radius: 0;
+    height: 100%;
+  }
 }
 
 .bc-form-input-prefix,
@@ -47,11 +66,16 @@ input {
     border-bottom-left-radius: 0;
     border-top-left-radius: 0;
   } 
+
+  .bc-form-input-wrap--size-m & {
+    height: $bc-form-field-height-s;
+  }
 }
 
 .bc-form-input-suffix {
   border-left: 0;
   border-radius: 0 $brickulator-border-radius-control $brickulator-border-radius-control 0;
+  border-right: $brickulator-border-control;
   order: 3;
 
 
@@ -63,4 +87,8 @@ input {
 
 .bc-form-input-wrap {
   display: flex;
+}
+
+.bc-form-field-group {
+  margin: $brickulator-space-stack-2-x;
 }

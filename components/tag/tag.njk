@@ -1,0 +1,5 @@
+{% macro tag(class, text="<span class='bc-tag__brand-plus'>&plus;</span> <span class='bc-tag__text'>Member</span>") %}
+  <span class="bc-tag{{ ' ' + class if class }}">
+    {{ text | safe }}
+  </span>
+{% endmacro %}

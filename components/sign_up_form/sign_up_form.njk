@@ -1,17 +1,53 @@
 {% macro sign_up_form() %}
   <div class="bc-sign-up-form-pane">
     <div class="bc-sign-up-form-pane__actions">
-      {{ button(text="&times; Close", class="bc-button--primary bc-button--size-s bc-sign-up-form-pane-hide-trigger") }}
+      {{ button(text="&times; Close", class="bc-button--size-s bc-sign-up-form-pane-hide-trigger") }}
+    </div>
+    <div class="bc-sign-up-form-pane__brickulator-plus-details bc-long-form-text">
+      {% filter markdown %}
+        ## Brickulator Plus
+
+        Sign up for a Brickulator Plus membership to enjoy the following benefits:
+        * Remove All Ads
+        * Automatically add sales tax to purchase price
+        * Customize results screen
+        * Add eBay sold listing values to results
+        * Add Brick Owl minifig total value to results
+        
+        <p class="bc-long-form-text__cta">
+          Special introductory price: 
+          <span class="bc-long-form-text__cta-price">
+            <strike>$6.99</strike> $4.99 / mo.
+          </span>
+        </p>
+      {% endfilter %}
+      {{ button(text="Join Now", class="bc-button--primary") }}
+    </div>
+
+    <div class="bc-sign-up-form-pane__brickulator-free-details bc-long-form-text">
+      {% filter markdown %}
+        ## Brickulator Free
+
+        A free brickulator account features the following benefits:
+        * One ad every 10 lookups (instead of every 3 without an account)
+        * Add Brick Owl minifig total value to results
+      {% endfilter %}
+      {{ button(text="Sign Up", class="bc-button--primary") }}
     </div>
 
     <form action="" method="POST" id="bc-sign-up-form">
+      <div class="bc-long-form-text">
+        {% filter markdown %}
+          ### Create your account
+        {% endfilter %}
+      </div>
       <div class="bc-field-group">
-        {{ form_label(for="bc-sign-up-form-email", label="Email", class="bc-form-label--on-dark") }}
+        {{ form_label(for="bc-sign-up-form-email", label="Email") }}
         <input autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" name="bc-sign-up-form-email" id="bc-sign-up-form-email" type="email">
       </div>
 
       <div class="bc-field-group">
-        {{ form_label(for="bc-sign-up-form-password", label="Create Password", class="bc-form-label--on-dark") }}
+        {{ form_label(for="bc-sign-up-form-password", label="Create Password") }}
         <input name="bc-sign-up-form-password" id="bc-sign-up-form-password" type="password">
       </div>
 

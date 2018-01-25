@@ -1,0 +1,17 @@
+.bc-tag {
+  @include bc-text-crop-monospace;
+  align-items: center;
+  background: $brickulator-color-brand;
+  border-radius: 30px;
+  color: $brickulator-color-text-on-brand-primary;
+  display: inline-flex;
+  padding: $brickulator-space-inset-1-half-x;
+  font-size: $brickulator-font-size-xs;
+  vertical-align: middle;
+  white-space: nowrap;
+}
+
+.bc-tag__text {
+  @include bc-text-crop-monospace;
+  display: inline-block;
+}

@@ -161,6 +161,25 @@ BC.Utils = function() {
     return fee;
   }
 
+  const getBricklinkSellerFees = function getBricklinkSellerFees(finalValue) {
+    const range0_500Percent = 3,
+          range500_1000Percent = 2,
+          range1000AndUpPercent = 1,
+          payPalTransactionFee = getPayPalTransactionFee(finalValue);
+
+    let fee;
+
+    if (finalValue > 1000) {
+      fee = 25 + ((finalValue - 1000) * (range1000AndUpPercent / 100));
+    } else if (finalValue > 500) {
+      fee = 15 + ((finalValue - 500) * (range500_1000Percent / 100));
+    } else {
+      fee = finalValue * (range0_500Percent / 100);
+    }
+
+    return fee + payPalTransactionFee;
+  }
+
   const getEbaySellerFees = function getEbaySellerFees(finalValue) {
     // TODO: Actually make this work
     const ebayCommissionPercent = 10,
@@ -219,6 +238,7 @@ BC.Utils = function() {
 
   return {
     formatCurrency: formatCurrency,
+    getBricklinkSellerFees: getBricklinkSellerFees,
     getBrickOwlSellerFees: getBrickOwlSellerFees,
     getEbaySellerFees: getEbaySellerFees,
     saveToLocalStorage: saveToLocalStorage,
@@ -407,12 +427,13 @@ ready(function(){
   BC.UserSettingsPane.initialize();
   BC.SignInForm.initialize();
   BC.SetLookupForm.initialize();
+  BC.AdHeader.initialize();
   BC.App.initialize(); // Check auth token, broadcast user state events
 });
 
 'use strict';
 BC.Autocomplete = function() {
-  const autocompleteSelector = ".bc-autocomplete",
+  const autocompleteSelector = ".bc-autocomplete__list",
         autocompleteVisibleClass = "bc-autocomplete--visible",
         autocompleteItemTemplateClass = "bc-autocomplete__item--template",
         itemLinkClass = "bc-autocomplete__item-link",
@@ -444,6 +465,7 @@ BC.Autocomplete = function() {
     // console.log(results);
 
     clearAutocompleteResults();
+    console.log(autocomplete);
     results.forEach(function(r) {
       const result = itemTemplate.cloneNode(true),
             setNumber = result.querySelector(`.${itemLinkTextClass}`),
@@ -467,7 +489,6 @@ BC.Autocomplete = function() {
   function triggerAutocomplete() {
     const currentValue = this.value,
           matches = findMatchesInDataset(currentValue);
-
     if (currentValue.length > 1) {
       if (matches.length > 0) {
         buildAutocompleteResults(matches);
@@ -506,11 +527,12 @@ BC.Autocomplete = function() {
 
 
   const initialize = function initialize(targetSelector, data) {
-    triggerInput = document.querySelector(targetSelector);
     updateDataset(data);
-    triggerInput.addEventListener('keyup', triggerAutocomplete);
+    triggerInput = document.querySelector(targetSelector);
+    console.log(triggerInput);
     autocomplete = triggerInput.parentNode.querySelector(autocompleteSelector);
     autocomplete.addEventListener('click', handleAutocompleteClick);
+    triggerInput.addEventListener('keyup', triggerAutocomplete);
     itemTemplate = autocomplete.querySelector(`.${autocompleteItemTemplateClass}`);
     itemTemplate.classList.remove(autocompleteItemTemplateClass);
     itemTemplate.parentNode.removeChild(itemTemplate);
@@ -531,8 +553,47 @@ function ready(fn) {
 }
 
 ready(function(){
-  BC.Autocomplete.initialize("#bc-value-lookup-form__set-number-input", setDB);
+  BC.Autocomplete.initialize("#bc-set-lookup-form__set-number-input", setDB);
 });
+
+'use strict';
+BC.AdHeader = function() {
+  const adHeaderSelector = '.bc-ad-header';
+
+  let adHeader;
+
+  function showAds() {
+    adHeader.setAttribute("style", "display: block;");
+  }
+
+  function hideAds() {
+    adHeader.removeAttribute("style");
+  }
+
+  function setAdDisplay() {
+    const userSettings = BC.Utils.getFromLocalStorage(localStorageKeys.userSettings);
+    if (!userSettings || !userSettings.plus_member) {
+      showAds();
+    } else {
+      hideAds();
+    }
+  }
+
+  function setEventListeners() {
+    document.addEventListener(customEvents.userSignedIn, setAdDisplay);
+    document.addEventListener(customEvents.userSignedOut, setAdDisplay);
+  }
+
+  const initialize = function initialize() {
+    adHeader = document.querySelector(adHeaderSelector);
+    setAdDisplay();
+    setEventListeners();
+  }
+
+  return {
+    initialize: initialize
+  }
+}();
 
 'use strict';
 BC.Overlay = function() {
@@ -579,78 +640,12 @@ BC.Overlay = function() {
 }();
 
 'use strict';
-BC.PortletPartOutBrickOwl = function() {
-  const boPoNewInputId = 'bo-po-new',
-        boPoUsedInputId = 'bo-po-used',
-        boPoNewProfitInputId = 'bo-po-profit-new',
-        boPoUsedProfitInputId = 'bo-po-profit-used',
-        boPoCostNewInputId = 'bo-po-cost-new',
-        boPoCostUsedInputId = 'bo-po-cost-used';
-
-  let boPoNew,
-      boPoUsed,
-      boPoNewProfit,
-      boPoUsedProfit,
-      boPoCostNew,
-      boPoCostUsed;
-
-  const update = function update(setData, purchasePrice) {
-    boPoNew = document.getElementById(boPoNewInputId);
-    boPoUsed = document.getElementById(boPoUsedInputId);
-    boPoNewProfit = document.getElementById(boPoNewProfitInputId);
-    boPoUsedProfit = document.getElementById(boPoUsedProfitInputId);
-    boPoCostNew = document.getElementById(boPoCostNewInputId);
-    boPoCostUsed = document.getElementById(boPoCostUsedInputId);
-
-    if (setData.boPON) {
-      const newValue = setData.boPON,
-            usedValue = setData.boPOU;
-
-      if (newValue !== null) {
-        boPoNew.value = BC.Utils.formatCurrency(newValue);
-        boPoCostNew.value = BC.Utils.formatCurrency(purchasePrice);
-        boPoNewProfit.value = BC.Utils.formatCurrency(newValue - purchasePrice);
-      }
-
-      if (usedValue !== null) {
-        boPoUsed.value = BC.Utils.formatCurrency(usedValue);
-        boPoCostUsed.value = BC.Utils.formatCurrency(purchasePrice);
-        boPoUsedProfit.value = BC.Utils.formatCurrency(usedValue - purchasePrice);
-      }
-    }
-  }
-
-  return {
-    update: update
-  }
-}();
-
-'use strict';
 BC.PortletLayout = function() {
   const emptyPortletClass = "bc-portlet--empty",
         defaultLayout = [
           {
-            header: "Complete Set Values (New)",
+            header: "Current Listings (New)",
             portlets: [
-              {
-                title: "Brick Owl",
-                retrievedAtKey: "boRA",
-                listingsCountKey: "boCSNLC",
-                lineItems: [
-                  {
-                    key: "boCSNM",
-                    label: "Median Listing"
-                  },
-                  {
-                    key: "boFees",
-                    label: "BrickOwl & PayPal Fees"
-                  },
-                  {
-                    key: "setCost",
-                    label: "Cost<span class='bc-portlet__line-item-label-plus-member-snippet'> w/taxes</span>"
-                  }
-                ]
-              },
               {
                 title: "Brick Owl",
                 retrievedAtKey: "boRA",
@@ -671,36 +666,17 @@ BC.PortletLayout = function() {
                 ]
               },
               {
-                title: "Brick Owl",
-                retrievedAtKey: "boRA",
-                listingsCountKey: "boCSNLC",
+                title: "Bricklink",
+                retrievedAtKey: "blRA",
+                listingsCountKey: "blCSNLC",
                 lineItems: [
                   {
-                    key: "boCSNL",
-                    label: "Lowest Listing"
+                    key: "blCSNA",
+                    label: "Avg Listing"
                   },
                   {
-                    key: "boFees",
-                    label: "Brick Owl & PayPal Fees"
-                  },
-                  {
-                    key: "setCost",
-                    label: "Cost<span class='bc-portlet__line-item-label-plus-member-snippet'> w/taxes</span>"
-                  }
-                ]
-              },
-              {
-                title: "Brick Owl",
-                retrievedAtKey: "boRA",
-                listingsCountKey: "boCSNLC",
-                lineItems: [
-                  {
-                    key: "boCSNH",
-                    label: "High Listing"
-                  },
-                  {
-                    key: "boFees",
-                    label: "Brick Owl & PayPal Fees"
+                    key: "blFees",
+                    label: "Bricklink & PayPal Fees"
                   },
                   {
                     key: "setCost",
@@ -711,27 +687,8 @@ BC.PortletLayout = function() {
             ]
           },
           {
-            header: "Complete Set Values (Used)",
+            header: "Current Listings (Used)",
             portlets: [
-              {
-                title: "Brick Owl",
-                retrievedAtKey: "boRA",
-                listingsCountKey: "boCSULC",
-                lineItems: [
-                  {
-                    key: "boCSUM",
-                    label: "Median Listing"
-                  },
-                  {
-                    key: "boFees",
-                    label: "Brick Owl & PayPal Fees"
-                  },
-                  {
-                    key: "setCost",
-                    label: "Cost<span class='bc-portlet__line-item-label-plus-member-snippet'> w/taxes</span>"
-                  }
-                ]
-              },
               {
                 title: "Brick Owl",
                 retrievedAtKey: "boRA",
@@ -752,77 +709,17 @@ BC.PortletLayout = function() {
                 ]
               },
               {
-                title: "Brick Owl",
-                retrievedAtKey: "boRA",
-                listingsCountKey: "boCSULC",
+                title: "Bricklink",
+                retrievedAtKey: "blRA",
+                listingsCountKey: "blCSULC",
                 lineItems: [
                   {
-                    key: "boCSUL",
-                    label: "Low Listing"
-                  },
-                  {
-                    key: "boFees",
-                    label: "Brick Owl & PayPal Fees"
-                  },
-                  {
-                    key: "setCost",
-                    label: "Cost<span class='bc-portlet__line-item-label-plus-member-snippet'> w/taxes</span>"
-                  }
-                ]
-              },
-              {
-                title: "Brick Owl",
-                retrievedAtKey: "boRA",
-                listingsCountKey: "boCSULC",
-                lineItems: [
-                  {
-                    key: "boCSUH",
-                    label: "High Listing"
-                  },
-                  {
-                    key: "boFees",
-                    label: "Brick Owl & PayPal Fees"
-                  },
-                  {
-                    key: "setCost",
-                    label: "Cost<span class='bc-portlet__line-item-label-plus-member-snippet'> w/taxes</span>"
-                  }
-                ]
-              }
-            ]
-          },
-          {
-            header: "Part Out Values",
-            portlets: [
-              {
-                title: "Brick Owl (Used)",
-                retrievedAtKey: "boRA",
-                lineItems: [
-                  {
-                    key: "boPOU",
-                    label: "Avg Value"
-                  },
-                  {
-                    key: "boFees",
-                    label: "Brick Owl & PayPal Fees"
-                  },
-                  {
-                    key: "setCost",
-                    label: "Cost<span class='bc-portlet__line-item-label-plus-member-snippet'> w/taxes</span>"
-                  }
-                ]
-              },
-              {
-                title: "Brick Owl (New)",
-                retrievedAtKey: "boRA",
-                lineItems: [
-                  {
-                    key: "boPON",
+                    key: "blCSUA",
                     label: "Avg Listing"
                   },
                   {
-                    key: "boFees",
-                    label: "Brick Owl & PayPal Fees"
+                    key: "blFees",
+                    label: "Bricklink & PayPal Fees"
                   },
                   {
                     key: "setCost",
@@ -835,7 +732,8 @@ BC.PortletLayout = function() {
         ],
         plusMemberPortlets = [
           {
-            header: "Sold Complete Sets (New)",
+            header: "Sold Listings (New)",
+            headerClass: "bc-portlet-section-header--plus-member",
             portlets: [
               {
                 title: "eBay",
@@ -857,11 +755,33 @@ BC.PortletLayout = function() {
                     label: "Cost<span class='bc-portlet__line-item-label-plus-member-snippet'> w/taxes</span>"
                   }
                 ]
+              },
+              {
+                title: "Bricklink",
+                retrievedAtKey: "blRA",
+                listingsCountKey: "blCSCLNLC",
+                timestampLabel: "In the last 6 months",
+                listingsCountSuffix: "sold",
+                lineItems: [
+                  {
+                    key: "blCSCLNM",
+                    label: "Median Value"
+                  },
+                  {
+                    key: "blFees",
+                    label: "Bricklink & PayPal Fees"
+                  },
+                  {
+                    key: "setCost",
+                    label: "Cost<span class='bc-portlet__line-item-label-plus-member-snippet'> w/taxes</span>"
+                  }
+                ]
               }
             ]
           },
           {
-            header: "Sold Complete Sets (Used)",
+            header: "Sold Listings (Used)",
+            headerClass: "bc-portlet-section-header--plus-member",
             portlets: [
               {
                 title: "eBay",
@@ -877,6 +797,27 @@ BC.PortletLayout = function() {
                   {
                     key: "eFees",
                     label: "eBay & PayPal Fees"
+                  },
+                  {
+                    key: "setCost",
+                    label: "Cost<span class='bc-portlet__line-item-label-plus-member-snippet'> w/taxes</span>"
+                  }
+                ]
+              },
+              {
+                title: "Bricklink",
+                retrievedAtKey: "blRA",
+                listingsCountKey: "blCSCLULC",
+                timestampLabel: "In the last 6 months",
+                listingsCountSuffix: "sold",
+                lineItems: [
+                  {
+                    key: "blCSCLUM",
+                    label: "Median Value"
+                  },
+                  {
+                    key: "blFees",
+                    label: "Bricklink & PayPal Fees"
                   },
                   {
                     key: "setCost",
@@ -905,10 +846,13 @@ BC.PortletLayout = function() {
     return layout;
   }
 
-  function getSectionHeader(text) {
+  function getSectionHeader(text, headerClass) {
     let headerNode = headerTemplate.cloneNode(true),
         headerNodeText = headerNode.querySelector(".bc-portlet-section-header__text");
     headerNodeText.innerHTML = text;
+    if (headerClass) {
+      headerNode.classList.add(headerClass);
+    }
     return headerNode;
   }
 
@@ -974,6 +918,9 @@ BC.PortletLayout = function() {
 
   function getMarketplaceFees(salePrice, feesKey) {
     switch(feesKey) {
+      case 'blFees':
+        return BC.Utils.getBricklinkSellerFees(salePrice);
+        break;
       case 'boFees':
         return BC.Utils.getBrickOwlSellerFees(salePrice);
         break;
@@ -1064,7 +1011,7 @@ BC.PortletLayout = function() {
     const layout = getLayout();
     portletWrapper.innerHTML = ''; // Clear the portlet wrapper
     layout.forEach(function(portletSection){
-      portletWrapper.append(getSectionHeader(portletSection.header));
+      portletWrapper.append(getSectionHeader(portletSection.header, portletSection.headerClass));
       portletWrapper.append(getPortletGrid(portletSection.portlets));
     });
   }
@@ -1089,6 +1036,53 @@ BC.PortletLayout = function() {
     initialize: initialize,
     buildLayout: buildLayout,
     updateAllPortletValues: updateAllPortletValues
+  }
+}();
+
+'use strict';
+BC.PortletPartOutBrickOwl = function() {
+  const boPoNewInputId = 'bo-po-new',
+        boPoUsedInputId = 'bo-po-used',
+        boPoNewProfitInputId = 'bo-po-profit-new',
+        boPoUsedProfitInputId = 'bo-po-profit-used',
+        boPoCostNewInputId = 'bo-po-cost-new',
+        boPoCostUsedInputId = 'bo-po-cost-used';
+
+  let boPoNew,
+      boPoUsed,
+      boPoNewProfit,
+      boPoUsedProfit,
+      boPoCostNew,
+      boPoCostUsed;
+
+  const update = function update(setData, purchasePrice) {
+    boPoNew = document.getElementById(boPoNewInputId);
+    boPoUsed = document.getElementById(boPoUsedInputId);
+    boPoNewProfit = document.getElementById(boPoNewProfitInputId);
+    boPoUsedProfit = document.getElementById(boPoUsedProfitInputId);
+    boPoCostNew = document.getElementById(boPoCostNewInputId);
+    boPoCostUsed = document.getElementById(boPoCostUsedInputId);
+
+    if (setData.boPON) {
+      const newValue = setData.boPON,
+            usedValue = setData.boPOU;
+
+      if (newValue !== null) {
+        boPoNew.value = BC.Utils.formatCurrency(newValue);
+        boPoCostNew.value = BC.Utils.formatCurrency(purchasePrice);
+        boPoNewProfit.value = BC.Utils.formatCurrency(newValue - purchasePrice);
+      }
+
+      if (usedValue !== null) {
+        boPoUsed.value = BC.Utils.formatCurrency(usedValue);
+        boPoCostUsed.value = BC.Utils.formatCurrency(purchasePrice);
+        boPoUsedProfit.value = BC.Utils.formatCurrency(usedValue - purchasePrice);
+      }
+    }
+  }
+
+  return {
+    update: update
   }
 }();
 
@@ -1121,47 +1115,10 @@ BC.PortletLayout = function() {
 // }();
 
 'use strict';
-BC.SetSummary = function() {
-  const numberSelector = '.bc-set-summary__number',
-        yearSelector = '.bc-set-summary__year',
-        titleSelector = '.bc-set-summary__title',
-        pcsSelector = '.bc-set-summary__pcs-count',
-        msrpSelector = '.bc-set-summary__msrp-value';
-
-  let number,
-      year,
-      title,
-      pcs,
-      msrp;
-
-  const initialize = function initialize() {
-    number = document.querySelector(numberSelector);
-    year = document.querySelector(yearSelector);
-    title = document.querySelector(titleSelector);
-    pcs = document.querySelector(pcsSelector);
-    msrp = document.querySelector(msrpSelector);
-  }
-
-  const update = function update(setData) {
-    const setNumber = typeof setData.nv === 'undefined' ? setData.n : setData.n + '-' + setData.nv;
-    number.innerHTML = setNumber;
-    year.innerHTML = setData.y;
-    title.innerHTML = setData.t;
-    pcs.innerHTML = setData.pcs;
-    msrp.innerHTML = parseFloat(setData.msrp, 10) > 0 ? "$" + setData.msrp : "Unknown";
-  }
-
-  return {
-    initialize: initialize,
-    update: update
-  }
-}();
-
-'use strict';
 BC.SetLookupForm = function() {
-  const formId = 'bc-value-lookup-form',
-        setNumberFieldId = "bc-value-lookup-form__set-number-input",
-        purchasePriceFieldId = "bc-value-lookup-form__purchase-price-input",
+  const formId = 'bc-set-lookup-form',
+        setNumberFieldId = "bc-set-lookup-form__set-number-input",
+        purchasePriceFieldId = "bc-set-lookup-form__purchase-price-input",
         taxRateSelector = ".bc-set-lookup-form__tax-message",
         taxRateAmountSelector = ".bc-set-lookup-form__tax-amount",
         taxRateVisibleClass = "bc-set-lookup-form__tax-message--visible";
@@ -1209,6 +1166,43 @@ BC.SetLookupForm = function() {
 
   return {
     initialize: initialize
+  }
+}();
+
+'use strict';
+BC.SetSummary = function() {
+  const numberSelector = '.bc-set-summary__number',
+        yearSelector = '.bc-set-summary__year',
+        titleSelector = '.bc-set-summary__title',
+        pcsSelector = '.bc-set-summary__pcs-count',
+        msrpSelector = '.bc-set-summary__msrp-value';
+
+  let number,
+      year,
+      title,
+      pcs,
+      msrp;
+
+  const initialize = function initialize() {
+    number = document.querySelector(numberSelector);
+    year = document.querySelector(yearSelector);
+    title = document.querySelector(titleSelector);
+    pcs = document.querySelector(pcsSelector);
+    msrp = document.querySelector(msrpSelector);
+  }
+
+  const update = function update(setData) {
+    const setNumber = typeof setData.nv === 'undefined' ? setData.n : setData.n + '-' + setData.nv;
+    number.innerHTML = setNumber;
+    year.innerHTML = setData.y;
+    title.innerHTML = setData.t;
+    pcs.innerHTML = setData.pcs;
+    msrp.innerHTML = parseFloat(setData.msrp, 10) > 0 ? "$" + setData.msrp : "Unknown";
+  }
+
+  return {
+    initialize: initialize,
+    update: update
   }
 }();
 
