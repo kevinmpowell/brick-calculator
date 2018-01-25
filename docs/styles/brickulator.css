@@ -791,10 +791,10 @@ input {
   width: 100%; }
 
 #bc-results {
+  display: none;
   padding-top: 0; }
 
 #bc-lookup {
-  display: none;
   padding: 8px; }
 
 .bc-show-lookup-form {
