@@ -1,4 +1,8 @@
 .bc-autocomplete {
+  position: relative;
+}
+
+.bc-autocomplete__list {
   background: $brickulator-color-background-panel;
   border: $brickulator-border-control;
   border-top: 0;
@@ -10,11 +14,12 @@
   position: absolute;
   top: 100%;
   width: 100%;
+  
+  &.bc-autocomplete--visible {
+    display: block;
+  }
 }
 
-.bc-autocomplete--visible {
-  display: block;
-}
 
 .bc-autocomplete__item-link {
   align-items: center;

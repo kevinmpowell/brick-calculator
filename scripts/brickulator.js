@@ -160,6 +160,25 @@ BC.Utils = function() {
     return fee;
   }
 
+  const getBricklinkSellerFees = function getBricklinkSellerFees(finalValue) {
+    const range0_500Percent = 3,
+          range500_1000Percent = 2,
+          range1000AndUpPercent = 1,
+          payPalTransactionFee = getPayPalTransactionFee(finalValue);
+
+    let fee;
+
+    if (finalValue > 1000) {
+      fee = 25 + ((finalValue - 1000) * (range1000AndUpPercent / 100));
+    } else if (finalValue > 500) {
+      fee = 15 + ((finalValue - 500) * (range500_1000Percent / 100));
+    } else {
+      fee = finalValue * (range0_500Percent / 100);
+    }
+
+    return fee + payPalTransactionFee;
+  }
+
   const getEbaySellerFees = function getEbaySellerFees(finalValue) {
     // TODO: Actually make this work
     const ebayCommissionPercent = 10,
@@ -218,6 +237,7 @@ BC.Utils = function() {
 
   return {
     formatCurrency: formatCurrency,
+    getBricklinkSellerFees: getBricklinkSellerFees,
     getBrickOwlSellerFees: getBrickOwlSellerFees,
     getEbaySellerFees: getEbaySellerFees,
     saveToLocalStorage: saveToLocalStorage,

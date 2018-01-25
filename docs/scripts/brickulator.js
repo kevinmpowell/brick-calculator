@@ -161,6 +161,25 @@ BC.Utils = function() {
     return fee;
   }
 
+  const getBricklinkSellerFees = function getBricklinkSellerFees(finalValue) {
+    const range0_500Percent = 3,
+          range500_1000Percent = 2,
+          range1000AndUpPercent = 1,
+          payPalTransactionFee = getPayPalTransactionFee(finalValue);
+
+    let fee;
+
+    if (finalValue > 1000) {
+      fee = 25 + ((finalValue - 1000) * (range1000AndUpPercent / 100));
+    } else if (finalValue > 500) {
+      fee = 15 + ((finalValue - 500) * (range500_1000Percent / 100));
+    } else {
+      fee = finalValue * (range0_500Percent / 100);
+    }
+
+    return fee + payPalTransactionFee;
+  }
+
   const getEbaySellerFees = function getEbaySellerFees(finalValue) {
     // TODO: Actually make this work
     const ebayCommissionPercent = 10,
@@ -219,6 +238,7 @@ BC.Utils = function() {
 
   return {
     formatCurrency: formatCurrency,
+    getBricklinkSellerFees: getBricklinkSellerFees,
     getBrickOwlSellerFees: getBrickOwlSellerFees,
     getEbaySellerFees: getEbaySellerFees,
     saveToLocalStorage: saveToLocalStorage,
@@ -412,47 +432,8 @@ ready(function(){
 });
 
 'use strict';
-BC.AdHeader = function() {
-  const adHeaderSelector = '.bc-ad-header';
-
-  let adHeader;
-
-  function showAds() {
-    adHeader.setAttribute("style", "display: block;");
-  }
-
-  function hideAds() {
-    adHeader.removeAttribute("style");
-  }
-
-  function setAdDisplay() {
-    const userSettings = BC.Utils.getFromLocalStorage(localStorageKeys.userSettings);
-    if (!userSettings || !userSettings.plus_member) {
-      showAds();
-    } else {
-      hideAds();
-    }
-  }
-
-  function setEventListeners() {
-    document.addEventListener(customEvents.userSignedIn, setAdDisplay);
-    document.addEventListener(customEvents.userSignedOut, setAdDisplay);
-  }
-
-  const initialize = function initialize() {
-    adHeader = document.querySelector(adHeaderSelector);
-    setAdDisplay();
-    setEventListeners();
-  }
-
-  return {
-    initialize: initialize
-  }
-}();
-
-'use strict';
 BC.Autocomplete = function() {
-  const autocompleteSelector = ".bc-autocomplete",
+  const autocompleteSelector = ".bc-autocomplete__list",
         autocompleteVisibleClass = "bc-autocomplete--visible",
         autocompleteItemTemplateClass = "bc-autocomplete__item--template",
         itemLinkClass = "bc-autocomplete__item-link",
@@ -484,6 +465,7 @@ BC.Autocomplete = function() {
     // console.log(results);
 
     clearAutocompleteResults();
+    console.log(autocomplete);
     results.forEach(function(r) {
       const result = itemTemplate.cloneNode(true),
             setNumber = result.querySelector(`.${itemLinkTextClass}`),
@@ -507,7 +489,6 @@ BC.Autocomplete = function() {
   function triggerAutocomplete() {
     const currentValue = this.value,
           matches = findMatchesInDataset(currentValue);
-
     if (currentValue.length > 1) {
       if (matches.length > 0) {
         buildAutocompleteResults(matches);
@@ -546,11 +527,12 @@ BC.Autocomplete = function() {
 
 
   const initialize = function initialize(targetSelector, data) {
-    triggerInput = document.querySelector(targetSelector);
     updateDataset(data);
-    triggerInput.addEventListener('keyup', triggerAutocomplete);
+    triggerInput = document.querySelector(targetSelector);
+    console.log(triggerInput);
     autocomplete = triggerInput.parentNode.querySelector(autocompleteSelector);
     autocomplete.addEventListener('click', handleAutocompleteClick);
+    triggerInput.addEventListener('keyup', triggerAutocomplete);
     itemTemplate = autocomplete.querySelector(`.${autocompleteItemTemplateClass}`);
     itemTemplate.classList.remove(autocompleteItemTemplateClass);
     itemTemplate.parentNode.removeChild(itemTemplate);
@@ -571,8 +553,47 @@ function ready(fn) {
 }
 
 ready(function(){
-  BC.Autocomplete.initialize("#bc-value-lookup-form__set-number-input", setDB);
+  BC.Autocomplete.initialize("#bc-set-lookup-form__set-number-input", setDB);
 });
+
+'use strict';
+BC.AdHeader = function() {
+  const adHeaderSelector = '.bc-ad-header';
+
+  let adHeader;
+
+  function showAds() {
+    adHeader.setAttribute("style", "display: block;");
+  }
+
+  function hideAds() {
+    adHeader.removeAttribute("style");
+  }
+
+  function setAdDisplay() {
+    const userSettings = BC.Utils.getFromLocalStorage(localStorageKeys.userSettings);
+    if (!userSettings || !userSettings.plus_member) {
+      showAds();
+    } else {
+      hideAds();
+    }
+  }
+
+  function setEventListeners() {
+    document.addEventListener(customEvents.userSignedIn, setAdDisplay);
+    document.addEventListener(customEvents.userSignedOut, setAdDisplay);
+  }
+
+  const initialize = function initialize() {
+    adHeader = document.querySelector(adHeaderSelector);
+    setAdDisplay();
+    setEventListeners();
+  }
+
+  return {
+    initialize: initialize
+  }
+}();
 
 'use strict';
 BC.Overlay = function() {
@@ -623,27 +644,8 @@ BC.PortletLayout = function() {
   const emptyPortletClass = "bc-portlet--empty",
         defaultLayout = [
           {
-            header: "Complete Set Values (New)",
+            header: "Current Listings (New)",
             portlets: [
-              {
-                title: "Brick Owl",
-                retrievedAtKey: "boRA",
-                listingsCountKey: "boCSNLC",
-                lineItems: [
-                  {
-                    key: "boCSNM",
-                    label: "Median Listing"
-                  },
-                  {
-                    key: "boFees",
-                    label: "BrickOwl & PayPal Fees"
-                  },
-                  {
-                    key: "setCost",
-                    label: "Cost<span class='bc-portlet__line-item-label-plus-member-snippet'> w/taxes</span>"
-                  }
-                ]
-              },
               {
                 title: "Brick Owl",
                 retrievedAtKey: "boRA",
@@ -664,36 +666,17 @@ BC.PortletLayout = function() {
                 ]
               },
               {
-                title: "Brick Owl",
-                retrievedAtKey: "boRA",
-                listingsCountKey: "boCSNLC",
+                title: "Bricklink",
+                retrievedAtKey: "blRA",
+                listingsCountKey: "blCSNLC",
                 lineItems: [
                   {
-                    key: "boCSNL",
-                    label: "Lowest Listing"
+                    key: "blCSNA",
+                    label: "Avg Listing"
                   },
                   {
-                    key: "boFees",
-                    label: "Brick Owl & PayPal Fees"
-                  },
-                  {
-                    key: "setCost",
-                    label: "Cost<span class='bc-portlet__line-item-label-plus-member-snippet'> w/taxes</span>"
-                  }
-                ]
-              },
-              {
-                title: "Brick Owl",
-                retrievedAtKey: "boRA",
-                listingsCountKey: "boCSNLC",
-                lineItems: [
-                  {
-                    key: "boCSNH",
-                    label: "High Listing"
-                  },
-                  {
-                    key: "boFees",
-                    label: "Brick Owl & PayPal Fees"
+                    key: "blFees",
+                    label: "Bricklink & PayPal Fees"
                   },
                   {
                     key: "setCost",
@@ -704,27 +687,8 @@ BC.PortletLayout = function() {
             ]
           },
           {
-            header: "Complete Set Values (Used)",
+            header: "Current Listings (Used)",
             portlets: [
-              {
-                title: "Brick Owl",
-                retrievedAtKey: "boRA",
-                listingsCountKey: "boCSULC",
-                lineItems: [
-                  {
-                    key: "boCSUM",
-                    label: "Median Listing"
-                  },
-                  {
-                    key: "boFees",
-                    label: "Brick Owl & PayPal Fees"
-                  },
-                  {
-                    key: "setCost",
-                    label: "Cost<span class='bc-portlet__line-item-label-plus-member-snippet'> w/taxes</span>"
-                  }
-                ]
-              },
               {
                 title: "Brick Owl",
                 retrievedAtKey: "boRA",
@@ -745,77 +709,17 @@ BC.PortletLayout = function() {
                 ]
               },
               {
-                title: "Brick Owl",
-                retrievedAtKey: "boRA",
-                listingsCountKey: "boCSULC",
+                title: "Bricklink",
+                retrievedAtKey: "blRA",
+                listingsCountKey: "blCSULC",
                 lineItems: [
                   {
-                    key: "boCSUL",
-                    label: "Low Listing"
-                  },
-                  {
-                    key: "boFees",
-                    label: "Brick Owl & PayPal Fees"
-                  },
-                  {
-                    key: "setCost",
-                    label: "Cost<span class='bc-portlet__line-item-label-plus-member-snippet'> w/taxes</span>"
-                  }
-                ]
-              },
-              {
-                title: "Brick Owl",
-                retrievedAtKey: "boRA",
-                listingsCountKey: "boCSULC",
-                lineItems: [
-                  {
-                    key: "boCSUH",
-                    label: "High Listing"
-                  },
-                  {
-                    key: "boFees",
-                    label: "Brick Owl & PayPal Fees"
-                  },
-                  {
-                    key: "setCost",
-                    label: "Cost<span class='bc-portlet__line-item-label-plus-member-snippet'> w/taxes</span>"
-                  }
-                ]
-              }
-            ]
-          },
-          {
-            header: "Part Out Values",
-            portlets: [
-              {
-                title: "Brick Owl (Used)",
-                retrievedAtKey: "boRA",
-                lineItems: [
-                  {
-                    key: "boPOU",
-                    label: "Avg Value"
-                  },
-                  {
-                    key: "boFees",
-                    label: "Brick Owl & PayPal Fees"
-                  },
-                  {
-                    key: "setCost",
-                    label: "Cost<span class='bc-portlet__line-item-label-plus-member-snippet'> w/taxes</span>"
-                  }
-                ]
-              },
-              {
-                title: "Brick Owl (New)",
-                retrievedAtKey: "boRA",
-                lineItems: [
-                  {
-                    key: "boPON",
+                    key: "blCSUA",
                     label: "Avg Listing"
                   },
                   {
-                    key: "boFees",
-                    label: "Brick Owl & PayPal Fees"
+                    key: "blFees",
+                    label: "Bricklink & PayPal Fees"
                   },
                   {
                     key: "setCost",
@@ -828,7 +732,7 @@ BC.PortletLayout = function() {
         ],
         plusMemberPortlets = [
           {
-            header: "Sold Complete Sets (New)",
+            header: "Sold Listings (New)",
             portlets: [
               {
                 title: "eBay",
@@ -850,11 +754,32 @@ BC.PortletLayout = function() {
                     label: "Cost<span class='bc-portlet__line-item-label-plus-member-snippet'> w/taxes</span>"
                   }
                 ]
+              },
+              {
+                title: "Bricklink",
+                retrievedAtKey: "blRA",
+                listingsCountKey: "blCSCLNLC",
+                timestampLabel: "In the last 6 months",
+                listingsCountSuffix: "sold",
+                lineItems: [
+                  {
+                    key: "blCSCLNM",
+                    label: "Median Value"
+                  },
+                  {
+                    key: "blFees",
+                    label: "Bricklink & PayPal Fees"
+                  },
+                  {
+                    key: "setCost",
+                    label: "Cost<span class='bc-portlet__line-item-label-plus-member-snippet'> w/taxes</span>"
+                  }
+                ]
               }
             ]
           },
           {
-            header: "Sold Complete Sets (Used)",
+            header: "Sold Listings (Used)",
             portlets: [
               {
                 title: "eBay",
@@ -870,6 +795,27 @@ BC.PortletLayout = function() {
                   {
                     key: "eFees",
                     label: "eBay & PayPal Fees"
+                  },
+                  {
+                    key: "setCost",
+                    label: "Cost<span class='bc-portlet__line-item-label-plus-member-snippet'> w/taxes</span>"
+                  }
+                ]
+              },
+              {
+                title: "Bricklink",
+                retrievedAtKey: "blRA",
+                listingsCountKey: "blCSCLULC",
+                timestampLabel: "In the last 6 months",
+                listingsCountSuffix: "sold",
+                lineItems: [
+                  {
+                    key: "blCSCLUM",
+                    label: "Median Value"
+                  },
+                  {
+                    key: "blFees",
+                    label: "Bricklink & PayPal Fees"
                   },
                   {
                     key: "setCost",
@@ -967,6 +913,9 @@ BC.PortletLayout = function() {
 
   function getMarketplaceFees(salePrice, feesKey) {
     switch(feesKey) {
+      case 'blFees':
+        return BC.Utils.getBricklinkSellerFees(salePrice);
+        break;
       case 'boFees':
         return BC.Utils.getBrickOwlSellerFees(salePrice);
         break;
@@ -1162,9 +1111,9 @@ BC.PortletPartOutBrickOwl = function() {
 
 'use strict';
 BC.SetLookupForm = function() {
-  const formId = 'bc-value-lookup-form',
-        setNumberFieldId = "bc-value-lookup-form__set-number-input",
-        purchasePriceFieldId = "bc-value-lookup-form__purchase-price-input",
+  const formId = 'bc-set-lookup-form',
+        setNumberFieldId = "bc-set-lookup-form__set-number-input",
+        purchasePriceFieldId = "bc-set-lookup-form__purchase-price-input",
         taxRateSelector = ".bc-set-lookup-form__tax-message",
         taxRateAmountSelector = ".bc-set-lookup-form__tax-amount",
         taxRateVisibleClass = "bc-set-lookup-form__tax-message--visible";
@@ -1249,108 +1198,6 @@ BC.SetSummary = function() {
   return {
     initialize: initialize,
     update: update
-  }
-}();
-
-'use strict';
-BC.SignInForm = function() {
-  const signInFormId = 'bc-sign-in-form',
-        emailFieldId = 'bc-sign-in-form-email',
-        passwordFieldId = 'bc-sign-in-form-password',
-        submitButtonSelector = '.bc-sign-in-form__submit-button',
-        signInEndpoint = '/auth/signin',
-        signInFormHiddenClass = 'bc-sign-in-form--hidden',
-        signUpLinkSelector = '.bc-show-sign-up-form';
-
-  let form,
-      emailField,
-      passwordField,
-      submitButton,
-      signUpLink;
-
-  function disableForm() {
-    emailField.setAttribute('disabled', true);
-    passwordField.setAttribute('disabled', true);
-    submitButton.setAttribute('disabled', true);
-  }
-
-  function enableForm() {
-    emailField.removeAttribute('disabled');
-    passwordField.removeAttribute('disabled');
-    submitButton.removeAttribute('disabled');
-  }
-
-  function resetForm() {
-    form.reset();
-  }
-
-  function handleFormSignIn(e) {
-    e.preventDefault();
-    disableForm();
-    var request = new XMLHttpRequest();
-    const apiDomain = apiMapping[currentDomain],
-          params = "email=" + emailField.value + "&password=" + passwordField.value,
-          endpointUrl = apiDomain + signInEndpoint;
-    request.open('POST', endpointUrl, true);
-    request.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
-    //Send the proper header information along with the request for the POST to work
-    request.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-
-    request.onload = function() {
-      console.log(request);
-      if (request.status >= 200 && request.status < 400) {
-        // Success!
-        var data = JSON.parse(request.responseText);
-        BC.Utils.saveToLocalStorage(localStorageKeys.authToken, data.auth_token);
-        BC.Utils.saveToLocalStorage(localStorageKeys.userSettings, data.preferences);
-        // TODO: Broadcast event that user settings have been loaded
-        BC.Overlay.show("Welcome back!", "Sign in successful.", true);
-        BC.App.setSignedInState();
-        enableForm();
-        resetForm();
-      } else {
-        var data = JSON.parse(request.responseText);
-        BC.Overlay.show("Sign In Failed", data.message, true);
-        enableForm();
-      }
-    };
-
-    request.onerror = function() {
-      // There was a connection error of some sort
-      BC.Overlay.show("Sign In Failed", "Something happened and we couldn't connect to sign you in. Sit tight, we'll fix it.", true);
-      enableForm();
-    };
-
-    request.send(params); // POST params are sent down here
-    return false; // prevent form submission
-  }
-
-  function hideSignInForm() {
-    form.classList.add(signInFormHiddenClass);
-  }
-
-  function showSignInForm() {
-    form.classList.remove(signInFormHiddenClass);
-  }
-
-  function setEventListeners() {
-    form.addEventListener("submit", handleFormSignIn);
-    signUpLink.addEventListener("click", BC.SignUpForm.showFormPane);
-    document.addEventListener(customEvents.userSignedIn, hideSignInForm);
-    document.addEventListener(customEvents.userSignedOut, showSignInForm);
-  }
-
-  const initialize = function initialize() {
-    form = document.getElementById(signInFormId);
-    emailField = document.getElementById(emailFieldId);
-    passwordField = document.getElementById(passwordFieldId);
-    submitButton = document.querySelector(submitButtonSelector);
-    signUpLink = document.querySelector(signUpLinkSelector);
-    setEventListeners();
-  }
-
-  return {
-    initialize: initialize
   }
 }();
 
@@ -1466,6 +1313,108 @@ BC.SignUpForm = function() {
     initialize: initialize,
     showFormPane: showFormPane,
     hideFormPane: hideFormPane
+  }
+}();
+
+'use strict';
+BC.SignInForm = function() {
+  const signInFormId = 'bc-sign-in-form',
+        emailFieldId = 'bc-sign-in-form-email',
+        passwordFieldId = 'bc-sign-in-form-password',
+        submitButtonSelector = '.bc-sign-in-form__submit-button',
+        signInEndpoint = '/auth/signin',
+        signInFormHiddenClass = 'bc-sign-in-form--hidden',
+        signUpLinkSelector = '.bc-show-sign-up-form';
+
+  let form,
+      emailField,
+      passwordField,
+      submitButton,
+      signUpLink;
+
+  function disableForm() {
+    emailField.setAttribute('disabled', true);
+    passwordField.setAttribute('disabled', true);
+    submitButton.setAttribute('disabled', true);
+  }
+
+  function enableForm() {
+    emailField.removeAttribute('disabled');
+    passwordField.removeAttribute('disabled');
+    submitButton.removeAttribute('disabled');
+  }
+
+  function resetForm() {
+    form.reset();
+  }
+
+  function handleFormSignIn(e) {
+    e.preventDefault();
+    disableForm();
+    var request = new XMLHttpRequest();
+    const apiDomain = apiMapping[currentDomain],
+          params = "email=" + emailField.value + "&password=" + passwordField.value,
+          endpointUrl = apiDomain + signInEndpoint;
+    request.open('POST', endpointUrl, true);
+    request.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+    //Send the proper header information along with the request for the POST to work
+    request.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+
+    request.onload = function() {
+      console.log(request);
+      if (request.status >= 200 && request.status < 400) {
+        // Success!
+        var data = JSON.parse(request.responseText);
+        BC.Utils.saveToLocalStorage(localStorageKeys.authToken, data.auth_token);
+        BC.Utils.saveToLocalStorage(localStorageKeys.userSettings, data.preferences);
+        // TODO: Broadcast event that user settings have been loaded
+        BC.Overlay.show("Welcome back!", "Sign in successful.", true);
+        BC.App.setSignedInState();
+        enableForm();
+        resetForm();
+      } else {
+        var data = JSON.parse(request.responseText);
+        BC.Overlay.show("Sign In Failed", data.message, true);
+        enableForm();
+      }
+    };
+
+    request.onerror = function() {
+      // There was a connection error of some sort
+      BC.Overlay.show("Sign In Failed", "Something happened and we couldn't connect to sign you in. Sit tight, we'll fix it.", true);
+      enableForm();
+    };
+
+    request.send(params); // POST params are sent down here
+    return false; // prevent form submission
+  }
+
+  function hideSignInForm() {
+    form.classList.add(signInFormHiddenClass);
+  }
+
+  function showSignInForm() {
+    form.classList.remove(signInFormHiddenClass);
+  }
+
+  function setEventListeners() {
+    form.addEventListener("submit", handleFormSignIn);
+    signUpLink.addEventListener("click", BC.SignUpForm.showFormPane);
+    document.addEventListener(customEvents.userSignedIn, hideSignInForm);
+    document.addEventListener(customEvents.userSignedOut, showSignInForm);
+  }
+
+  const initialize = function initialize() {
+    form = document.getElementById(signInFormId);
+    emailField = document.getElementById(emailFieldId);
+    passwordField = document.getElementById(passwordFieldId);
+    submitButton = document.querySelector(submitButtonSelector);
+    signUpLink = document.querySelector(signUpLinkSelector);
+    setEventListeners();
+  }
+
+  return {
+    initialize: initialize
   }
 }();
 

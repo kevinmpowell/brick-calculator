@@ -14,6 +14,9 @@
   text-transform: uppercase; }
 
 .bc-autocomplete {
+  position: relative; }
+
+.bc-autocomplete__list {
   background: #FFFFFF;
   border: solid 1px #C6CDCC;
   border-top: 0;
@@ -25,9 +28,8 @@
   position: absolute;
   top: 100%;
   width: 100%; }
-
-.bc-autocomplete--visible {
-  display: block; }
+  .bc-autocomplete__list.bc-autocomplete--visible {
+    display: block; }
 
 .bc-autocomplete__item-link {
   -webkit-box-align: center;
@@ -86,7 +88,11 @@
 
 .bc-form-label {
   color: #1E1F1F;
-  font-size: 14px; }
+  font-size: 14px;
+  margin: 0 0 4px; }
+
+.bc-form-label--size-s {
+  font-size: 12px; }
 
 .bc-form-label--size-m {
   font-size: 12px; }
@@ -106,7 +112,16 @@ input {
   font-size: 20px;
   font-family: "Hiragino Sans", "Helvetica", sans-serif;
   height: 40px;
-  padding: 4px; }
+  padding: 4px;
+  margin: 0; }
+
+.bc-form-input-wrap--button-suffix .bc-form-input-suffix {
+  padding: 0; }
+
+.bc-form-input-wrap--button-suffix .bc-button {
+  border-bottom-left-radius: 0;
+  border-top-left-radius: 0;
+  height: 100%; }
 
 .bc-form-input-prefix,
 .bc-form-input-suffix {
@@ -128,6 +143,9 @@ input {
   .bc-form-input-suffix + input {
     border-bottom-left-radius: 0;
     border-top-left-radius: 0; }
+  .bc-form-input-wrap--size-m .bc-form-input-prefix, .bc-form-input-wrap--size-m
+  .bc-form-input-suffix {
+    height: 36px; }
 
 .bc-form-input-suffix {
   border-left: 0;
@@ -379,7 +397,7 @@ input {
     -webkit-box-flex: 1;
         -ms-flex-positive: 1;
             flex-grow: 1;
-    font-size: 20px;
+    font-size: 12px;
     -webkit-box-pack: center;
         -ms-flex-pack: center;
             justify-content: center; }
@@ -592,13 +610,16 @@ input {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
-  -webkit-box-pack: justify;
-      -ms-flex-pack: justify;
-          justify-content: space-between; }
+  -webkit-box-pack: start;
+      -ms-flex-pack: start;
+          justify-content: flex-start; }
 
 .bc-sign-in-form__or {
   color: #EEF5F4;
-  font-size: 12px; }
+  font-size: 12px;
+  padding: 16px;
+  padding-bottom: 0;
+  padding-top: 0; }
 
 .bc-site-header {
   -webkit-box-align: center;
@@ -625,12 +646,9 @@ input {
 .bc--user-signed-in .bc-site-header__sign-in {
   display: none; }
 
-.bc--show-values .bc-site-header__sign-in {
-  display: none; }
-
 .bc-site-header__signed-in-indicator {
   background: #FE8A18;
-  border-radius: 4px 4px 0 0;
+  border-radius: 2px 2px 0 0;
   display: none;
   height: 8px;
   left: 4px;
@@ -643,12 +661,22 @@ input {
     bottom: 100%;
     content: '';
     display: block;
-    height: 8px;
-    left: 0;
-    width: 8px;
+    height: 6px;
+    left: 50%;
+    -webkit-transform: translateX(-50%);
+            transform: translateX(-50%);
+    top: -6px;
+    width: 6px;
     position: absolute; }
   .bc--user-signed-in .bc-site-header__signed-in-indicator {
     display: block; }
+
+.bc--show-values .bc-site-header__signed-in-indicator,
+.bc--show-values .bc-site-header__sign-in {
+  display: none; }
+
+.bc-set-lookup-form {
+  margin: 0 0 32px; }
 
 .bc-set-lookup-form__tax-message {
   display: none;
@@ -754,7 +782,7 @@ input::-webkit-inner-spin-button {
   font-size: 16px;
   padding: 0 8px; }
 
-.bc-value-lookup-form__actions {
+.bc-set-lookup-form__actions {
   -webkit-box-align: center;
       -ms-flex-align: center;
           align-items: center;

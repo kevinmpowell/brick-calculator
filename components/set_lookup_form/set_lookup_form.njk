@@ -1,6 +1,6 @@
 {% macro set_lookup_form() %}
-  <form action="" class="bc-value-lookup-form" id="bc-value-lookup-form" novalidate>
-    <div class="bc-value-lookup-form__actions">
+  <form action="" class="bc-set-lookup-form" id="bc-set-lookup-form" novalidate>
+    <div class="bc-set-lookup-form__actions">
       <div class="bc-lookup-set-data-status">
         {{ spinner(text="Loading Set Data...", class="bc-spinner--loading-set-data") }}
         <div class="bc-lookup-set-data-status-message">
@@ -11,13 +11,14 @@
       {{ button(text="Reset Form", type="reset", class="bc-button--size-s") }}
     </div>
     {% call form_field_group() %}
-      <label class="bc-form-label" for="bc-value-lookup-form__set-number-input">Set Number</label>
-      <input autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" name="setNumber" id="bc-value-lookup-form__set-number-input" type="text" pattern="[0-9]*">
-      {{ autocomplete() }}
+      <label class="bc-form-label" for="bc-set-lookup-form__set-number-input">Set Number</label>
+      {% call autocomplete() %}
+        <input autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" name="setNumber" id="bc-set-lookup-form__set-number-input" type="text" pattern="[0-9]*">
+      {% endcall %}
     {% endcall %}
 
     {% call form_field_group() %}
-      <label class="bc-form-label" for="bc-value-lookup-form__purchase-price-input">
+      <label class="bc-form-label" for="bc-set-lookup-form__purchase-price-input">
         Purchase Price
         <span class="bc-set-lookup-form__tax-message">
           (<span class="bc-set-lookup-form__tax-amount"></span>% sales tax will be added)
@@ -27,7 +28,7 @@
         <div class="bc-form-input-prefix">
           $
         </div>
-        <input step="0.01" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" type="number" id="bc-value-lookup-form__purchase-price-input" name="purchasePrice">
+        <input step="0.01" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" type="number" id="bc-set-lookup-form__purchase-price-input" name="purchasePrice">
       </div>
     {% endcall %}
 

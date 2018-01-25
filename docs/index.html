@@ -64,8 +64,8 @@
 
     <div id="bc-lookup">
       
-  <form action="" class="bc-value-lookup-form" id="bc-value-lookup-form" novalidate>
-    <div class="bc-value-lookup-form__actions">
+  <form action="" class="bc-set-lookup-form" id="bc-set-lookup-form" novalidate>
+    <div class="bc-set-lookup-form__actions">
       <div class="bc-lookup-set-data-status">
         
   <div
@@ -102,19 +102,23 @@
     
   <div class="bc-form-field-group">
     
-      <label class="bc-form-label" for="bc-value-lookup-form__set-number-input">Set Number</label>
-      <input autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" name="setNumber" id="bc-value-lookup-form__set-number-input" type="text" pattern="[0-9]*">
+      <label class="bc-form-label" for="bc-set-lookup-form__set-number-input">Set Number</label>
       
-  <ul class="bc-autocomplete">
-    <li class="bc-autocomplete__item bc-autocomplete__item--template">
-      <a href="" class="bc-autocomplete__item-link">
-        <span class="bc-autocomplete__item-link-text">
-          Suggest Something Here
-        </span>
-        <small class="bc-autocomplete__item-metadata">And something smaller here</small>
-      </a>
-    </li>
-  </ul>
+  <div class="bc-autocomplete">
+    
+        <input autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" name="setNumber" id="bc-set-lookup-form__set-number-input" type="text" pattern="[0-9]*">
+      
+    <ul class="bc-autocomplete__list">
+      <li class="bc-autocomplete__item bc-autocomplete__item--template">
+        <a href="" class="bc-autocomplete__item-link">
+          <span class="bc-autocomplete__item-link-text">
+            Suggest Something Here
+          </span>
+          <small class="bc-autocomplete__item-metadata">And something smaller here</small>
+        </a>
+      </li>
+    </ul>
+  </div>
 
     
   </div>
@@ -123,7 +127,7 @@
     
   <div class="bc-form-field-group">
     
-      <label class="bc-form-label" for="bc-value-lookup-form__purchase-price-input">
+      <label class="bc-form-label" for="bc-set-lookup-form__purchase-price-input">
         Purchase Price
         <span class="bc-set-lookup-form__tax-message">
           (<span class="bc-set-lookup-form__tax-amount"></span>% sales tax will be added)
@@ -133,7 +137,7 @@
         <div class="bc-form-input-prefix">
           $
         </div>
-        <input step="0.01" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" type="number" id="bc-value-lookup-form__purchase-price-input" name="purchasePrice">
+        <input step="0.01" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" type="number" id="bc-set-lookup-form__purchase-price-input" name="purchasePrice">
       </div>
     
   </div>
@@ -157,17 +161,36 @@
       
   <div class="bc-newsletter-sign-up-form">
     
-  <div class="bc-form-field-group">
+  <form action="" class="bc-form">
     
       
-  <label for="" class="bc-form-label">Subscribe for updates</label>
+  <div class="bc-form-field-group">
+    
+        
+  <label for="" class="bc-form-label bc-form-label--size-s">Subscribe for updates</label>
 
-      
+        
+        
+  
+    <div class="bc-form-input-wrap bc-form-input-wrap--size-m bc-form-input-wrap--button-suffix">
   
     
     
+      <div class="bc-form-input-suffix">
+  
+  
+
+  <button
+    
+     type="submit" 
+    
+    class="bc-button bc-button--size-m">
+    Subscribe
+  </button>
+</div>
+    
       <input type="text" 
-              class="bc-form-input"
+              class="bc-form-input bc-form-input--size-m"
               id="" 
               name=""
               autocomplete="off" 
@@ -182,9 +205,14 @@
               
               >
   
+    </div>
+  
+
+      
+  </div>
 
     
-  </div>
+  </form>
 
   </div>
 
@@ -289,7 +317,9 @@
       </div>
       
   <form action="" method="POST" id="bc-sign-in-form">
-    <div class="bc-field-group">
+    
+  <div class="bc-form-field-group">
+    
       
   <label for="bc-sign-in-form-email" class="bc-form-label bc-form-label--on-dark bc-form-label--size-m">Email</label>
 
@@ -312,9 +342,13 @@
               >
   
 
-    </div>
+    
+  </div>
 
-    <div class="bc-field-group">
+
+    
+  <div class="bc-form-field-group">
+    
       
   <label for="bc-sign-in-form-password" class="bc-form-label bc-form-label--on-dark bc-form-label--size-m">Password</label>
 
@@ -337,7 +371,9 @@
               >
   
 
-    </div>
+    
+  </div>
+
 
     <div class="bc-sign-in-form__actions">
       

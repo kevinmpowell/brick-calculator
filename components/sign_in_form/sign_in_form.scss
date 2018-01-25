@@ -10,10 +10,13 @@
 .bc-sign-in-form__actions {
   align-items: center;
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-start;
 }
 
 .bc-sign-in-form__or {
   color: $brickulator-color-text-on-dark-secondary;
   font-size: $brickulator-font-size-s;
+  padding: $brickulator-space-inset-2-x;
+  padding-bottom: 0;
+  padding-top: 0;
 }

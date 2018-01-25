@@ -1,8 +1,8 @@
 'use strict';
 BC.SetLookupForm = function() {
-  const formId = 'bc-value-lookup-form',
-        setNumberFieldId = "bc-value-lookup-form__set-number-input",
-        purchasePriceFieldId = "bc-value-lookup-form__purchase-price-input",
+  const formId = 'bc-set-lookup-form',
+        setNumberFieldId = "bc-set-lookup-form__set-number-input",
+        purchasePriceFieldId = "bc-set-lookup-form__purchase-price-input",
         taxRateSelector = ".bc-set-lookup-form__tax-message",
         taxRateAmountSelector = ".bc-set-lookup-form__tax-amount",
         taxRateVisibleClass = "bc-set-lookup-form__tax-message--visible";

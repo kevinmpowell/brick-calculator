@@ -1,3 +1,9 @@
+{% macro form(class, action) %}
+  <form action="{{ action }}" class="bc-form{{ ' ' + class if class }}">
+    {{ caller() }}
+  </form>
+{% endmacro %}
+
 {% macro form_label(class, for, label) %}
   <label for="{{ for }}" class="bc-form-label{{ ' ' + class if class }}">{{ label }}</label>
 {% endmacro %}
@@ -15,9 +21,10 @@
               prefix,
               suffix,
               disabled=false,
-              placeholder) %}
+              placeholder,
+              wrapper_class) %}
   {% if prefix or suffix %}
-    <div class="bc-form-input-wrap">
+    <div class="bc-form-input-wrap{{ ' ' + wrapper_class if wrapper_class }}">
   {% endif %}
     {% if prefix %}
       <div class="bc-form-input-prefix">{{ prefix }}</div>

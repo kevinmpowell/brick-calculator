@@ -7,6 +7,7 @@
 @import '../components/set_summary/set_summary';
 @import '../components/list_group/list_group';
 @import '../components/long_form_text/long_form_text';
+@import '../components/newsletter_sign_up_form/newsletter_sign_up_form';
 @import '../components/portlet_section_header/portlet_section_header';
 @import '../components/portlet_grid/portlet_grid';
 @import '../components/portlet/portlet';
@@ -94,7 +95,7 @@ input::-webkit-inner-spin-button {
   padding: 0 8px;
 }
 
-.bc-value-lookup-form__actions {
+.bc-set-lookup-form__actions {
   align-items: center;
   display: flex;
   justify-content: space-between;
