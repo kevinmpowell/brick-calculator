@@ -18,6 +18,7 @@
 @import '../components/sign_in_form/sign_in_form';
 @import '../components/site_header/site_header';
 @import '../components/set_lookup_form/set_lookup_form';
+@import '../components/tag/tag';
 @import '../components/user_settings_pane/user_settings_pane';
 
 body {
@@ -50,12 +51,12 @@ input {
 }
 
 #bc-results {
-  display: none; // Comment out to display results for debugging
+  // display: none; // Comment out to display results for debugging
   padding-top: 0;
 }
 
 #bc-lookup {
-  // display: none; // Hide form for debugging
+  display: none; // Hide form for debugging
   padding: $brickulator-space-inset-1-x;
 }
 

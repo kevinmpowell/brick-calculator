@@ -261,6 +261,11 @@ input {
   padding: 4px 8px;
   text-transform: uppercase;
   text-align: center; }
+  .bc-portlet-section-header .bc-tag {
+    display: none;
+    margin-right: 4px; }
+  .bc-portlet-section-header.bc-portlet-section-header--plus-member .bc-tag {
+    display: block; }
 
 .bc-portlet-section-header__text {
   -webkit-box-flex: 0;
@@ -685,6 +690,44 @@ input {
 .bc-set-lookup-form__tax-message--visible {
   display: inline; }
 
+.bc-tag {
+  line-height: 1.3;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  background: #FE8A18;
+  border-radius: 30px;
+  color: #FFFFFF;
+  display: -webkit-inline-box;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+  padding: 4px;
+  font-size: 10px;
+  vertical-align: middle;
+  white-space: nowrap; }
+  .bc-tag::before, .bc-tag::after {
+    content: '';
+    display: block;
+    height: 0;
+    width: 0; }
+  .bc-tag::before {
+    margin-bottom: calc(-0.24444em + 0px); }
+  .bc-tag::after {
+    margin-top: calc(-0.3em + 0px); }
+
+.bc-tag__text {
+  line-height: 1.3;
+  display: inline-block; }
+  .bc-tag__text::before, .bc-tag__text::after {
+    content: '';
+    display: block;
+    height: 0;
+    width: 0; }
+  .bc-tag__text::before {
+    margin-bottom: calc(-0.24444em + 0px); }
+  .bc-tag__text::after {
+    margin-top: calc(-0.3em + 0px); }
+
 .bc-user-settings-pane {
   background: #EEF5F4;
   height: 100%;
@@ -748,10 +791,10 @@ input {
   width: 100%; }
 
 #bc-results {
-  display: none;
   padding-top: 0; }
 
 #bc-lookup {
+  display: none;
   padding: 8px; }
 
 .bc-show-lookup-form {

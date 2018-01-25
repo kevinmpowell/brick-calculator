@@ -92,6 +92,7 @@ BC.PortletLayout = function() {
         plusMemberPortlets = [
           {
             header: "Sold Listings (New)",
+            headerClass: "bc-portlet-section-header--plus-member",
             portlets: [
               {
                 title: "eBay",
@@ -139,6 +140,7 @@ BC.PortletLayout = function() {
           },
           {
             header: "Sold Listings (Used)",
+            headerClass: "bc-portlet-section-header--plus-member",
             portlets: [
               {
                 title: "eBay",
@@ -203,10 +205,13 @@ BC.PortletLayout = function() {
     return layout;
   }
 
-  function getSectionHeader(text) {
+  function getSectionHeader(text, headerClass) {
     let headerNode = headerTemplate.cloneNode(true),
         headerNodeText = headerNode.querySelector(".bc-portlet-section-header__text");
     headerNodeText.innerHTML = text;
+    if (headerClass) {
+      headerNode.classList.add(headerClass);
+    }
     return headerNode;
   }
 
@@ -365,7 +370,7 @@ BC.PortletLayout = function() {
     const layout = getLayout();
     portletWrapper.innerHTML = ''; // Clear the portlet wrapper
     layout.forEach(function(portletSection){
-      portletWrapper.append(getSectionHeader(portletSection.header));
+      portletWrapper.append(getSectionHeader(portletSection.header, portletSection.headerClass));
       portletWrapper.append(getPortletGrid(portletSection.portlets));
     });
   }
