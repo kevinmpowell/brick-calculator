@@ -63,6 +63,9 @@
   padding: 8px;
   text-transform: uppercase;
   width: 100%; }
+  .bc-button:disabled {
+    cursor: not-allowed;
+    opacity: 0.3; }
 
 .bc-button--primary {
   background: #FE8A18;
@@ -114,6 +117,9 @@ input {
   height: 40px;
   padding: 4px;
   margin: 0; }
+  input:disabled {
+    cursor: not-allowed;
+    opacity: 0.3; }
 
 .bc-form-input-wrap--button-suffix .bc-form-input-suffix {
   padding: 0; }
@@ -244,6 +250,9 @@ input {
   font-size: 16px; }
   .bc-long-form-text__cta-price strike {
     font-size: 12px; }
+
+.bc-newsletter-sign-up-form--hidden {
+  display: none; }
 
 .bc-portlet-section-header {
   -webkit-box-align: center;
@@ -727,6 +736,95 @@ input {
     margin-bottom: calc(-0.24444em + 0px); }
   .bc-tag__text::after {
     margin-top: calc(-0.3em + 0px); }
+
+.bc-toast-message-wrapper {
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  bottom: 0;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-pack: end;
+      -ms-flex-pack: end;
+          justify-content: flex-end;
+  left: 0;
+  padding: 16px;
+  pointer-events: none;
+  position: fixed;
+  right: 0;
+  top: 0;
+  z-index: 999; }
+
+.bc-toast-message {
+  background: #FFFFFF;
+  border: solid 1px #C6CDCC;
+  border-radius: 8px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  overflow: hidden;
+  pointer-events: auto;
+  margin: 0 0 8px;
+  max-width: 600px;
+  width: 100%; }
+
+.bc-toast-message__dismiss {
+  border-left: solid 1px #C6CDCC;
+  -webkit-box-flex: 0;
+      -ms-flex: 0 0 40px;
+          flex: 0 0 40px;
+  text-decoration: none; }
+  .bc-toast-message__dismiss:hover {
+    background: #EEF5F4; }
+
+.bc-toast-message__content {
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  border-left: solid 1px #C6CDCC;
+  color: #535555;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  font-size: 14px;
+  padding: 8px;
+  -webkit-box-flex: 1;
+      -ms-flex: 1 1 auto;
+          flex: 1 1 auto; }
+
+.bc-toast-message__type {
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-flex: 0;
+      -ms-flex: 0 0 30px;
+          flex: 0 0 30px; }
+  .bc-toast-message--warning .bc-toast-message__type {
+    color: #F2CD37;
+    font-size: 24px;
+    font-weight: 700; }
+  .bc-toast-message--success .bc-toast-message__type {
+    color: #4B9F4A;
+    font-size: 24px;
+    font-weight: 700; }
+  .bc-toast-message--error .bc-toast-message__type {
+    color: #C91A09;
+    font-size: 24px;
+    font-weight: 700; }
 
 .bc-user-settings-pane {
   background: #EEF5F4;

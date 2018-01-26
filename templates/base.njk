@@ -13,5 +13,8 @@
     <body>
         {% block body %}{% endblock body %}
         {% block closing_body_assets %}{% endblock closing_body_assets %}
+        {% call bc.toast_message_wrapper() %}
+            {{ bc.toast_message(id="bc-toast-message-js-template", type="warning", text="TEMPLATE") }}
+        {% endcall %}
     </body>
 </html>

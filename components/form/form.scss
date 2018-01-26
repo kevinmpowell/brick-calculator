@@ -35,6 +35,11 @@ input {
   height: $bc-form-field-height;
   padding: $brickulator-space-inset-1-half-x;
   margin: 0;
+
+  &:disabled {
+    cursor: not-allowed;
+    opacity: $brickulator-opacity-disabled;
+  }
 }
 
 .bc-form-input-wrap--button-suffix {

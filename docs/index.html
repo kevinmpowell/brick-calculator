@@ -161,7 +161,7 @@
       
   <div class="bc-newsletter-sign-up-form">
     
-  <form action="" class="bc-form">
+  <form action="" class="bc-form bc-newsletter-sign-up-form__form">
     
       
   <div class="bc-form-field-group">
@@ -184,16 +184,16 @@
     
      type="submit" 
     
-    class="bc-button bc-button--size-m">
+    class="bc-button bc-button--size-m bc-newsletter-sign-up-form__submit">
     Subscribe
   </button>
 </div>
     
-      <input type="text" 
-              class="bc-form-input bc-form-input--size-m"
+      <input type="email" 
+              class="bc-form-input bc-newsletter-sign-up-form__email-address bc-form-input--size-m"
               id="" 
               name=""
-              autocomplete="off" 
+              autocomplete="email" 
               autocorrect="off" 
               autocapitalize="off" 
               spellcheck="false"
@@ -620,5 +620,45 @@
     <script type="text/javascript" src="scripts/dependencies/timeago.min.js"></script>
     <script type="text/javascript" src="scripts/brickulator.js"></script>
   
+        
+  <div class="bc-toast-message-wrapper">
+    
+            
+  
+
+  
+    
+  
+  <div  id="bc-toast-message-js-template"  
+        class="bc-toast-message  bc-toast-message--warning">
+    
+      <span class="bc-toast-message__type">
+        !
+      </span>
+    
+    <span class="bc-toast-message__content">
+      <span class="bc-toast-message__content-text">
+        TEMPLATE
+      </span>
+    </span>
+    
+      
+  
+  
+
+  <button
+    
+     type="button" 
+    
+    class="bc-button bc-toast-message__dismiss bc-button--link-style">
+    &times;
+  </button>
+
+    
+  </div>
+
+        
+  </div>
+
     </body>
 </html>

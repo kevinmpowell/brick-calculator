@@ -1,0 +1,73 @@
+.bc-toast-message-wrapper {
+  align-items: center;
+  bottom: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  left: 0;
+  padding: $brickulator-space-inset-2-x;
+  pointer-events: none;
+  position: fixed;
+  right: 0;
+  top: 0;
+  z-index: $brickulator-z-index-top-of-the-world;
+}
+
+.bc-toast-message {
+  // align-items: center;
+  background: $brickulator-color-background-panel;
+  border: $brickulator-border-control; 
+  border-radius: $brickulator-border-radius-panel;
+  display: flex;
+  justify-content: space-between;
+  overflow: hidden;
+  pointer-events: auto;
+  margin: $brickulator-space-stack-1-x;
+  max-width: 600px;
+  width: 100%;
+}
+
+.bc-toast-message__dismiss {
+  border-left: $brickulator-border-control; 
+  flex: 0 0 40px;
+  text-decoration: none;
+
+  &:hover {
+    background: $brickulator-color-background-light;
+  }
+}
+
+.bc-toast-message__content {
+  align-items: center;
+  border-left: $brickulator-border-control; 
+  color: $brickulator-color-text-on-light-secondary;
+  display: flex;
+  font-size: $brickulator-font-size-m;
+  padding: $brickulator-space-inset-1-x;
+  flex: 1 1 auto;
+}
+
+.bc-toast-message__type {
+  align-items: center;
+  display: flex;
+  justify-content: center;
+  flex: 0 0 30px;
+  
+  .bc-toast-message--warning & {
+    color: $brickulator-color-feedback-warning;
+    font-size: $brickulator-font-size-xxl;
+    font-weight: $brickulator-font-weight-bold;
+  }
+
+  .bc-toast-message--success & {
+    color: $brickulator-color-feedback-success;
+    font-size: $brickulator-font-size-xxl;
+    font-weight: $brickulator-font-weight-bold;
+  }
+
+  .bc-toast-message--error & {
+    color: $brickulator-color-feedback-error;
+    font-size: $brickulator-font-size-xxl;
+    font-weight: $brickulator-font-weight-bold;
+  }
+}

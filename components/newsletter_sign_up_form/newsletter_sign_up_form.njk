@@ -1,10 +1,10 @@
 {% macro newsletter_sign_up_form(class) %}
   <div class="bc-newsletter-sign-up-form{{ ' ' + class if class }}">
-    {% call form() %}
+    {% call form(class="bc-newsletter-sign-up-form__form") %}
       {% call form_field_group() %}
         {{ form_label(label="Subscribe for updates", class="bc-form-label--size-s") }}
-        {% set input_suffix = button(type="submit", text="Subscribe", class="bc-button--size-m") %}
-        {{ form_input(placeholder="Your email address", class="bc-form-input--size-m", wrapper_class="bc-form-input-wrap--size-m bc-form-input-wrap--button-suffix", suffix=input_suffix) }}
+        {% set input_suffix = button(type="submit", text="Subscribe", class="bc-button--size-m bc-newsletter-sign-up-form__submit") %}
+        {{ form_input(placeholder="Your email address", class="bc-newsletter-sign-up-form__email-address bc-form-input--size-m", wrapper_class="bc-form-input-wrap--size-m bc-form-input-wrap--button-suffix", suffix=input_suffix, type="email", autocomplete="email") }}
       {% endcall %}
     {% endcall %}
   </div>
