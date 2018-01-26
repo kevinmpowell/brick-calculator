@@ -118,11 +118,17 @@ BC.API = function() {
           statusText: xhr.statusText
         });
       };
+
+      xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+      if (opts.method === 'POST') {
+        xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+      }
       if (opts.headers) {
         Object.keys(opts.headers).forEach(function (key) {
           xhr.setRequestHeader(key, opts.headers[key]);
         });
       }
+
       var params = opts.params;
       // We'll need to stringify if we've been given an object
       // If we have a string, this is skipped.
@@ -427,5 +433,6 @@ ready(function(){
   BC.SignInForm.initialize();
   BC.SetLookupForm.initialize();
   BC.AdHeader.initialize();
+  BC.NewsletterSignUpForm.initialize();
   BC.App.initialize(); // Check auth token, broadcast user state events
 });

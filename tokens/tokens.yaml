@@ -66,6 +66,8 @@ border:
       secondary: "solid 1px #EEF5F4" 
   radius: 
     control: 2px
+opacity:
+  disabled: 0.3
 z-index:
   behind: -1
   ground-floor: 0
