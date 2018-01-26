@@ -3,7 +3,8 @@ BC.NewsletterSignUpForm = function() {
 
   const formSelector = '.bc-newsletter-sign-up-form__form',
         emailInputSelector = '.bc-newsletter-sign-up-form__email-address',
-        subscribeButtonSelector = '.bc-newsletter-sign-up-form__submit';
+        subscribeButtonSelector = '.bc-newsletter-sign-up-form__submit',
+        formHiddenClass = 'bc-newsletter-sign-up-form--hidden';
 
   let newsletterForms,
       submitButton,
@@ -11,12 +12,13 @@ BC.NewsletterSignUpForm = function() {
 
   const newsletterSubscriptionSucceeded = function newsletterSubscriptionSucceeded() {
     // TOAST MESSAGE, FADE OUT FORM
-    alert("You're all signed up!");
+    BC.ToastMessage.create("Thanks! You're subscribed to the Brickulator Newsletter.", "success");
+    hideForms();
   }
 
   const newsletterSubscriptionFailed = function newsletterSubscriptionFailed() {
     // TOAST MESSAGE
-    alert("Unable to subscribe you to the newsletter at this time.");
+    BC.ToastMessage.create("Unable to subscribe you to the newsletter at this time.", "error");
     enableForm();
   }
 
@@ -33,6 +35,13 @@ BC.NewsletterSignUpForm = function() {
   function emailValid(email) {
     var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     return re.test(String(email).toLowerCase());
+  }
+
+  function hideForms() {
+    newsletterForms.forEach(function(f){
+      // Possibly replace with an ad
+      f.classList.add(formHiddenClass);
+    })
   }
 
   function enableForm() {
@@ -56,7 +65,7 @@ BC.NewsletterSignUpForm = function() {
     if (emailValid(email)) {
       addSubscriberToNewsletterList(email);
     } else {
-      alert("Please enter a real email address.");
+      BC.ToastMessage.create("Please enter a real email address.", "error");
       enableForm();
     }
   }

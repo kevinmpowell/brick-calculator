@@ -434,6 +434,7 @@ ready(function(){
   BC.SignInForm.initialize();
   BC.SetLookupForm.initialize();
   BC.AdHeader.initialize();
+  BC.ToastMessage.initialize();
   BC.NewsletterSignUpForm.initialize();
   BC.App.initialize(); // Check auth token, broadcast user state events
 });
@@ -603,6 +604,99 @@ ready(function(){
 });
 
 'use strict';
+BC.NewsletterSignUpForm = function() {
+
+  const formSelector = '.bc-newsletter-sign-up-form__form',
+        emailInputSelector = '.bc-newsletter-sign-up-form__email-address',
+        subscribeButtonSelector = '.bc-newsletter-sign-up-form__submit',
+        formHiddenClass = 'bc-newsletter-sign-up-form--hidden';
+
+  let newsletterForms,
+      submitButton,
+      emailInput;
+
+  const newsletterSubscriptionSucceeded = function newsletterSubscriptionSucceeded() {
+    // TOAST MESSAGE, FADE OUT FORM
+    BC.ToastMessage.create("Thanks! You're subscribed to the Brickulator Newsletter.", "success");
+    hideForms();
+  }
+
+  const newsletterSubscriptionFailed = function newsletterSubscriptionFailed() {
+    // TOAST MESSAGE
+    BC.ToastMessage.create("Unable to subscribe you to the newsletter at this time.", "error");
+    enableForm();
+  }
+
+  function addSubscriberToNewsletterList(email) {
+    BC.API.makeRequest({
+      url: '/subscribe',
+      method: 'POST',
+      params: {
+        email: email
+      }
+    }).then(newsletterSubscriptionSucceeded, newsletterSubscriptionFailed);
+  }
+
+  function emailValid(email) {
+    var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    return re.test(String(email).toLowerCase());
+  }
+
+  function hideForms() {
+    newsletterForms.forEach(function(f){
+      // Possibly replace with an ad
+      f.classList.add(formHiddenClass);
+    })
+  }
+
+  function enableForm() {
+    emailInput.removeAttribute("disabled");
+    submitButton.removeAttribute("disabled");
+  }
+
+  function disableForm() {
+    emailInput.setAttribute("disabled", true);
+    submitButton.setAttribute("disabled", true);
+  }
+
+  function handleNewsletterSignUpFormSubmit(e) {
+    e.preventDefault();
+    emailInput = this.querySelector(emailInputSelector),
+    submitButton = this.querySelector(subscribeButtonSelector);
+    disableForm();
+
+    const email = emailInput.value;
+    
+    if (emailValid(email)) {
+      addSubscriberToNewsletterList(email);
+    } else {
+      BC.ToastMessage.create("Please enter a real email address.", "error");
+      enableForm();
+    }
+  }
+
+  function setEventListeners() {
+    newsletterForms.forEach(function(f){
+      f.addEventListener("submit", handleNewsletterSignUpFormSubmit);
+    });
+  }
+
+  const initialize = function initialize() {
+    newsletterForms = Array.from(document.querySelectorAll(formSelector));
+    setEventListeners();
+    // number = document.querySelector(numberSelector);
+    // year = document.querySelector(yearSelector);
+    // title = document.querySelector(titleSelector);
+    // pcs = document.querySelector(pcsSelector);
+    // msrp = document.querySelector(msrpSelector);
+  }
+
+  return {
+    initialize: initialize
+  }
+}();
+
+'use strict';
 BC.Overlay = function() {
   const overlaySelector = '.bc-overlay',
         overlayTitleSelector = '.bc-overlay__title',
@@ -643,90 +737,6 @@ BC.Overlay = function() {
     initialize: initialize,
     show: show,
     hide: hide
-  }
-}();
-
-'use strict';
-BC.NewsletterSignUpForm = function() {
-
-  const formSelector = '.bc-newsletter-sign-up-form__form',
-        emailInputSelector = '.bc-newsletter-sign-up-form__email-address',
-        subscribeButtonSelector = '.bc-newsletter-sign-up-form__submit';
-
-  let newsletterForms,
-      submitButton,
-      emailInput;
-
-  const newsletterSubscriptionSucceeded = function newsletterSubscriptionSucceeded() {
-    // TOAST MESSAGE, FADE OUT FORM
-    alert("You're all signed up!");
-  }
-
-  const newsletterSubscriptionFailed = function newsletterSubscriptionFailed() {
-    // TOAST MESSAGE
-    alert("Unable to subscribe you to the newsletter at this time.");
-    enableForm();
-  }
-
-  function addSubscriberToNewsletterList(email) {
-    BC.API.makeRequest({
-      url: '/subscribe',
-      method: 'POST',
-      params: {
-        email: email
-      }
-    }).then(newsletterSubscriptionSucceeded, newsletterSubscriptionFailed);
-  }
-
-  function emailValid(email) {
-    var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-    return re.test(String(email).toLowerCase());
-  }
-
-  function enableForm() {
-    emailInput.removeAttribute("disabled");
-    submitButton.removeAttribute("disabled");
-  }
-
-  function disableForm() {
-    emailInput.setAttribute("disabled", true);
-    submitButton.setAttribute("disabled", true);
-  }
-
-  function handleNewsletterSignUpFormSubmit(e) {
-    e.preventDefault();
-    emailInput = this.querySelector(emailInputSelector),
-    submitButton = this.querySelector(subscribeButtonSelector);
-    disableForm();
-
-    const email = emailInput.value;
-    
-    if (emailValid(email)) {
-      addSubscriberToNewsletterList(email);
-    } else {
-      alert("Please enter a real email address.");
-      enableForm();
-    }
-  }
-
-  function setEventListeners() {
-    newsletterForms.forEach(function(f){
-      f.addEventListener("submit", handleNewsletterSignUpFormSubmit);
-    });
-  }
-
-  const initialize = function initialize() {
-    newsletterForms = Array.from(document.querySelectorAll(formSelector));
-    setEventListeners();
-    // number = document.querySelector(numberSelector);
-    // year = document.querySelector(yearSelector);
-    // title = document.querySelector(titleSelector);
-    // pcs = document.querySelector(pcsSelector);
-    // msrp = document.querySelector(msrpSelector);
-  }
-
-  return {
-    initialize: initialize
   }
 }();
 
@@ -1349,7 +1359,8 @@ BC.SignInForm = function() {
         BC.Utils.saveToLocalStorage(localStorageKeys.authToken, data.auth_token);
         BC.Utils.saveToLocalStorage(localStorageKeys.userSettings, data.preferences);
         // TODO: Broadcast event that user settings have been loaded
-        BC.Overlay.show("Welcome back!", "Sign in successful.", true);
+        BC.ToastMessage.create("Signed in. Welcome back.", "success");
+
         BC.App.setSignedInState();
         enableForm();
         resetForm();
@@ -1570,18 +1581,70 @@ BC.SiteMenu = function() {
 'use strict';
 BC.ToastMessage = function() {
   const wrapperSelector = '.bc-toast-message-wrapper',
-        templateId = 'bc-toast-message-js-template';
+        messageSelector = '.bc-toast-message',
+        templateId = 'bc-toast-message-js-template',
+        contentSelector = '.bc-toast-message__content-text',
+        typeSelector = '.bc-toast-message__type',
+        dismissibleSelector = '.bc-toast-message__dismiss',
+        typeMapping = {  "warning": "!",
+                          "error": "&otimes;",
+                          "success": "&#10003;"
+                        };
 
   let template,
       wrapper;
 
-  const initialize = function initialize() {
-    wrapper = document.querySelector(numberSelector);
-    template = document.getElementById(templateId);
+  const handleWrapperClick = function handleWrapperClick(e) {
+    if (e.target.classList.contains('bc-toast-message__dismiss')) {
+      const toastMessage = e.target.closest(messageSelector);
+      removeMessage(toastMessage);
+    }
   }
 
-  const create = function create(message, type, dismissible) {
+  const removeMessage = function removeMessage(toastMessage) {
+    toastMessage.parentNode.removeChild(toastMessage);
+  }
 
+  function setEventListeners() {
+    wrapper.addEventListener("click", handleWrapperClick);
+  }
+
+  const initialize = function initialize() {
+    wrapper = document.querySelector(wrapperSelector);
+    template = document.getElementById(templateId);
+    template.removeAttribute("id");
+    template.parentNode.removeChild(template);
+    setEventListeners();
+  }
+
+  const create = function create(content, type, timeout, dismissible) {
+    dismissible = typeof dismissibile === 'undefined' ? true : dismissible;
+    timeout = typeof timeout === 'undefined' ? 5000 : timeout;
+    let toastMessage = template.cloneNode(true),
+        contentArea = toastMessage.querySelector(contentSelector),
+        typeArea = toastMessage.querySelector(typeSelector),
+        dismissibleButton = toastMessage.querySelector(dismissibleSelector);
+  
+    contentArea.innerHTML = content;
+
+    if (type) {
+      typeArea.innerHTML = typeMapping[type];
+      toastMessage.classList.add("bc-toast-message--" + type);
+    } else {
+      typeArea.parentNode.removeChild(typeArea);
+    }
+
+    if (!dismissible) {
+      dismissibleButton.parentNode.removeChild(dismissibleButton);
+    }
+
+    wrapper.appendChild(toastMessage);
+
+    if (timeout) {
+      setTimeout(function(){
+        removeMessage(toastMessage);
+      }, timeout);
+    }
   }
 
   return {

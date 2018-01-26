@@ -50,7 +50,8 @@ BC.SignInForm = function() {
         BC.Utils.saveToLocalStorage(localStorageKeys.authToken, data.auth_token);
         BC.Utils.saveToLocalStorage(localStorageKeys.userSettings, data.preferences);
         // TODO: Broadcast event that user settings have been loaded
-        BC.Overlay.show("Welcome back!", "Sign in successful.", true);
+        BC.ToastMessage.create("Signed in. Welcome back.", "success");
+
         BC.App.setSignedInState();
         enableForm();
         resetForm();
