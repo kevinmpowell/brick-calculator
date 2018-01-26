@@ -1,0 +1,33 @@
+{% macro toast_message(class='', id, text, type, dismissible=true) %}
+  {% set type_mapping = {
+    "warning": "!",
+    "error": "&otimes;",
+    "success": "&#10003;"
+  } %}
+
+  {% if type %}
+    {% set class = class + ' bc-toast-message--' + type %}
+  {% endif %}
+  <div {% if id %} id="{{ id }}" {% endif %} 
+        class="bc-toast-message{{ ' ' + class if class }}">
+    {% if type %}
+      <span class="bc-toast-message__type">
+        {{ type_mapping[type] | safe }}
+      </span>
+    {% endif %}
+    <span class="bc-toast-message__content">
+      <span class="bc-toast-message__content-text">
+        {{ text }}
+      </span>
+    </span>
+    {% if dismissible %}
+      {{ button(class="bc-toast-message__dismiss bc-button--link-style", text="&times;") }}
+    {% endif %}
+  </div>
+{% endmacro %}
+
+{% macro toast_message_wrapper() %}
+  <div class="bc-toast-message-wrapper">
+    {{ caller() }}
+  </div>
+{% endmacro %}

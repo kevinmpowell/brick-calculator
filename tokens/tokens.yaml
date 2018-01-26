@@ -16,6 +16,10 @@ color:
       primary: "#1E1F1F"
       secondary: "#535555"
       tertiary: "#959999"
+  feedback:
+    warning: "#F2CD37"
+    error: "#C91A09"
+    success: "#4B9F4A"
   link: "#20b6a1"
 font:
   family:
@@ -28,6 +32,9 @@ font:
     l: 16px
     xl: 20px
     xxl: 24px
+  weight:
+    normal: 400
+    bold: 700
 line-height:
   body: 1.2
 space:
@@ -66,6 +73,7 @@ border:
       secondary: "solid 1px #EEF5F4" 
   radius: 
     control: 2px
+    panel: 8px
 opacity:
   disabled: 0.3
 z-index:

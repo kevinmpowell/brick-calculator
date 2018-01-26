@@ -13,5 +13,11 @@
     <body>
         {% block body %}{% endblock body %}
         {% block closing_body_assets %}{% endblock closing_body_assets %}
+        {% call bc.toast_message_wrapper() %}
+            {{ bc.toast_message(id="bc-toast-message-js-template", type="warning", text="You'd better watch out") }}
+            {{ bc.toast_message(type="success", text="Signed in. Welcome back.") }}
+            {{ bc.toast_message(type="error", text="Subscription failed. Please try again later.") }}
+            {{ bc.toast_message(text="Nothing to see here. Move along.", dismissible=false) }}
+        {% endcall %}
     </body>
 </html>
