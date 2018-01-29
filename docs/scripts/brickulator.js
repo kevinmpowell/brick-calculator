@@ -440,45 +440,6 @@ ready(function(){
 });
 
 'use strict';
-BC.AdHeader = function() {
-  const adHeaderSelector = '.bc-ad-header';
-
-  let adHeader;
-
-  function showAds() {
-    adHeader.setAttribute("style", "display: block;");
-  }
-
-  function hideAds() {
-    adHeader.removeAttribute("style");
-  }
-
-  function setAdDisplay() {
-    const userSettings = BC.Utils.getFromLocalStorage(localStorageKeys.userSettings);
-    if (!userSettings || !userSettings.plus_member) {
-      showAds();
-    } else {
-      hideAds();
-    }
-  }
-
-  function setEventListeners() {
-    document.addEventListener(customEvents.userSignedIn, setAdDisplay);
-    document.addEventListener(customEvents.userSignedOut, setAdDisplay);
-  }
-
-  const initialize = function initialize() {
-    adHeader = document.querySelector(adHeaderSelector);
-    setAdDisplay();
-    setEventListeners();
-  }
-
-  return {
-    initialize: initialize
-  }
-}();
-
-'use strict';
 BC.Autocomplete = function() {
   const autocompleteSelector = ".bc-autocomplete__list",
         autocompleteVisibleClass = "bc-autocomplete--visible",
@@ -604,6 +565,89 @@ ready(function(){
 });
 
 'use strict';
+BC.AdHeader = function() {
+  const adHeaderSelector = '.bc-ad-header';
+
+  let adHeader;
+
+  function showAds() {
+    adHeader.setAttribute("style", "display: block;");
+  }
+
+  function hideAds() {
+    adHeader.removeAttribute("style");
+  }
+
+  function setAdDisplay() {
+    const userSettings = BC.Utils.getFromLocalStorage(localStorageKeys.userSettings);
+    if (!userSettings || !userSettings.plus_member) {
+      showAds();
+    } else {
+      hideAds();
+    }
+  }
+
+  function setEventListeners() {
+    document.addEventListener(customEvents.userSignedIn, setAdDisplay);
+    document.addEventListener(customEvents.userSignedOut, setAdDisplay);
+  }
+
+  const initialize = function initialize() {
+    adHeader = document.querySelector(adHeaderSelector);
+    setAdDisplay();
+    setEventListeners();
+  }
+
+  return {
+    initialize: initialize
+  }
+}();
+
+'use strict';
+BC.Overlay = function() {
+  const overlaySelector = '.bc-overlay',
+        overlayTitleSelector = '.bc-overlay__title',
+        overlayMessageSelector = '.bc-overlay__message',
+        overlayVisibleClass = 'bc-overlay--visible';
+
+  let overlay,
+      title,
+      message;
+
+  function dismissOverlay() {
+    hide();
+    overlay.removeEventListener("click", dismissOverlay);
+  }
+
+  const initialize = function initialize() {
+    overlay = document.querySelector(overlaySelector);
+    title = document.querySelector(overlayTitleSelector);
+    message = document.querySelector(overlayMessageSelector);
+  }
+
+  const show = function show(titleText, messageText, dismissible) {
+    dismissible = typeof dismissible === 'undefined' ? false : true;
+    title.innerHTML = titleText;
+    message.innerHTML = messageText;
+    overlay.classList.add(overlayVisibleClass);
+
+    if (dismissible) {
+      overlay.addEventListener("click", dismissOverlay);
+    }
+  }
+
+  const hide = function hide() {
+    overlay.classList.remove(overlayVisibleClass);
+  }
+
+  return {
+    initialize: initialize,
+    show: show,
+    hide: hide
+  }
+}();
+
+'use strict';
 BC.NewsletterSignUpForm = function() {
 
   const formSelector = '.bc-newsletter-sign-up-form__form',
@@ -693,50 +737,6 @@ BC.NewsletterSignUpForm = function() {
 
   return {
     initialize: initialize
-  }
-}();
-
-'use strict';
-BC.Overlay = function() {
-  const overlaySelector = '.bc-overlay',
-        overlayTitleSelector = '.bc-overlay__title',
-        overlayMessageSelector = '.bc-overlay__message',
-        overlayVisibleClass = 'bc-overlay--visible';
-
-  let overlay,
-      title,
-      message;
-
-  function dismissOverlay() {
-    hide();
-    overlay.removeEventListener("click", dismissOverlay);
-  }
-
-  const initialize = function initialize() {
-    overlay = document.querySelector(overlaySelector);
-    title = document.querySelector(overlayTitleSelector);
-    message = document.querySelector(overlayMessageSelector);
-  }
-
-  const show = function show(titleText, messageText, dismissible) {
-    dismissible = typeof dismissible === 'undefined' ? false : true;
-    title.innerHTML = titleText;
-    message.innerHTML = messageText;
-    overlay.classList.add(overlayVisibleClass);
-
-    if (dismissible) {
-      overlay.addEventListener("click", dismissOverlay);
-    }
-  }
-
-  const hide = function hide() {
-    overlay.classList.remove(overlayVisibleClass);
-  }
-
-  return {
-    initialize: initialize,
-    show: show,
-    hide: hide
   }
 }();
 
@@ -1187,34 +1187,6 @@ BC.PortletPartOutBrickOwl = function() {
   }
 }();
 
-// 'use strict';
-// BC.PortletPricePerPiece = function() {
-//   const msrpPPPInputId = 'ppp-msrp',
-//         userPPPInputId = 'ppp-your-price';
-
-//   let msrpPPP,
-//       userPPP;
-
-//   const update = function update(setData, purchasePrice) {
-//     msrpPPP = document.getElementById(msrpPPPInputId);
-//     userPPP = document.getElementById(userPPPInputId);
-//     const partCount = setData.pcs;
-//     console.log(setData);
-
-//     if (partCount !== null) {
-//       if (setData.msrp !== null) {
-//         msrpPPP.value = BC.Utils.formatCurrency(setData.msrp / partCount) + " per piece";
-//       }
-
-//       userPPP.value = BC.Utils.formatCurrency(purchasePrice / partCount) + " per piece";
-//     }
-//   }
-
-//   return {
-//     update: update
-//   }
-// }();
-
 'use strict';
 BC.SetLookupForm = function() {
   const formId = 'bc-set-lookup-form',
@@ -1269,6 +1241,34 @@ BC.SetLookupForm = function() {
     initialize: initialize
   }
 }();
+
+// 'use strict';
+// BC.PortletPricePerPiece = function() {
+//   const msrpPPPInputId = 'ppp-msrp',
+//         userPPPInputId = 'ppp-your-price';
+
+//   let msrpPPP,
+//       userPPP;
+
+//   const update = function update(setData, purchasePrice) {
+//     msrpPPP = document.getElementById(msrpPPPInputId);
+//     userPPP = document.getElementById(userPPPInputId);
+//     const partCount = setData.pcs;
+//     console.log(setData);
+
+//     if (partCount !== null) {
+//       if (setData.msrp !== null) {
+//         msrpPPP.value = BC.Utils.formatCurrency(setData.msrp / partCount) + " per piece";
+//       }
+
+//       userPPP.value = BC.Utils.formatCurrency(purchasePrice / partCount) + " per piece";
+//     }
+//   }
+
+//   return {
+//     update: update
+//   }
+// }();
 
 'use strict';
 BC.SetSummary = function() {
