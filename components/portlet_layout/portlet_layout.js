@@ -87,9 +87,7 @@ BC.PortletLayout = function() {
                 ]
               }
             ]
-          }
-        ],
-        plusMemberPortlets = [
+          },
           {
             header: "Sold Listings (New)",
             headerClass: "bc-portlet-section-header--plus-member",
@@ -98,7 +96,7 @@ BC.PortletLayout = function() {
                 title: "eBay",
                 retrievedAtKey: "eRA",
                 listingsCountKey: "eCSCLNLC",
-                timestampLabel: "In the last 30 days",
+                timestampLabel: "In the last 3 months",
                 listingsCountSuffix: "sold",
                 lineItems: [
                   {
@@ -146,7 +144,7 @@ BC.PortletLayout = function() {
                 title: "eBay",
                 retrievedAtKey: "eRA",
                 listingsCountKey: "eCSCLULC",
-                timestampLabel: "In the last 30 days",
+                timestampLabel: "In the last 3 months",
                 listingsCountSuffix: "sold",
                 lineItems: [
                   {
@@ -186,6 +184,9 @@ BC.PortletLayout = function() {
               }
             ]
           }
+        ],
+        plusMemberPortlets = [
+          
         ];
 
   let portletTemplate,
