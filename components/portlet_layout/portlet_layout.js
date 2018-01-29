@@ -90,7 +90,7 @@ BC.PortletLayout = function() {
           },
           {
             header: "Sold Listings (New)",
-            headerClass: "bc-portlet-section-header--plus-member",
+            headerClass: "",
             portlets: [
               {
                 title: "eBay",
@@ -138,7 +138,7 @@ BC.PortletLayout = function() {
           },
           {
             header: "Sold Listings (Used)",
-            headerClass: "bc-portlet-section-header--plus-member",
+            headerClass: "",
             portlets: [
               {
                 title: "eBay",
