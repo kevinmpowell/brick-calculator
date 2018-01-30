@@ -745,10 +745,30 @@ BC.Overlay = function() {
 'use strict';
 BC.PortletLayout = function() {
   const emptyPortletClass = "bc-portlet--empty",
+        zebraStripedPortletSectionsClass = "bc-section--alt-background",
         defaultLayout = [
           {
             header: "Current Listings (New)",
             portlets: [
+              {
+                title: "Bricklink",
+                retrievedAtKey: "blRA",
+                listingsCountKey: "blCSNLC",
+                lineItems: [
+                  {
+                    key: "blCSNA",
+                    label: "Avg Listing"
+                  },
+                  {
+                    key: "blFees",
+                    label: "Bricklink & PayPal Fees"
+                  },
+                  {
+                    key: "setCost",
+                    label: "Cost<span class='bc-portlet__line-item-label-plus-member-snippet'> w/taxes</span>"
+                  }
+                ]
+              },
               {
                 title: "Brick Owl",
                 retrievedAtKey: "boRA",
@@ -769,17 +789,17 @@ BC.PortletLayout = function() {
                 ]
               },
               {
-                title: "Bricklink",
-                retrievedAtKey: "blRA",
-                listingsCountKey: "blCSNLC",
+                title: "eBay",
+                retrievedAtKey: "eRA",
+                listingsCountKey: "eCSNLC",
                 lineItems: [
                   {
-                    key: "blCSNA",
+                    key: "eCSNA",
                     label: "Avg Listing"
                   },
                   {
-                    key: "blFees",
-                    label: "Bricklink & PayPal Fees"
+                    key: "eFees",
+                    label: "eBay & PayPal Fees"
                   },
                   {
                     key: "setCost",
@@ -792,6 +812,25 @@ BC.PortletLayout = function() {
           {
             header: "Current Listings (Used)",
             portlets: [
+              {
+                title: "Bricklink",
+                retrievedAtKey: "blRA",
+                listingsCountKey: "blCSULC",
+                lineItems: [
+                  {
+                    key: "blCSUA",
+                    label: "Avg Listing"
+                  },
+                  {
+                    key: "blFees",
+                    label: "Bricklink & PayPal Fees"
+                  },
+                  {
+                    key: "setCost",
+                    label: "Cost<span class='bc-portlet__line-item-label-plus-member-snippet'> w/taxes</span>"
+                  }
+                ]
+              },
               {
                 title: "Brick Owl",
                 retrievedAtKey: "boRA",
@@ -812,17 +851,17 @@ BC.PortletLayout = function() {
                 ]
               },
               {
-                title: "Bricklink",
-                retrievedAtKey: "blRA",
-                listingsCountKey: "blCSULC",
+                title: "eBay",
+                retrievedAtKey: "eRA",
+                listingsCountKey: "eCSULC",
                 lineItems: [
                   {
-                    key: "blCSUA",
+                    key: "eCSUA",
                     label: "Avg Listing"
                   },
                   {
-                    key: "blFees",
-                    label: "Bricklink & PayPal Fees"
+                    key: "eFees",
+                    label: "eBay & PayPal Fees"
                   },
                   {
                     key: "setCost",
@@ -836,27 +875,6 @@ BC.PortletLayout = function() {
             header: "Sold Listings (New)",
             headerClass: "",
             portlets: [
-              {
-                title: "eBay",
-                retrievedAtKey: "eRA",
-                listingsCountKey: "eCSCLNLC",
-                timestampLabel: "In the last 3 months",
-                listingsCountSuffix: "sold",
-                lineItems: [
-                  {
-                    key: "eCSCLNM",
-                    label: "Median Value"
-                  },
-                  {
-                    key: "eFees",
-                    label: "eBay & PayPal Fees"
-                  },
-                  {
-                    key: "setCost",
-                    label: "Cost<span class='bc-portlet__line-item-label-plus-member-snippet'> w/taxes</span>"
-                  }
-                ]
-              },
               {
                 title: "Bricklink",
                 retrievedAtKey: "blRA",
@@ -877,22 +895,37 @@ BC.PortletLayout = function() {
                     label: "Cost<span class='bc-portlet__line-item-label-plus-member-snippet'> w/taxes</span>"
                   }
                 ]
-              }
-            ]
-          },
-          {
-            header: "Sold Listings (Used)",
-            headerClass: "",
-            portlets: [
+              },
+              {
+                title: "Brick Owl",
+                retrievedAtKey: "boRA",
+                listingsCountKey: "boCSCLNLC",
+                timestampLabel: "In the last 6 months",
+                listingsCountSuffix: "sold",
+                lineItems: [
+                  {
+                    key: "boCSCLNA",
+                    label: "Average Value"
+                  },
+                  {
+                    key: "boFees",
+                    label: "Brick Owl & PayPal Fees"
+                  },
+                  {
+                    key: "setCost",
+                    label: "Cost<span class='bc-portlet__line-item-label-plus-member-snippet'> w/taxes</span>"
+                  }
+                ]
+              },
               {
                 title: "eBay",
                 retrievedAtKey: "eRA",
-                listingsCountKey: "eCSCLULC",
+                listingsCountKey: "eCSCLNLC",
                 timestampLabel: "In the last 3 months",
                 listingsCountSuffix: "sold",
                 lineItems: [
                   {
-                    key: "eCSCLUM",
+                    key: "eCSCLNM",
                     label: "Median Value"
                   },
                   {
@@ -904,7 +937,13 @@ BC.PortletLayout = function() {
                     label: "Cost<span class='bc-portlet__line-item-label-plus-member-snippet'> w/taxes</span>"
                   }
                 ]
-              },
+              }
+            ]
+          },
+          {
+            header: "Sold Listings (Used)",
+            headerClass: "",
+            portlets: [
               {
                 title: "Bricklink",
                 retrievedAtKey: "blRA",
@@ -919,6 +958,48 @@ BC.PortletLayout = function() {
                   {
                     key: "blFees",
                     label: "Bricklink & PayPal Fees"
+                  },
+                  {
+                    key: "setCost",
+                    label: "Cost<span class='bc-portlet__line-item-label-plus-member-snippet'> w/taxes</span>"
+                  }
+                ]
+              },
+              {
+                title: "Brick Owl",
+                retrievedAtKey: "boRA",
+                listingsCountKey: "boCSCLULC",
+                timestampLabel: "In the last 6 months",
+                listingsCountSuffix: "sold",
+                lineItems: [
+                  {
+                    key: "boCSCLUA",
+                    label: "Average Value"
+                  },
+                  {
+                    key: "boFees",
+                    label: "Brick Owl & PayPal Fees"
+                  },
+                  {
+                    key: "setCost",
+                    label: "Cost<span class='bc-portlet__line-item-label-plus-member-snippet'> w/taxes</span>"
+                  }
+                ]
+              },
+              {
+                title: "eBay",
+                retrievedAtKey: "eRA",
+                listingsCountKey: "eCSCLULC",
+                timestampLabel: "In the last 3 months",
+                listingsCountSuffix: "sold",
+                lineItems: [
+                  {
+                    key: "eCSCLUM",
+                    label: "Median Value"
+                  },
+                  {
+                    key: "eFees",
+                    label: "eBay & PayPal Fees"
                   },
                   {
                     key: "setCost",
@@ -950,12 +1031,15 @@ BC.PortletLayout = function() {
     return layout;
   }
 
-  function getSectionHeader(text, headerClass) {
+  function getSectionHeader(text, headerClass, sectionClass) {
     let headerNode = headerTemplate.cloneNode(true),
         headerNodeText = headerNode.querySelector(".bc-portlet-section-header__text");
     headerNodeText.innerHTML = text;
     if (headerClass) {
       headerNode.classList.add(headerClass);
+    }
+    if (sectionClass) {
+      headerNode.classList.add(sectionClass);
     }
     return headerNode;
   }
@@ -1012,11 +1096,16 @@ BC.PortletLayout = function() {
     return portletNode;
   }
 
-  function getPortletGrid(portlets) {
+  function getPortletGrid(portlets, sectionClass) {
     let gridNode = gridTemplate.cloneNode(true);
     portlets.forEach(function(portlet){
       gridNode.append(getPortlet(portlet));
     });
+
+    if (sectionClass) {
+      gridNode.classList.add(sectionClass);
+    }
+
     return gridNode;
   }
 
@@ -1113,10 +1202,12 @@ BC.PortletLayout = function() {
 
   const buildLayout = function buildLayout() {
     const layout = getLayout();
+    let sectionClass = false;
     portletWrapper.innerHTML = ''; // Clear the portlet wrapper
     layout.forEach(function(portletSection){
-      portletWrapper.append(getSectionHeader(portletSection.header, portletSection.headerClass));
-      portletWrapper.append(getPortletGrid(portletSection.portlets));
+      portletWrapper.append(getSectionHeader(portletSection.header, portletSection.headerClass, sectionClass));
+      portletWrapper.append(getPortletGrid(portletSection.portlets, sectionClass));
+      sectionClass = sectionClass ? false : zebraStripedPortletSectionsClass;
     });
   }
 

@@ -2,8 +2,9 @@
   display: flex;
   flex-wrap: wrap;
   padding: $brickulator-space-inset-squish-1-x;
+  padding-bottom: $brickulator-space-generic-4-x;
   justify-content: space-between;
-  margin: $brickulator-space-stack-2-x;
+  // margin: $brickulator-space-stack-2-x;
 
   > * {
     width: 48%;
