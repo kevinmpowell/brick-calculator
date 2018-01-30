@@ -325,7 +325,7 @@ img {
   display: -ms-flexbox;
   display: flex;
   color: #FE8A18;
-  font-size: 12px;
+  font-size: 14px;
   font-family: "Menlo", monospace;
   -webkit-box-pack: justify;
       -ms-flex-pack: justify;
@@ -366,10 +366,10 @@ img {
   -ms-flex-wrap: wrap;
       flex-wrap: wrap;
   padding: 4px 8px;
+  padding-bottom: 32px;
   -webkit-box-pack: justify;
       -ms-flex-pack: justify;
-          justify-content: space-between;
-  margin: 0 0 16px; }
+          justify-content: space-between; }
   .bc-portlet-grid > * {
     width: 48%; }
 
