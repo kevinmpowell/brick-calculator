@@ -1,0 +1,45 @@
+$size: 12px;
+
+.bc-logo {
+  display: block;
+  height: $size;
+  width: $size;
+  position: relative;
+}
+
+.bc-logo__block {
+  content: '';
+  position: absolute;
+  height: $size / 4.75;
+  width: $size / 1.45;
+  background: $brickulator-color-brand;
+
+  top: 24%;
+  transform: translateX(-50%);
+  left: 50%;
+}
+
+.bc-logo__block--bottom {
+  bottom: 21.1%;
+  top: auto;
+}
+
+.bc-logo__studs {
+  display: flex;
+  justify-content: space-around;
+  padding: 0 2%;
+  width: 100%;
+  position: absolute;
+  bottom: 100%;
+}
+
+.bc-logo__stud {
+  background: $brickulator-color-brand;
+  border-radius: 50% 50% / 30% 30% 0 0;
+  width: $size / 10;
+  height: $size / 30;
+}
+
+img {
+  display: block;
+}
