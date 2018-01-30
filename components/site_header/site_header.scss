@@ -8,12 +8,22 @@
 }
 
 .bc-site-header__title {
+  align-items: center;
+  display: flex;
+  margin: 0;
+}
+
+.bc-site-header__title-text {
   color: $brickulator-color-brand;
   font-family: $brickulator-font-family-monospace;
   font-size: $brickulator-font-size-m;
   letter-spacing: 0.05em;
-  margin: 0;
   text-align: center;
+}
+
+.bc-site-header__logo {
+  position: relative;
+  top: -0.5px;
 }
 
 .bc--user-signed-in {

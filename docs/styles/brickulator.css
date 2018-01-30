@@ -244,6 +244,47 @@ input {
   display: block;
   padding: 4px 8px; }
 
+.bc-logo {
+  display: block;
+  height: 12px;
+  width: 12px;
+  position: relative; }
+
+.bc-logo__block {
+  content: '';
+  position: absolute;
+  height: 2.52632px;
+  width: 8.27586px;
+  background: #FE8A18;
+  top: 24%;
+  -webkit-transform: translateX(-50%);
+          transform: translateX(-50%);
+  left: 50%; }
+
+.bc-logo__block--bottom {
+  bottom: 21.1%;
+  top: auto; }
+
+.bc-logo__studs {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-pack: distribute;
+      justify-content: space-around;
+  padding: 0 2%;
+  width: 100%;
+  position: absolute;
+  bottom: 100%; }
+
+.bc-logo__stud {
+  background: #FE8A18;
+  border-radius: 50% 50% / 30% 30% 0 0;
+  width: 1.2px;
+  height: 0.4px; }
+
+img {
+  display: block; }
+
 .bc-long-form-text h2 {
   font-size: 20px;
   margin: 0 0 8px; }
@@ -672,12 +713,24 @@ input {
   margin-bottom: 0 0 4px; }
 
 .bc-site-header__title {
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  margin: 0; }
+
+.bc-site-header__title-text {
   color: #FE8A18;
   font-family: "Menlo", monospace;
   font-size: 14px;
   letter-spacing: 0.05em;
-  margin: 0;
   text-align: center; }
+
+.bc-site-header__logo {
+  position: relative;
+  top: -0.5px; }
 
 .bc--user-signed-in .bc-site-header__sign-in {
   display: none; }
