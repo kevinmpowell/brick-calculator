@@ -509,19 +509,21 @@ BC.Autocomplete = function() {
       return dataset[k];
     });
 
-    // console.log(results);
-
     clearAutocompleteResults();
-    console.log(autocomplete);
-    results.forEach(function(r) {
-      const result = itemTemplate.cloneNode(true),
-            setNumber = result.querySelector(`.${itemLinkTextClass}`),
-            setTitle = result.querySelector(`.${itemMetadataClass}`);
-      setNumber.innerHTML = r.k;
-      setNumber.href = `#${r.k}`;
-      setTitle.innerHTML = r.t;
-      autocomplete.appendChild(result);
-    });
+
+    if (results.length > 1) {
+      results.forEach(function(r) {
+        const result = itemTemplate.cloneNode(true),
+              setNumber = result.querySelector(`.${itemLinkTextClass}`),
+              setTitle = result.querySelector(`.${itemMetadataClass}`);
+        setNumber.innerHTML = r.k;
+        setNumber.href = `#${r.k}`;
+        setTitle.innerHTML = r.t;
+        autocomplete.appendChild(result);
+      });
+    } else {
+      hideAutocomplete();
+    }
   }
 
   function findMatchesInDataset(value) {
@@ -737,53 +739,6 @@ BC.Overlay = function() {
     initialize: initialize,
     show: show,
     hide: hide
-  }
-}();
-
-'use strict';
-BC.PortletPartOutBrickOwl = function() {
-  const boPoNewInputId = 'bo-po-new',
-        boPoUsedInputId = 'bo-po-used',
-        boPoNewProfitInputId = 'bo-po-profit-new',
-        boPoUsedProfitInputId = 'bo-po-profit-used',
-        boPoCostNewInputId = 'bo-po-cost-new',
-        boPoCostUsedInputId = 'bo-po-cost-used';
-
-  let boPoNew,
-      boPoUsed,
-      boPoNewProfit,
-      boPoUsedProfit,
-      boPoCostNew,
-      boPoCostUsed;
-
-  const update = function update(setData, purchasePrice) {
-    boPoNew = document.getElementById(boPoNewInputId);
-    boPoUsed = document.getElementById(boPoUsedInputId);
-    boPoNewProfit = document.getElementById(boPoNewProfitInputId);
-    boPoUsedProfit = document.getElementById(boPoUsedProfitInputId);
-    boPoCostNew = document.getElementById(boPoCostNewInputId);
-    boPoCostUsed = document.getElementById(boPoCostUsedInputId);
-
-    if (setData.boPON) {
-      const newValue = setData.boPON,
-            usedValue = setData.boPOU;
-
-      if (newValue !== null) {
-        boPoNew.value = BC.Utils.formatCurrency(newValue);
-        boPoCostNew.value = BC.Utils.formatCurrency(purchasePrice);
-        boPoNewProfit.value = BC.Utils.formatCurrency(newValue - purchasePrice);
-      }
-
-      if (usedValue !== null) {
-        boPoUsed.value = BC.Utils.formatCurrency(usedValue);
-        boPoCostUsed.value = BC.Utils.formatCurrency(purchasePrice);
-        boPoUsedProfit.value = BC.Utils.formatCurrency(usedValue - purchasePrice);
-      }
-    }
-  }
-
-  return {
-    update: update
   }
 }();
 
@@ -1185,6 +1140,53 @@ BC.PortletLayout = function() {
     initialize: initialize,
     buildLayout: buildLayout,
     updateAllPortletValues: updateAllPortletValues
+  }
+}();
+
+'use strict';
+BC.PortletPartOutBrickOwl = function() {
+  const boPoNewInputId = 'bo-po-new',
+        boPoUsedInputId = 'bo-po-used',
+        boPoNewProfitInputId = 'bo-po-profit-new',
+        boPoUsedProfitInputId = 'bo-po-profit-used',
+        boPoCostNewInputId = 'bo-po-cost-new',
+        boPoCostUsedInputId = 'bo-po-cost-used';
+
+  let boPoNew,
+      boPoUsed,
+      boPoNewProfit,
+      boPoUsedProfit,
+      boPoCostNew,
+      boPoCostUsed;
+
+  const update = function update(setData, purchasePrice) {
+    boPoNew = document.getElementById(boPoNewInputId);
+    boPoUsed = document.getElementById(boPoUsedInputId);
+    boPoNewProfit = document.getElementById(boPoNewProfitInputId);
+    boPoUsedProfit = document.getElementById(boPoUsedProfitInputId);
+    boPoCostNew = document.getElementById(boPoCostNewInputId);
+    boPoCostUsed = document.getElementById(boPoCostUsedInputId);
+
+    if (setData.boPON) {
+      const newValue = setData.boPON,
+            usedValue = setData.boPOU;
+
+      if (newValue !== null) {
+        boPoNew.value = BC.Utils.formatCurrency(newValue);
+        boPoCostNew.value = BC.Utils.formatCurrency(purchasePrice);
+        boPoNewProfit.value = BC.Utils.formatCurrency(newValue - purchasePrice);
+      }
+
+      if (usedValue !== null) {
+        boPoUsed.value = BC.Utils.formatCurrency(usedValue);
+        boPoCostUsed.value = BC.Utils.formatCurrency(purchasePrice);
+        boPoUsedProfit.value = BC.Utils.formatCurrency(usedValue - purchasePrice);
+      }
+    }
+  }
+
+  return {
+    update: update
   }
 }();
 
