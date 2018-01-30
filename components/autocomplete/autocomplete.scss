@@ -25,16 +25,20 @@
   align-items: center;
   color: $brickulator-color-text-on-light-primary;
   display: flex;
-  padding: $brickulator-space-inset-1-x;
+  padding: $brickulator-space-inset-2-x;
+  padding-left: $brickulator-space-generic-1-x;
+  padding-right: $brickulator-space-generic-1-x;
   text-decoration: none;
   font-size: $brickulator-font-size-l;
 }
 
 .bc-autocomplete__item-link-text {
+  @include bc-text-crop-sans-serif;
   white-space: nowrap;
 }
 
 .bc-autocomplete__item-metadata {
+  @include bc-text-crop-sans-serif;
   color: $brickulator-color-text-on-light-secondary;
   margin: $brickulator-space-inline-left-1-half-x;
 }
