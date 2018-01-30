@@ -29,19 +29,21 @@ BC.Autocomplete = function() {
       return dataset[k];
     });
 
-    // console.log(results);
-
     clearAutocompleteResults();
-    console.log(autocomplete);
-    results.forEach(function(r) {
-      const result = itemTemplate.cloneNode(true),
-            setNumber = result.querySelector(`.${itemLinkTextClass}`),
-            setTitle = result.querySelector(`.${itemMetadataClass}`);
-      setNumber.innerHTML = r.k;
-      setNumber.href = `#${r.k}`;
-      setTitle.innerHTML = r.t;
-      autocomplete.appendChild(result);
-    });
+
+    if (results.length > 1) {
+      results.forEach(function(r) {
+        const result = itemTemplate.cloneNode(true),
+              setNumber = result.querySelector(`.${itemLinkTextClass}`),
+              setTitle = result.querySelector(`.${itemMetadataClass}`);
+        setNumber.innerHTML = r.k;
+        setNumber.href = `#${r.k}`;
+        setTitle.innerHTML = r.t;
+        autocomplete.appendChild(result);
+      });
+    } else {
+      hideAutocomplete();
+    }
   }
 
   function findMatchesInDataset(value) {
