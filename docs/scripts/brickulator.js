@@ -1636,10 +1636,18 @@ BC.SiteMenu = function() {
 
   const showMenu = function showMenu() {
     menu.classList.add(menuVisibleClass);
+    const inputs = Array.from(menu.querySelectorAll("input"));
+    inputs.forEach(function(i){
+      i.removeAttribute("tabindex");
+    });
   }
 
   const hideMenu = function showMenu() {
     menu.classList.remove(menuVisibleClass);
+    const inputs = Array.from(menu.querySelectorAll("input"));
+    inputs.forEach(function(i){
+      i.setAttribute("tabindex", "-1");
+    });
   }
 
   function setEventListeners() {

@@ -43,12 +43,12 @@
       </div>
       <div class="bc-field-group">
         {{ form_label(for="bc-sign-up-form-email", label="Email") }}
-        <input autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" name="bc-sign-up-form-email" id="bc-sign-up-form-email" type="email">
+        <input autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" name="bc-sign-up-form-email" id="bc-sign-up-form-email" type="email" tabindex="-1">
       </div>
 
       <div class="bc-field-group">
         {{ form_label(for="bc-sign-up-form-password", label="Create Password") }}
-        <input name="bc-sign-up-form-password" id="bc-sign-up-form-password" type="password">
+        <input name="bc-sign-up-form-password" id="bc-sign-up-form-password" type="password" tabindex="-1">
       </div>
 
       {{ button(type="submit", text="Sign Up", class="bc-button--primary bc-sign-up-form__submit-button") }}

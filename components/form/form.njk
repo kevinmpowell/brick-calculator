@@ -22,7 +22,8 @@
               suffix,
               disabled=false,
               placeholder,
-              wrapper_class) %}
+              wrapper_class,
+              tabindex) %}
   {% if prefix or suffix %}
     <div class="bc-form-input-wrap{{ ' ' + wrapper_class if wrapper_class }}">
   {% endif %}
@@ -51,6 +52,9 @@
               {% endif %}
               {% if placeholder %}
                 placeholder="{{ placeholder }}"
+              {% endif %}
+              {% if tabindex %}
+                tabindex="{{ tabindex }}"
               {% endif %}
               >
   {% if prefix or suffix %}
