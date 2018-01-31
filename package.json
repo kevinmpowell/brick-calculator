@@ -21,6 +21,7 @@
     "esds-build": "^0.28.0"
   },
   "dependencies": {
+    "gulp-javascript-obfuscator": "^1.1.4",
     "timeago.js": "^3.0.2"
   }
 }

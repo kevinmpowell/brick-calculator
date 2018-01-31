@@ -19,29 +19,7 @@ const ebaySellingFeePercentage = .13, // TODO: Get this from a lookup
       customEvents = {
         userSignedIn: 'bc-user-signed-in',
         userSignedOut: 'bc-user-signed-out'
-      }; // in milliseconds
-
-
-      // Headers and params are optional
-      // makeRequest({
-      //   method: 'GET',
-      //   url: 'http://example.com'
-      // })
-      // .then(function (datums) {
-      //   return makeRequest({
-      //     method: 'POST',
-      //     url: datums.url,
-      //     params: {
-      //       score: 9001
-      //     },
-      //     headers: {
-      //       'X-Subliminal-Message': 'Upvote-this-answer'
-      //     }
-      //   });
-      // })
-      // .catch(function (err) {
-      //   console.error('Augh, there was an error!', err.statusText);
-      // });
+      };
 
 BC.App = function() {
   const userSignedInClass = 'bc--user-signed-in',
