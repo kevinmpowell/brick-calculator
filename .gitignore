@@ -37,3 +37,6 @@ jspm_packages/
 
 # MacOS folder attributes
 *.DS_Store
+
+# Source JS - minified version is committed
+docs/scripts/brickulator.js
