@@ -1,16 +1,24 @@
 'use strict';
 BC.Autocomplete = function() {
-  const autocompleteSelector = ".bc-autocomplete__list",
+  const autocompleteWrapperSelector = ".bc-autocomplete",
+        autocompleteSelector = ".bc-autocomplete__list",
         autocompleteVisibleClass = "bc-autocomplete--visible",
         autocompleteItemTemplateClass = "bc-autocomplete__item--template",
         itemLinkClass = "bc-autocomplete__item-link",
         itemLinkTextClass = "bc-autocomplete__item-link-text",
-        itemMetadataClass = "bc-autocomplete__item-metadata";
+        itemMetadataClass = "bc-autocomplete__item-metadata",
+        inputTextSelector = ".bc-autocomplete__input-value",
+        clearInputSelector = ".bc-autocomplete__clear-input",
+        autocompleteInputValueFilledClass = "bc-autocomplete--with-value";
+
   let dataset,
       keys,
       autocomplete,
+      autocompleteWrapper,
       itemTemplate,
-      triggerInput;
+      triggerInput,
+      clearInputButton,
+      inputText;
 
   function showAutocomplete() {
     autocomplete.classList.add(autocompleteVisibleClass);
@@ -42,6 +50,7 @@ BC.Autocomplete = function() {
         autocomplete.appendChild(result);
       });
     } else {
+      autofillInput(results[0].k, results[0].t);
       hideAutocomplete();
     }
   }
@@ -58,7 +67,16 @@ BC.Autocomplete = function() {
   function triggerAutocomplete() {
     const currentValue = this.value,
           matches = findMatchesInDataset(currentValue);
+
+    if (currentValue.length > 0) {
+      autocompleteWrapper.classList.add(autocompleteInputValueFilledClass);
+    } else {
+      autocompleteWrapper.classList.remove(autocompleteInputValueFilledClass);
+    }
+
     if (currentValue.length > 1) {
+      clearInputAutoFillText();
+      
       if (matches.length > 0) {
         buildAutocompleteResults(matches);
         showAutocomplete();
@@ -70,8 +88,20 @@ BC.Autocomplete = function() {
     }
   }
 
-  function autofillInput(text) {
+  function clearInput() {
+    clearInputAutoFillText();
+    triggerInput.value = '';
+    autocompleteWrapper.classList.remove(autocompleteInputValueFilledClass);
+    hideAutocomplete();
+  }
+
+  function clearInputAutoFillText() {
+    inputText.textContent = '';
+  }
+
+  function autofillInput(text, metadata) {
     triggerInput.value = text;
+    inputText.textContent = metadata;
   }
 
   function handleAutocompleteClick(e) {
@@ -82,8 +112,9 @@ BC.Autocomplete = function() {
     } else if (e.target.closest('.' + itemLinkClass) !== null) {
       link = e.target.closest('.' + itemLinkClass);
     }
-    const setNumber = link.querySelector('.' + itemLinkTextClass).textContent;
-    autofillInput(setNumber);
+    const setNumber = link.querySelector('.' + itemLinkTextClass).textContent,
+          metadata = link.querySelector('.' + itemMetadataClass).textContent;
+    autofillInput(setNumber, metadata);
     hideAutocomplete();
   }
 
@@ -94,17 +125,24 @@ BC.Autocomplete = function() {
     }
   }
 
+  function setEventListeners() {
+    autocomplete.addEventListener('click', handleAutocompleteClick);
+    triggerInput.addEventListener('keyup', triggerAutocomplete);
+    clearInputButton.addEventListener('click', clearInput);
+  }
+
 
   const initialize = function initialize(targetSelector, data) {
     updateDataset(data);
     triggerInput = document.querySelector(targetSelector);
-    console.log(triggerInput);
+    inputText = document.querySelector(inputTextSelector);
+    autocompleteWrapper = document.querySelector(autocompleteWrapperSelector);
+    clearInputButton = document.querySelector(clearInputSelector);
     autocomplete = triggerInput.parentNode.querySelector(autocompleteSelector);
-    autocomplete.addEventListener('click', handleAutocompleteClick);
-    triggerInput.addEventListener('keyup', triggerAutocomplete);
     itemTemplate = autocomplete.querySelector(`.${autocompleteItemTemplateClass}`);
     itemTemplate.classList.remove(autocompleteItemTemplateClass);
     itemTemplate.parentNode.removeChild(itemTemplate);
+    setEventListeners();
   }
 
   return {

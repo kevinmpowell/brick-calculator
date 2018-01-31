@@ -31,6 +31,37 @@
   .bc-autocomplete__list.bc-autocomplete--visible {
     display: block; }
 
+.bc-autocomplete__input-metadata {
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  display: none;
+  -webkit-box-pack: end;
+      -ms-flex-pack: end;
+          justify-content: flex-end;
+  position: absolute;
+  right: 8px;
+  -webkit-transform: translateY(-50%);
+          transform: translateY(-50%);
+  top: 50%;
+  width: calc(100% - 90px); }
+  .bc-autocomplete--with-value .bc-autocomplete__input-metadata {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex; }
+
+.bc-button.bc-autocomplete__clear-input {
+  display: none;
+  margin-left: 8px; }
+  .bc-autocomplete--with-value .bc-button.bc-autocomplete__clear-input {
+    display: block; }
+
+.bc-autocomplete__input-value {
+  color: #535555;
+  font-size: 12px;
+  pointer-events: none;
+  text-align: right; }
+
 .bc-autocomplete__item-link {
   -webkit-box-align: center;
       -ms-flex-align: center;
