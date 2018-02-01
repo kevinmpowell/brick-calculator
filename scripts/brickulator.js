@@ -238,7 +238,6 @@ BC.SetDatabase = function() {
         setDataCachedMessage = document.querySelector(".bc-lookup-set-data-status-message"),
         setDataCachedMessageHiddenClass = "bc-lookup-set-data-status-message--hidden";
   function saveSetDBToLocalStorage(rawJSON) {
-    localStorage.clear();
     localStorage.setItem("BCSetDB", rawJSON);
   }
 
@@ -252,6 +251,22 @@ BC.SetDatabase = function() {
     setDataCachedMessage.classList.remove(setDataCachedMessageHiddenClass);
   }
 
+  const getDecodedSetDatabase = function getDecodedSetDatabase() {
+    const encDB = BC.Utils.getFromLocalStorage("BCSetDB");
+    let response;
+    console.log(encDB);
+    if (encDB === null || typeof encDB === 'undefined') {
+      response = null
+    } else {
+      response = JSON.parse(atob(encDB));
+    }
+    return response;
+  }
+
+  const getSetDBDataRetrievedTimestamp = function getSetDBDataRetrievedTimestamp() {
+    return BC.Utils.getFromLocalStorage("BCSetDataRetrieved");
+  }
+
   const retrieveFreshSetData = function retrieveFreshSetData() {
     var request = new XMLHttpRequest();
 
@@ -263,20 +278,19 @@ BC.SetDatabase = function() {
       request.onload = function() {
         if (request.status >= 200 && request.status < 400) {
           // Success!
-          var data = JSON.parse(request.responseText);
-          data.dataRetrieved = Date.now();
-          saveSetDBToLocalStorage(JSON.stringify(data));
-          setDB = data;
+          BC.Utils.saveToLocalStorage("BCSetDB", request.responseText);
+          BC.Utils.saveToLocalStorage("BCSetDataRetrieved", Date.now());
+          setDB = getDecodedSetDatabase();
           BC.Autocomplete.updateDataset(setDB);
           hideLoadingSpinner();
-          updateSetDataTimestamp(setDB.dataRetrieved);
+          updateSetDataTimestamp(getSetDBDataRetrievedTimestamp());
           BC.Overlay.hide();
         } else {
           // We reached our target server, but it returned an error
           // alert("Could not retrieve set data - connection successful, but data failed");
           if (setDB !== null) {
             // If we've got localStorage data we're in good shape, move along
-            updateSetDataTimestamp(setDB.dataRetrieved);
+            updateSetDataTimestamp(getSetDBDataRetrievedTimestamp());
           } else {
             // No local storage data and data retrieval failed.
             BC.Overlay.show("Oh Noes!", "Something went wrong on our end. It's us, not you. We'll get on that right away.");
@@ -291,7 +305,7 @@ BC.SetDatabase = function() {
         // alert("Could not retrieve set data - connection error");
         if (setDB !== null) {
           // If we've got localStorage data we're in good shape, move along
-          updateSetDataTimestamp(setDB.dataRetrieved);
+          updateSetDataTimestamp(getSetDBDataRetrievedTimestamp());
         } else {
           // No local storage data and data retrieval failed.
           BC.Overlay.show("Oh Noes!", "Something went wrong on our end. It's us, not you. We'll get on that right away.");
@@ -305,7 +319,7 @@ BC.SetDatabase = function() {
       // console.log(e);
       if (setDB !== null) {
         // Something went wrong with the data request, but we've got localStorage data, so move along
-        updateSetDataTimestamp(setDB.dataRetrieved);
+        updateSetDataTimestamp(getSetDBDataRetrievedTimestamp());
         BC.Overlay.hide();
       }
       hideLoadingSpinner();
@@ -318,23 +332,24 @@ BC.SetDatabase = function() {
   }
 
   const initialize = function initialize() {
-    setDB = localStorage.getItem("BCSetDB");
-    setDB = JSON.parse(setDB);
+    setDB = getDecodedSetDatabase();
+    const dataRetrieved = getSetDBDataRetrievedTimestamp();
     if (setDB === null) {
       // If there's no data to work with, put up the overlay so the form can't be used
       BC.Overlay.show("Sit Tight.", "We're getting the freshest set values just for you!")
     }
     // if (1 === 1) {
-    if (setDB === null || typeof setDB.dataRetrieved === 'undefined' || (Date.now() - setDB.dataRetrieved) > oneHour ) { // If it's been more than an hour get fresh data
+    if (setDB === null || typeof dataRetrieved === 'undefined' || (Date.now() - dataRetrieved) > oneHour ) { // If it's been more than an hour get fresh data
       retrieveFreshSetData();
     } else {
-      updateSetDataTimestamp(setDB.dataRetrieved);
+      updateSetDataTimestamp(dataRetrieved);
     }
   }
 
   return {
     initialize: initialize,
-    retrieveFreshSetData: retrieveFreshSetData
+    retrieveFreshSetData: retrieveFreshSetData,
+    getDecodedSetDatabase: getDecodedSetDatabase
   };
 }();
 
