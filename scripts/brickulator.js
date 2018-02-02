@@ -28,7 +28,7 @@ BC.App = function() {
   let body;
 
   function setBodyClass(userState) {
-    const userSettings = BC.Utils.getFromLocalStorage(localStorageKeys.userSettings);
+    const userSettings = BC.App.getUserSettings();
 
     if (userState === 'signedIn') {
       body.classList.remove(userSignedOutClass);
@@ -42,6 +42,15 @@ BC.App = function() {
       body.classList.add(plusMemberSignedInClass);
     } else {
       body.classList.remove(plusMemberSignedInClass);
+    }
+  }
+
+  const getUserSettings = function getUserSettings() {
+    const userSettingsRaw = localStorage.getItem(localStorageKeys.userSettings);
+    if (userSettingsRaw === null) {
+      return null;
+    } else {
+      return JSON.parse(BC.Utils.stringDecoder(userSettingsRaw)).preferences;
     }
   }
 
@@ -70,7 +79,8 @@ BC.App = function() {
   return {
     initialize: initialize,
     signOut: signOut,
-    setSignedInState: setSignedInState
+    setSignedInState: setSignedInState,
+    getUserSettings: getUserSettings
   };
 }();
 
@@ -125,7 +135,18 @@ BC.API = function() {
 }();
 
 BC.Utils = function() {
-  const checkAuthTokenEndpoint = '/auth/validate-token';
+  const checkAuthTokenEndpoint = '/auth/validate-token',
+        encodedNumberMap = {
+          4: 1,
+          5: 2,
+          6: 3,
+          7: 4,
+          8: 5,
+          9: 6,
+          1: 7,
+          2: 8,
+          3: 9
+        };
 
   const formatCurrency = function formatCurrency(number) {
     return number.toLocaleString('en-US', { style: 'currency', currency: 'USD' });
@@ -219,6 +240,22 @@ BC.Utils = function() {
     element.dispatchEvent(event);
   }
 
+  const stringDecoder = function stringDecoder(s)
+   {
+      return (s ? s : this).split('').map(function(_)
+       {
+          if (_.match(/[1-9]/)) {
+            return _.replace(/[1-9]/g, function(match){
+              return encodedNumberMap[match];
+            });
+          }
+          if (!_.match(/[A-Za-z]/)) return _;
+          var c = Math.floor(_.charCodeAt(0) / 97);
+          var k = (_.toLowerCase().charCodeAt(0) - 83) % 26 || 26;
+          return String.fromCharCode(k + ((c == 0) ? 64 : 96));
+       }).join('');
+   }
+
   return {
     formatCurrency: formatCurrency,
     getBricklinkSellerFees: getBricklinkSellerFees,
@@ -228,7 +265,8 @@ BC.Utils = function() {
     getFromLocalStorage: getFromLocalStorage,
     removeFromLocalStorage: removeFromLocalStorage,
     validateAuthToken: validateAuthToken,
-    broadcastEvent: broadcastEvent
+    broadcastEvent: broadcastEvent,
+    stringDecoder: stringDecoder
   }
 }();
 
@@ -251,14 +289,14 @@ BC.SetDatabase = function() {
     setDataCachedMessage.classList.remove(setDataCachedMessageHiddenClass);
   }
 
+
   const getDecodedSetDatabase = function getDecodedSetDatabase() {
     const encDB = BC.Utils.getFromLocalStorage("BCSetDB");
     let response;
-    console.log(encDB);
     if (encDB === null || typeof encDB === 'undefined') {
       response = null
     } else {
-      response = JSON.parse(atob(encDB));
+      response = JSON.parse(BC.Utils.stringDecoder(encDB));
     }
     return response;
   }
@@ -278,7 +316,7 @@ BC.SetDatabase = function() {
       request.onload = function() {
         if (request.status >= 200 && request.status < 400) {
           // Success!
-          BC.Utils.saveToLocalStorage("BCSetDB", request.responseText);
+          BC.Utils.saveToLocalStorage("BCSetDB", JSON.stringify(request.responseText));
           BC.Utils.saveToLocalStorage("BCSetDataRetrieved", Date.now());
           setDB = getDecodedSetDatabase();
           BC.Autocomplete.updateDataset(setDB);

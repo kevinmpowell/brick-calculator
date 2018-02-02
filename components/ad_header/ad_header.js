@@ -13,7 +13,7 @@ BC.AdHeader = function() {
   }
 
   function setAdDisplay() {
-    const userSettings = BC.Utils.getFromLocalStorage(localStorageKeys.userSettings);
+    const userSettings = BC.App.getUserSettings();
     if (!userSettings || !userSettings.plus_member) {
       showAds();
     } else {

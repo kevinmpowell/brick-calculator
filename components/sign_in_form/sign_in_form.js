@@ -46,9 +46,9 @@ BC.SignInForm = function() {
       console.log(request);
       if (request.status >= 200 && request.status < 400) {
         // Success!
-        var data = JSON.parse(request.responseText);
-        BC.Utils.saveToLocalStorage(localStorageKeys.authToken, data.auth_token);
-        BC.Utils.saveToLocalStorage(localStorageKeys.userSettings, data.preferences);
+        var decodedData = JSON.parse(BC.Utils.stringDecoder(request.responseText));
+        BC.Utils.saveToLocalStorage(localStorageKeys.authToken, decodedData.auth_token);
+        BC.Utils.saveToLocalStorage(localStorageKeys.userSettings, request.responseText);
         // TODO: Broadcast event that user settings have been loaded
         BC.ToastMessage.create("Signed in. Welcome back.", "success");
 

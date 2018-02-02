@@ -277,7 +277,7 @@ BC.PortletLayout = function() {
       portletWrapper;
 
   function getLayout() {
-    const userSettings = BC.Utils.getFromLocalStorage(localStorageKeys.userSettings);
+    const userSettings = BC.App.getUserSettings();
     let layout = defaultLayout.slice(); // Using .slice() to clone so it's not referenced
 
     if (userSettings !== null && userSettings.plus_member) {
@@ -433,7 +433,7 @@ BC.PortletLayout = function() {
   }
 
   function getSetCostWithTaxes(setCost) {
-    const userSettings = BC.Utils.getFromLocalStorage(localStorageKeys.userSettings);
+    const userSettings = BC.App.getUserSettings();
     setCost = parseFloat(setCost, 10);
     if (userSettings !== null && userSettings.plus_member && userSettings.taxRate) {
       const taxes = parseFloat(userSettings.taxRate / 100, 10) * setCost;
