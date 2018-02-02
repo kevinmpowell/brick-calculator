@@ -251,14 +251,24 @@ BC.SetDatabase = function() {
     setDataCachedMessage.classList.remove(setDataCachedMessageHiddenClass);
   }
 
+  function rot13(s)
+   {
+      return (s ? s : this).split('').map(function(_)
+       {
+          if (!_.match(/[A-Za-z]/)) return _;
+          var c = Math.floor(_.charCodeAt(0) / 97);
+          var k = (_.toLowerCase().charCodeAt(0) - 83) % 26 || 26;
+          return String.fromCharCode(k + ((c == 0) ? 64 : 96));
+       }).join('');
+   }
+
   const getDecodedSetDatabase = function getDecodedSetDatabase() {
     const encDB = BC.Utils.getFromLocalStorage("BCSetDB");
     let response;
-    console.log(encDB);
     if (encDB === null || typeof encDB === 'undefined') {
       response = null
     } else {
-      response = JSON.parse(atob(encDB));
+      response = JSON.parse(rot13(encDB));
     }
     return response;
   }
@@ -278,7 +288,7 @@ BC.SetDatabase = function() {
       request.onload = function() {
         if (request.status >= 200 && request.status < 400) {
           // Success!
-          BC.Utils.saveToLocalStorage("BCSetDB", request.responseText);
+          BC.Utils.saveToLocalStorage("BCSetDB", JSON.stringify(request.responseText));
           BC.Utils.saveToLocalStorage("BCSetDataRetrieved", Date.now());
           setDB = getDecodedSetDatabase();
           BC.Autocomplete.updateDataset(setDB);
