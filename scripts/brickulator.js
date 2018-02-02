@@ -236,7 +236,18 @@ BC.SetDatabase = function() {
   const loadingSpinner = document.querySelector(".bc-spinner--loading-set-data"),
         loadingSpinnerVisibleClass = "bc-spinner--visible",
         setDataCachedMessage = document.querySelector(".bc-lookup-set-data-status-message"),
-        setDataCachedMessageHiddenClass = "bc-lookup-set-data-status-message--hidden";
+        setDataCachedMessageHiddenClass = "bc-lookup-set-data-status-message--hidden",
+        encodedNumberMap = {
+          4: 1,
+          5: 2,
+          6: 3,
+          7: 4,
+          8: 5,
+          9: 6,
+          1: 7,
+          2: 8,
+          3: 9
+        };
   function saveSetDBToLocalStorage(rawJSON) {
     localStorage.setItem("BCSetDB", rawJSON);
   }
@@ -255,6 +266,11 @@ BC.SetDatabase = function() {
    {
       return (s ? s : this).split('').map(function(_)
        {
+          if (_.match(/[1-9]/)) {
+            return _.replace(/[1-9]/g, function(match){
+              return encodedNumberMap[match];
+            });
+          }
           if (!_.match(/[A-Za-z]/)) return _;
           var c = Math.floor(_.charCodeAt(0) / 97);
           var k = (_.toLowerCase().charCodeAt(0) - 83) % 26 || 26;
@@ -268,6 +284,7 @@ BC.SetDatabase = function() {
     if (encDB === null || typeof encDB === 'undefined') {
       response = null
     } else {
+      console.log(rot13(encDB));
       response = JSON.parse(rot13(encDB));
     }
     return response;
