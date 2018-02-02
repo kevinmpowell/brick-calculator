@@ -28,7 +28,7 @@ BC.App = function() {
   let body;
 
   function setBodyClass(userState) {
-    const userSettings = BC.Utils.getFromLocalStorage(localStorageKeys.userSettings);
+    const userSettings = BC.App.getUserSettings();
 
     if (userState === 'signedIn') {
       body.classList.remove(userSignedOutClass);
@@ -42,6 +42,15 @@ BC.App = function() {
       body.classList.add(plusMemberSignedInClass);
     } else {
       body.classList.remove(plusMemberSignedInClass);
+    }
+  }
+
+  const getUserSettings = function getUserSettings() {
+    const userSettingsRaw = localStorage.getItem(localStorageKeys.userSettings);
+    if (userSettingsRaw === null) {
+      return null;
+    } else {
+      return JSON.parse(BC.Utils.stringDecoder(userSettingsRaw)).preferences;
     }
   }
 
@@ -70,7 +79,8 @@ BC.App = function() {
   return {
     initialize: initialize,
     signOut: signOut,
-    setSignedInState: setSignedInState
+    setSignedInState: setSignedInState,
+    getUserSettings: getUserSettings
   };
 }();
 
@@ -125,7 +135,18 @@ BC.API = function() {
 }();
 
 BC.Utils = function() {
-  const checkAuthTokenEndpoint = '/auth/validate-token';
+  const checkAuthTokenEndpoint = '/auth/validate-token',
+        encodedNumberMap = {
+          4: 1,
+          5: 2,
+          6: 3,
+          7: 4,
+          8: 5,
+          9: 6,
+          1: 7,
+          2: 8,
+          3: 9
+        };
 
   const formatCurrency = function formatCurrency(number) {
     return number.toLocaleString('en-US', { style: 'currency', currency: 'USD' });
@@ -219,50 +240,7 @@ BC.Utils = function() {
     element.dispatchEvent(event);
   }
 
-  return {
-    formatCurrency: formatCurrency,
-    getBricklinkSellerFees: getBricklinkSellerFees,
-    getBrickOwlSellerFees: getBrickOwlSellerFees,
-    getEbaySellerFees: getEbaySellerFees,
-    saveToLocalStorage: saveToLocalStorage,
-    getFromLocalStorage: getFromLocalStorage,
-    removeFromLocalStorage: removeFromLocalStorage,
-    validateAuthToken: validateAuthToken,
-    broadcastEvent: broadcastEvent
-  }
-}();
-
-BC.SetDatabase = function() {
-  const loadingSpinner = document.querySelector(".bc-spinner--loading-set-data"),
-        loadingSpinnerVisibleClass = "bc-spinner--visible",
-        setDataCachedMessage = document.querySelector(".bc-lookup-set-data-status-message"),
-        setDataCachedMessageHiddenClass = "bc-lookup-set-data-status-message--hidden",
-        encodedNumberMap = {
-          4: 1,
-          5: 2,
-          6: 3,
-          7: 4,
-          8: 5,
-          9: 6,
-          1: 7,
-          2: 8,
-          3: 9
-        };
-  function saveSetDBToLocalStorage(rawJSON) {
-    localStorage.setItem("BCSetDB", rawJSON);
-  }
-
-  function showLoadingSpinner() {
-    loadingSpinner.classList.add(loadingSpinnerVisibleClass);
-    setDataCachedMessage.classList.add(setDataCachedMessageHiddenClass);
-  }
-
-  function hideLoadingSpinner() {
-    loadingSpinner.classList.remove(loadingSpinnerVisibleClass);
-    setDataCachedMessage.classList.remove(setDataCachedMessageHiddenClass);
-  }
-
-  function rot13(s)
+  const stringDecoder = function stringDecoder(s)
    {
       return (s ? s : this).split('').map(function(_)
        {
@@ -278,14 +256,47 @@ BC.SetDatabase = function() {
        }).join('');
    }
 
+  return {
+    formatCurrency: formatCurrency,
+    getBricklinkSellerFees: getBricklinkSellerFees,
+    getBrickOwlSellerFees: getBrickOwlSellerFees,
+    getEbaySellerFees: getEbaySellerFees,
+    saveToLocalStorage: saveToLocalStorage,
+    getFromLocalStorage: getFromLocalStorage,
+    removeFromLocalStorage: removeFromLocalStorage,
+    validateAuthToken: validateAuthToken,
+    broadcastEvent: broadcastEvent,
+    stringDecoder: stringDecoder
+  }
+}();
+
+BC.SetDatabase = function() {
+  const loadingSpinner = document.querySelector(".bc-spinner--loading-set-data"),
+        loadingSpinnerVisibleClass = "bc-spinner--visible",
+        setDataCachedMessage = document.querySelector(".bc-lookup-set-data-status-message"),
+        setDataCachedMessageHiddenClass = "bc-lookup-set-data-status-message--hidden";
+  function saveSetDBToLocalStorage(rawJSON) {
+    localStorage.setItem("BCSetDB", rawJSON);
+  }
+
+  function showLoadingSpinner() {
+    loadingSpinner.classList.add(loadingSpinnerVisibleClass);
+    setDataCachedMessage.classList.add(setDataCachedMessageHiddenClass);
+  }
+
+  function hideLoadingSpinner() {
+    loadingSpinner.classList.remove(loadingSpinnerVisibleClass);
+    setDataCachedMessage.classList.remove(setDataCachedMessageHiddenClass);
+  }
+
+
   const getDecodedSetDatabase = function getDecodedSetDatabase() {
     const encDB = BC.Utils.getFromLocalStorage("BCSetDB");
     let response;
     if (encDB === null || typeof encDB === 'undefined') {
       response = null
     } else {
-      console.log(rot13(encDB));
-      response = JSON.parse(rot13(encDB));
+      response = JSON.parse(BC.Utils.stringDecoder(encDB));
     }
     return response;
   }

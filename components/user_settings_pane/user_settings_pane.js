@@ -45,7 +45,7 @@ BC.UserSettingsPane = function() {
   }
 
   const update = function update() {
-    const userSettings = BC.Utils.getFromLocalStorage(localStorageKeys.userSettings);
+    const userSettings = BC.App.getUserSettings();
     updateTaxesSetting(userSettings);
   }
 

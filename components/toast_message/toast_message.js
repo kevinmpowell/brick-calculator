@@ -14,9 +14,12 @@ BC.ToastMessage = function() {
   let template,
       wrapper;
 
-  const handleWrapperClick = function handleWrapperClick(e) {
+  const handleToastMessageClick = function handleToastMessageClick(e) {
     if (e.target.classList.contains('bc-toast-message__dismiss')) {
-      const toastMessage = e.target.closest(messageSelector);
+      const toastMessage = this;
+      if (toastMessage.timeout) {
+        clearTimeout(toastMessage.timeout);
+      }
       removeMessage(toastMessage);
     }
   }
@@ -25,16 +28,11 @@ BC.ToastMessage = function() {
     toastMessage.parentNode.removeChild(toastMessage);
   }
 
-  function setEventListeners() {
-    wrapper.addEventListener("click", handleWrapperClick);
-  }
-
   const initialize = function initialize() {
     wrapper = document.querySelector(wrapperSelector);
     template = document.getElementById(templateId);
     template.removeAttribute("id");
     template.parentNode.removeChild(template);
-    setEventListeners();
   }
 
   const create = function create(content, type, timeout, dismissible) {
@@ -59,9 +57,10 @@ BC.ToastMessage = function() {
     }
 
     wrapper.appendChild(toastMessage);
+    toastMessage.addEventListener("click", handleToastMessageClick);
 
     if (timeout) {
-      setTimeout(function(){
+      toastMessage.timeout = setTimeout(function(){
         removeMessage(toastMessage);
       }, timeout);
     }
