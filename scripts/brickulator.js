@@ -6,6 +6,8 @@ const ebaySellingFeePercentage = .13, // TODO: Get this from a lookup
       oneMinute = 60000, // in milliseconds
       threeMinutes = oneMinute * 3, // in milliseconds
       oneHour = oneMinute * 60,
+      currentYear = (new Date()).getFullYear(),
+      numberOfYearsToRetrieve = 5,
       currentDomain = window.location.hostname,
       localStorageKeys = {
         authToken: 'bcUserAuthToken',
@@ -305,12 +307,14 @@ BC.SetDatabase = function() {
     return BC.Utils.getFromLocalStorage("BCSetDataRetrieved");
   }
 
-  const retrieveFreshSetData = function retrieveFreshSetData() {
+  const retrieveFreshSetData = function retrieveFreshSetData(year) {
+    year = typeof year === 'undefined' ? currentYear : year;
+    console.log("Retrieving set data for " + year);
     var request = new XMLHttpRequest();
 
     showLoadingSpinner();
     try {
-      request.open('GET', apiDomain + '/lego_sets', true);
+      request.open('GET', apiDomain + '/lego_sets?start_year=' + year, true);
       request.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
 
       request.onload = function() {
@@ -320,9 +324,16 @@ BC.SetDatabase = function() {
           BC.Utils.saveToLocalStorage("BCSetDataRetrieved", Date.now());
           setDB = getDecodedSetDatabase();
           BC.Autocomplete.updateDataset(setDB);
-          hideLoadingSpinner();
-          updateSetDataTimestamp(getSetDBDataRetrievedTimestamp());
           BC.Overlay.hide();
+
+          if (!((year - 1) <= (currentYear - numberOfYearsToRetrieve))) {
+            // Retrieve another set of data starting at one year back, call recursively for numberOfYearsToRetrieve, for example first get 2018 data, then 2017-2018 data, then 2016-2018 data, replacing local storage each time
+            const nextYear = year - 1;
+            retrieveFreshSetData(nextYear);
+          } else {
+            hideLoadingSpinner();
+            updateSetDataTimestamp(getSetDBDataRetrievedTimestamp());
+          }
         } else {
           // We reached our target server, but it returned an error
           // alert("Could not retrieve set data - connection successful, but data failed");
