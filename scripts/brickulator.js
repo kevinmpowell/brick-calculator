@@ -309,7 +309,6 @@ BC.SetDatabase = function() {
 
   const retrieveFreshSetData = function retrieveFreshSetData(year) {
     year = typeof year === 'undefined' ? currentYear : year;
-    console.log("Retrieving set data for " + year);
     var request = new XMLHttpRequest();
 
     showLoadingSpinner();
