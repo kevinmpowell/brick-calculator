@@ -56,14 +56,25 @@ BC.App = function() {
     }
   }
 
+  const clearUserSettings = function clearUserSettings() {
+    localStorage.removeItem(localStorageKeys.userSettings);
+  }
+
+  const clearAuthToken = function clearAuthToken() {
+    localStorage.removeItem(localStorageKeys.authToken);
+  }
+
   const setSignedInState = function setSignedInState() {
-    BC.Utils.validateAuthToken().then(function(){
+    BC.Utils.validateAuthToken()
+    .then(function(){
       setBodyClass('signedIn');
       BC.Utils.broadcastEvent(customEvents.userSignedIn);
-    }, function() {
+    })
+    .catch(function() {
       setBodyClass('signedOut');
       BC.Utils.broadcastEvent(customEvents.userSignedOut);
-      // BC.Overlay.show("Not currently signed in", "This is an annoying message and should not be shown on page load.", true);
+      clearAuthToken();
+      clearUserSettings();
     });
   }
 
@@ -223,7 +234,7 @@ BC.Utils = function() {
     if (storedToken !== null) {
       return BC.API.makeRequest({
           method: 'GET', 
-          url: '/auth/validate-token', 
+          url: checkAuthTokenEndpoint, 
           headers:{
             'Authorization': storedToken
           }});
