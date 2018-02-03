@@ -13,7 +13,7 @@
     {% call form_field_group() %}
       <label class="bc-form-label" for="bc-set-lookup-form__set-number-input">Set Number</label>
       {% call autocomplete() %}
-        <input autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" name="setNumber" id="bc-set-lookup-form__set-number-input" type="text" pattern="[0-9]*">
+        {{ form_input(id="bc-set-lookup-form__set-number-input", name="setNumber", clear_button=true, pattern="[0-9]*") }}
       {% endcall %}
     {% endcall %}
 
@@ -24,12 +24,7 @@
           (<span class="bc-set-lookup-form__tax-amount"></span>% sales tax will be added)
         </span>
       </label>
-      <div class="bc-form-input-wrap">
-        <div class="bc-form-input-prefix">
-          $
-        </div>
-        <input step="0.01" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" type="number" id="bc-set-lookup-form__purchase-price-input" name="purchasePrice">
-      </div>
+        {{ form_input(step="0.01", type="number", id="bc-set-lookup-form__purchase-price-input", name="purchasePrice", clear_button=true, prefix="$") }}
     {% endcall %}
 
     {{ button(text="Brickulate!", type="submit", class="bc-button--primary") }}

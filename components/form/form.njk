@@ -23,8 +23,19 @@
               disabled=false,
               placeholder,
               wrapper_class,
-              tabindex) %}
-  {% if prefix or suffix %}
+              tabindex,
+              clear_button) %}
+  
+  {% if clear_button %}
+    {% if wrapper_class %}
+      {% set wrapper_class = wrapper_class + ' bc-form-input-wrap--has-clear-button' %}
+    {% else %}
+      {% set wrapper_class = 'bc-form-input-wrap--has-clear-button' %}
+    {% endif %}
+  {% endif %}
+
+
+  {% if prefix or suffix or clear_button %}
     <div class="bc-form-input-wrap{{ ' ' + wrapper_class if wrapper_class }}">
   {% endif %}
     {% if prefix %}
@@ -32,6 +43,11 @@
     {% endif %}
     {% if suffix %}
       <div class="bc-form-input-suffix">{{ suffix }}</div>
+    {% endif %}
+    {% if clear_button %}
+      <div class="bc-form-input__clear-button-touch-wrap">
+        {{ button(class="bc-form-input__clear-button", text="<span class='bc-form-input__clear-button-text'>&times;</span>") }}
+      </div>
     {% endif %}
       <input type="{{ type }}" 
               class="bc-form-input{{ ' ' + class if class }}"
@@ -57,7 +73,7 @@
                 tabindex="{{ tabindex }}"
               {% endif %}
               >
-  {% if prefix or suffix %}
+  {% if prefix or suffix or clear_button %}
     </div>
   {% endif %}
 {% endmacro %}

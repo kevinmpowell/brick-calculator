@@ -15,6 +15,7 @@ const ebaySellingFeePercentage = .13, // TODO: Get this from a lookup
       },
       apiMapping = {
         'localhost': 'http://localhost:5000',
+        '10.0.1.15': 'http://10.0.1.15:5000',
         'kevinmpowell.github.io': 'https://brickulator-api.herokuapp.com'
       },
       apiDomain = apiMapping[currentDomain],
@@ -56,14 +57,25 @@ BC.App = function() {
     }
   }
 
+  const clearUserSettings = function clearUserSettings() {
+    localStorage.removeItem(localStorageKeys.userSettings);
+  }
+
+  const clearAuthToken = function clearAuthToken() {
+    localStorage.removeItem(localStorageKeys.authToken);
+  }
+
   const setSignedInState = function setSignedInState() {
-    BC.Utils.validateAuthToken().then(function(){
+    BC.Utils.validateAuthToken()
+    .then(function(){
       setBodyClass('signedIn');
       BC.Utils.broadcastEvent(customEvents.userSignedIn);
-    }, function() {
+    })
+    .catch(function() {
       setBodyClass('signedOut');
       BC.Utils.broadcastEvent(customEvents.userSignedOut);
-      // BC.Overlay.show("Not currently signed in", "This is an annoying message and should not be shown on page load.", true);
+      clearAuthToken();
+      clearUserSettings();
     });
   }
 
@@ -223,7 +235,7 @@ BC.Utils = function() {
     if (storedToken !== null) {
       return BC.API.makeRequest({
           method: 'GET', 
-          url: '/auth/validate-token', 
+          url: checkAuthTokenEndpoint, 
           headers:{
             'Authorization': storedToken
           }});
@@ -473,6 +485,7 @@ ready(function(){
   BC.UserSettingsPane.initialize();
   BC.SignInForm.initialize();
   BC.SetLookupForm.initialize();
+  BC.FormInput.initialize();
   BC.AdHeader.initialize();
   BC.ToastMessage.initialize();
   BC.NewsletterSignUpForm.initialize();
