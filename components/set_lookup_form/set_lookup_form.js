@@ -16,6 +16,7 @@ BC.SetLookupForm = function() {
   function handleFormSubmit(e) {
     e.preventDefault();
     BC.Values.calculate(setNumber.value, purchasePrice.value);
+    document.activeElement.blur();
   }
 
   function setTaxRateDisplay(userSettings) {

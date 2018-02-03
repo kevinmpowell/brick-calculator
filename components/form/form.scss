@@ -21,7 +21,7 @@ $bc-form-field-height-s: 36px;
 }
 
 .bc-form-input--size-m {
-  font-size: $brickulator-font-size-m;
+  font-size: $brickulator-font-size-l; // Keep this 16px or higher or iOS will start screen zooming
   height: auto;
   padding: $brickulator-space-inset-1-half-x;
 }

@@ -32,6 +32,7 @@ BC.SignInForm = function() {
 
   function handleFormSignIn(e) {
     e.preventDefault();
+    document.activeElement.blur();
     disableForm();
     var request = new XMLHttpRequest();
     const apiDomain = apiMapping[currentDomain],

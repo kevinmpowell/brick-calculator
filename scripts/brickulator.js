@@ -436,10 +436,12 @@ BC.Values = function() {
 
   function showValues() {
     document.body.classList.add("bc--show-values");
+    window.scrollTo(0, 0); // Scroll page to top
   }
 
   function hideValues() {
     document.body.classList.remove("bc--show-values");
+    window.scrollTo(0, 0); // Scroll page to top
   }
 
   function handleShowLookupFormClick(e) {
