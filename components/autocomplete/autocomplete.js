@@ -8,7 +8,6 @@ BC.Autocomplete = function() {
         itemLinkTextClass = "bc-autocomplete__item-link-text",
         itemMetadataClass = "bc-autocomplete__item-metadata",
         inputTextSelector = ".bc-autocomplete__input-value",
-        clearInputSelector = ".bc-autocomplete__clear-input",
         autocompleteInputValueFilledClass = "bc-autocomplete--with-value";
 
   let dataset,
@@ -17,7 +16,6 @@ BC.Autocomplete = function() {
       autocompleteWrapper,
       itemTemplate,
       triggerInput,
-      clearInputButton,
       inputText;
 
   function showAutocomplete() {
@@ -67,11 +65,11 @@ BC.Autocomplete = function() {
   function triggerAutocomplete() {
     const currentValue = this.value,
           matches = findMatchesInDataset(currentValue);
-
     if (currentValue.length > 0) {
       autocompleteWrapper.classList.add(autocompleteInputValueFilledClass);
     } else {
       autocompleteWrapper.classList.remove(autocompleteInputValueFilledClass);
+      clearInputAutoFillText();
     }
 
     if (currentValue.length > 1) {
@@ -88,13 +86,6 @@ BC.Autocomplete = function() {
     }
   }
 
-  function clearInput() {
-    clearInputAutoFillText();
-    triggerInput.value = '';
-    autocompleteWrapper.classList.remove(autocompleteInputValueFilledClass);
-    hideAutocomplete();
-  }
-
   function clearInputAutoFillText() {
     inputText.textContent = '';
   }
@@ -105,6 +96,7 @@ BC.Autocomplete = function() {
   }
 
   function handleAutocompleteClick(e) {
+    console.log("AC CLICK");
     e.preventDefault();
     let link;
     if (e.target.classList.contains(itemLinkClass)) {
@@ -126,9 +118,9 @@ BC.Autocomplete = function() {
   }
 
   function setEventListeners() {
-    autocomplete.addEventListener('click', handleAutocompleteClick);
     triggerInput.addEventListener('keyup', triggerAutocomplete);
-    clearInputButton.addEventListener('click', clearInput);
+    // triggerInput.addEventListener('change', triggerAutocomplete);
+    autocomplete.addEventListener('click', handleAutocompleteClick);
   }
 
 
@@ -137,8 +129,7 @@ BC.Autocomplete = function() {
     triggerInput = document.querySelector(targetSelector);
     inputText = document.querySelector(inputTextSelector);
     autocompleteWrapper = document.querySelector(autocompleteWrapperSelector);
-    clearInputButton = document.querySelector(clearInputSelector);
-    autocomplete = triggerInput.parentNode.querySelector(autocompleteSelector);
+    autocomplete = autocompleteWrapper.querySelector(autocompleteSelector);
     itemTemplate = autocomplete.querySelector(`.${autocompleteItemTemplateClass}`);
     itemTemplate.classList.remove(autocompleteItemTemplateClass);
     itemTemplate.parentNode.removeChild(itemTemplate);

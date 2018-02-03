@@ -1,5 +1,6 @@
 .bc-autocomplete {
   position: relative;
+  z-index: $brickulator-z-index-mountain;
 }
 
 .bc-autocomplete__list {
@@ -9,12 +10,12 @@
   display: none;
   left: 0;
   list-style: none;
-  padding: 0;
   margin: 0;
+  padding: 0;
   position: absolute;
   top: 100%;
   width: 100%;
-  
+
   &.bc-autocomplete--visible {
     display: block;
   }
@@ -24,6 +25,8 @@
   align-items: center;
   display: none;
   justify-content: flex-end;
+  pointer-events: none;
+  padding-right: 2em;
   position: absolute;
   right: $brickulator-space-generic-1-x;
   transform: translateY(-50%);
@@ -48,7 +51,6 @@
 .bc-autocomplete__input-value {
   color: $brickulator-color-text-on-light-secondary;
   font-size: $brickulator-font-size-s;
-  pointer-events: none;
   text-align: right;
 }
 

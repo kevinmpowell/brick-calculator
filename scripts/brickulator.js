@@ -15,6 +15,7 @@ const ebaySellingFeePercentage = .13, // TODO: Get this from a lookup
       },
       apiMapping = {
         'localhost': 'http://localhost:5000',
+        '10.0.1.15': 'http://10.0.1.15:5000',
         'kevinmpowell.github.io': 'https://brickulator-api.herokuapp.com'
       },
       apiDomain = apiMapping[currentDomain],
@@ -484,6 +485,7 @@ ready(function(){
   BC.UserSettingsPane.initialize();
   BC.SignInForm.initialize();
   BC.SetLookupForm.initialize();
+  BC.FormInput.initialize();
   BC.AdHeader.initialize();
   BC.ToastMessage.initialize();
   BC.NewsletterSignUpForm.initialize();

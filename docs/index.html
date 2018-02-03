@@ -138,11 +138,23 @@
       
   <div class="bc-autocomplete">
     
-        <input autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" name="setNumber" id="bc-set-lookup-form__set-number-input" type="text" pattern="[0-9]*">
+        
+  
+  
+    
       
-    <span class="bc-autocomplete__input-metadata">
-      <span class="bc-autocomplete__input-value"></span>
-      
+    
+  
+
+
+  
+    <div class="bc-form-input-wrap bc-form-input-wrap--has-clear-button">
+  
+    
+    
+    
+      <div class="bc-form-input__clear-button-touch-wrap">
+        
   
   
 
@@ -150,10 +162,35 @@
     
      type="button" 
     
-    class="bc-button bc-button--size-s bc-autocomplete__clear-input">
-    &times;
+    class="bc-button bc-form-input__clear-button">
+    <span class='bc-form-input__clear-button-text'>&times;</span>
   </button>
 
+      </div>
+    
+      <input type="text" 
+              class="bc-form-input"
+              id="bc-set-lookup-form__set-number-input" 
+              name="bc-set-lookup-form__set-number-input"
+              autocomplete="off" 
+              autocorrect="off" 
+              autocapitalize="off" 
+              spellcheck="false"
+              
+              pattern="[0-9]*"
+              
+              
+              
+              
+              
+              >
+  
+    </div>
+  
+
+      
+    <span class="bc-autocomplete__input-metadata">
+      <span class="bc-autocomplete__input-value"></span>
     </span>
     <ul class="bc-autocomplete__list">
       <li class="bc-autocomplete__item bc-autocomplete__item--template">
@@ -180,12 +217,58 @@
           (<span class="bc-set-lookup-form__tax-amount"></span>% sales tax will be added)
         </span>
       </label>
-      <div class="bc-form-input-wrap">
-        <div class="bc-form-input-prefix">
-          $
-        </div>
-        <input step="0.01" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" type="number" id="bc-set-lookup-form__purchase-price-input" name="purchasePrice">
+        
+  
+  
+    
+      
+    
+  
+
+
+  
+    <div class="bc-form-input-wrap bc-form-input-wrap--has-clear-button">
+  
+    
+      <div class="bc-form-input-prefix">$</div>
+    
+    
+    
+      <div class="bc-form-input__clear-button-touch-wrap">
+        
+  
+  
+
+  <button
+    
+     type="button" 
+    
+    class="bc-button bc-form-input__clear-button">
+    <span class='bc-form-input__clear-button-text'>&times;</span>
+  </button>
+
       </div>
+    
+      <input type="number" 
+              class="bc-form-input"
+              id="bc-set-lookup-form__purchase-price-input" 
+              name="bc-set-lookup-form__purchase-price-input"
+              autocomplete="off" 
+              autocorrect="off" 
+              autocapitalize="off" 
+              spellcheck="false"
+              
+              
+              step="0.01"
+              
+              
+              
+              
+              >
+  
+    </div>
+  
+
     
   </div>
 
@@ -219,6 +302,10 @@
         
         
   
+  
+
+
+  
     <div class="bc-form-input-wrap bc-form-input-wrap--size-m bc-form-input-wrap--button-suffix">
   
     
@@ -235,6 +322,7 @@
     Subscribe
   </button>
 </div>
+    
     
       <input type="email" 
               class="bc-form-input bc-newsletter-sign-up-form__email-address bc-form-input--size-m"
@@ -378,6 +466,11 @@
 
       
   
+  
+
+
+  
+    
     
     
       <input type="email" 
@@ -410,6 +503,11 @@
 
       
   
+  
+
+
+  
+    
     
     
       <input type="password" 
@@ -507,11 +605,16 @@
 
         
   
+  
+
+
+  
     <div class="bc-form-input-wrap">
   
     
     
       <div class="bc-form-input-suffix">%</div>
+    
     
       <input type="number" 
               class="bc-form-input"
