@@ -1,5 +1,6 @@
 'use strict';
 var BC = BC || {};
+const brickulatorAPIVersionNumber = '1.0.0';
 
 const ebaySellingFeePercentage = .13, // TODO: Get this from a lookup
       oneMinute = 60000, // in milliseconds
@@ -11,7 +12,9 @@ const ebaySellingFeePercentage = .13, // TODO: Get this from a lookup
       localStorageKeys = {
         authToken: 'bcUserAuthToken',
         userSettings: 'bcUserSettings',
-        setDB: 'BCSetDB'
+        setDB: 'BCSetDB',
+        setDBTimestamp: 'BCSetDataRetrieved',
+        apiVersionNumber: 'BCSetDBVersionNumber'
       },
       apiMapping = {
         'localhost': 'http://localhost:5000',
@@ -303,6 +306,16 @@ BC.SetDatabase = function() {
     setDataCachedMessage.classList.remove(setDataCachedMessageHiddenClass);
   }
 
+  function clearLocalSetDatabase() {
+    localStorage.removeItem(localStorageKeys.setDB);
+    localStorage.removeItem(localStorageKeys.setDBTimestamp);
+    localStorage.removeItem(localStorageKeys.apiVersionNumber);
+  }
+
+  function getEncodedSetDatabase() {
+    return BC.Utils.getFromLocalStorage(localStorageKeys.setDB);
+  }
+
   const getDecodedSetDatabase = function getDecodedSetDatabase() {
     const encDB = localStorage.getItem(localStorageKeys.setDB);
     let response;
@@ -314,12 +327,8 @@ BC.SetDatabase = function() {
     return response;
   }
 
-  function getEncodedSetDatabase() {
-    return BC.Utils.getFromLocalStorage(localStorageKeys.setDB);
-  }
-
   const getSetDBDataRetrievedTimestamp = function getSetDBDataRetrievedTimestamp() {
-    return BC.Utils.getFromLocalStorage("BCSetDataRetrieved");
+    return BC.Utils.getFromLocalStorage(localStorageKeys.setDBTimestamp);
   }
 
   const retrieveFreshSetData = function retrieveFreshSetData(year) {
@@ -358,7 +367,7 @@ BC.SetDatabase = function() {
             retrieveFreshSetData(nextYear);
           } else {
             // Done, we've got all the data we're going to pull from the server
-            BC.Utils.saveToLocalStorage("BCSetDataRetrieved", Date.now());
+            BC.Utils.saveToLocalStorage(localStorageKeys.setDBTimestamp, Date.now());
             hideLoadingSpinner();
             updateSetDataTimestamp(getSetDBDataRetrievedTimestamp());
           }
@@ -408,7 +417,17 @@ BC.SetDatabase = function() {
     timeago().render(document.querySelectorAll('.bc-lookup-set-data-timestamp'));
   }
 
+  function checkforDataApiVersionChange() {
+    const versionNumber = BC.Utils.getFromLocalStorage(localStorageKeys.apiVersionNumber);
+    if (versionNumber === null || versionNumber !== brickulatorAPIVersionNumber) {
+      // The version number has changed, we need to clear the locally cached setDB data
+      clearLocalSetDatabase();
+      BC.Utils.saveToLocalStorage(localStorageKeys.apiVersionNumber, brickulatorAPIVersionNumber);
+    }
+  }
+
   const initialize = function initialize() {
+    checkforDataApiVersionChange();
     const setDB = BC.SetDatabase.getDecodedSetDatabase();
     const dataRetrieved = getSetDBDataRetrievedTimestamp();
     if (setDB === null) {
