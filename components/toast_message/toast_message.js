@@ -35,7 +35,7 @@ BC.ToastMessage = function() {
     template.parentNode.removeChild(template);
   }
 
-  const create = function create(content, type, timeout, dismissible) {
+  const create = function create(content, type, timeout, dismissible, callback) {
     dismissible = typeof dismissibile === 'undefined' ? true : dismissible;
     timeout = typeof timeout === 'undefined' ? 5000 : timeout;
     let toastMessage = template.cloneNode(true),
@@ -58,6 +58,9 @@ BC.ToastMessage = function() {
 
     wrapper.appendChild(toastMessage);
     toastMessage.addEventListener("click", handleToastMessageClick);
+    if (callback) {
+      toastMessage.addEventListener("click", callback);
+    }
 
     if (timeout) {
       toastMessage.timeout = setTimeout(function(){
