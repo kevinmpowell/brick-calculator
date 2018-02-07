@@ -14,7 +14,8 @@ const ebaySellingFeePercentage = .13, // TODO: Get this from a lookup
         userSettings: 'bcUserSettings',
         setDB: 'BCSetDB',
         setDBTimestamp: 'BCSetDataRetrieved',
-        apiVersionNumber: 'BCSetDBVersionNumber'
+        apiVersionNumber: 'BCSetDBVersionNumber',
+        cookieConsent: 'BCCookieConsent'
       },
       apiMapping = {
         'localhost': 'http://localhost:5000',
@@ -25,13 +26,17 @@ const ebaySellingFeePercentage = .13, // TODO: Get this from a lookup
       customEvents = {
         userSignedIn: 'bc-user-signed-in',
         userSignedOut: 'bc-user-signed-out'
-      };
+      },
+      EUCountryCodes = ['BE', 'BG', 'CZ', 'DK', 'DE', 'EE', 'IE', 'EL', 'ES', 'FR', 'IT', 'CY', 'LV', 'UK', 'LT', 'LU', 'HU', 'MT', 'NL', 'AT', 'PL', 'PT', 'RO', 'SI', 'SK', 'FI', 'SE', 'GB'];
 
 BC.App = function() {
   const userSignedInClass = 'bc--user-signed-in',
         userSignedOutClass = 'bc--user-signed-out',
         plusMemberSignedInClass = 'bc--plus-member-signed-in';
-  let body;
+  let body,
+      country,
+      language,
+      cookieConsent;
 
   function setBodyClass(userState) {
     const userSettings = BC.App.getUserSettings();
@@ -49,6 +54,29 @@ BC.App = function() {
     } else {
       body.classList.remove(plusMemberSignedInClass);
     }
+  }
+
+  function setLocale() {
+    const localeData = getLocale().split('-');
+    country = localeData[1];
+    language = localeData[0];
+  }
+
+  function showCookieConsentMessage() {
+    const cookieConsentGiven = BC.Utils.getFromLocalStorage(localStorageKeys.cookieConsent);
+
+    if (!cookieConsentGiven && EUCountryCodes.includes(country)) {
+      BC.ToastMessage.create('This site uses cookies to improve the user experience. By using this site, you are agreeing to our use of cookies.', false, false, true, BC.App.storeCookieUsageAuthorization);
+    }
+
+    if (!EUCountryCodes.includes(country)) {
+      // If the user's locale is not in the EU, always accept cookie usage and store it in localStorage to improve performance on subsequent visits
+      storeCookieUsageAuthorization();
+    }
+  }
+
+  const storeCookieUsageAuthorization = function storeCookieUsageAuthorization() {
+    BC.Utils.saveToLocalStorage(localStorageKeys.cookieConsent, true);
   }
 
   const getUserSettings = function getUserSettings() {
@@ -88,16 +116,46 @@ BC.App = function() {
     setSignedInState();
   }
 
+  const getLocale = function getLocale() {
+    // From: https://github.com/maxogden/browser-locale/blob/master/index.js
+    var lang
+
+    if (navigator.languages && navigator.languages.length) {
+      // latest versions of Chrome and Firefox set this correctly
+      lang = navigator.languages[0]
+    } else if (navigator.userLanguage) {
+      // IE only
+      lang = navigator.userLanguage
+    } else {
+      // latest versions of Chrome, Firefox, and Safari set this correctly
+      lang = navigator.language
+    }
+
+    return lang
+  }
+
+  const getCountry = function getCountry() {
+    return country;
+  }
+
+  const getLanguage = function getLanguage() {
+    return language;
+  }
+
   const initialize = function initialize() {
     body = document.body;
     setSignedInState();
+    setLocale();
+    showCookieConsentMessage();
   }
 
   return {
     initialize: initialize,
     signOut: signOut,
     setSignedInState: setSignedInState,
-    getUserSettings: getUserSettings
+    getUserSettings: getUserSettings,
+    getLocale: getLocale,
+    storeCookieUsageAuthorization: storeCookieUsageAuthorization
   };
 }();
 
