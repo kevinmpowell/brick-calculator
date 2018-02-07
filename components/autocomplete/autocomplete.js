@@ -151,5 +151,5 @@ function ready(fn) {
 }
 
 ready(function(){
-  BC.Autocomplete.initialize("#bc-set-lookup-form__set-number-input", setDB);
+  BC.Autocomplete.initialize("#bc-set-lookup-form__set-number-input", BC.SetDatabase.getDecodedSetDatabase());
 });

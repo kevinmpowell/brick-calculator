@@ -1,6 +1,5 @@
 'use strict';
 var BC = BC || {};
-let setDB;
 
 const ebaySellingFeePercentage = .13, // TODO: Get this from a lookup
       oneMinute = 60000, // in milliseconds
@@ -11,7 +10,8 @@ const ebaySellingFeePercentage = .13, // TODO: Get this from a lookup
       currentDomain = window.location.hostname,
       localStorageKeys = {
         authToken: 'bcUserAuthToken',
-        userSettings: 'bcUserSettings'
+        userSettings: 'bcUserSettings',
+        setDB: 'BCSetDB'
       },
       apiMapping = {
         'localhost': 'http://localhost:5000',
@@ -254,8 +254,7 @@ BC.Utils = function() {
     element.dispatchEvent(event);
   }
 
-  const stringDecoder = function stringDecoder(s)
-   {
+  const stringDecoder = function stringDecoder(s) {
       return (s ? s : this).split('').map(function(_)
        {
           if (_.match(/[1-9]/)) {
@@ -289,8 +288,9 @@ BC.SetDatabase = function() {
         loadingSpinnerVisibleClass = "bc-spinner--visible",
         setDataCachedMessage = document.querySelector(".bc-lookup-set-data-status-message"),
         setDataCachedMessageHiddenClass = "bc-lookup-set-data-status-message--hidden";
+
   function saveSetDBToLocalStorage(rawJSON) {
-    localStorage.setItem("BCSetDB", rawJSON);
+    localStorage.setItem(localStorageKeys.setDB, rawJSON);
   }
 
   function showLoadingSpinner() {
@@ -303,9 +303,8 @@ BC.SetDatabase = function() {
     setDataCachedMessage.classList.remove(setDataCachedMessageHiddenClass);
   }
 
-
   const getDecodedSetDatabase = function getDecodedSetDatabase() {
-    const encDB = BC.Utils.getFromLocalStorage("BCSetDB");
+    const encDB = localStorage.getItem(localStorageKeys.setDB);
     let response;
     if (encDB === null || typeof encDB === 'undefined') {
       response = null
@@ -313,6 +312,10 @@ BC.SetDatabase = function() {
       response = JSON.parse(BC.Utils.stringDecoder(encDB));
     }
     return response;
+  }
+
+  function getEncodedSetDatabase() {
+    return BC.Utils.getFromLocalStorage(localStorageKeys.setDB);
   }
 
   const getSetDBDataRetrievedTimestamp = function getSetDBDataRetrievedTimestamp() {
@@ -325,16 +328,28 @@ BC.SetDatabase = function() {
 
     showLoadingSpinner();
     try {
-      request.open('GET', apiDomain + '/lego_sets?start_year=' + year, true);
+      request.open('GET', apiDomain + '/lego_sets?year=' + year, true);
       request.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
 
       request.onload = function() {
         if (request.status >= 200 && request.status < 400) {
           // Success!
-          BC.Utils.saveToLocalStorage("BCSetDB", JSON.stringify(request.responseText));
-          BC.Utils.saveToLocalStorage("BCSetDataRetrieved", Date.now());
-          setDB = getDecodedSetDatabase();
-          BC.Autocomplete.updateDataset(setDB);
+          // Merge response into existing local storage
+          const newData = JSON.parse(request.responseText);
+          let setData = getEncodedSetDatabase();
+          if (setData === null) {
+            setData = {};
+          }
+          Object.assign(setData, newData);
+
+          BC.Utils.saveToLocalStorage("BCSetDB", JSON.stringify(setData));
+
+          const decodedDB = BC.SetDatabase.getDecodedSetDatabase();
+
+          // Push decoded set database out to all the modules that need to reference it: autocomplete, & value calculation
+          BC.Autocomplete.updateDataset(decodedDB);
+          BC.Values.updateCachedSetDatabase(decodedDB);
+
           BC.Overlay.hide();
 
           if (!((year - 1) <= (currentYear - numberOfYearsToRetrieve))) {
@@ -342,13 +357,15 @@ BC.SetDatabase = function() {
             const nextYear = year - 1;
             retrieveFreshSetData(nextYear);
           } else {
+            // Done, we've got all the data we're going to pull from the server
+            BC.Utils.saveToLocalStorage("BCSetDataRetrieved", Date.now());
             hideLoadingSpinner();
             updateSetDataTimestamp(getSetDBDataRetrievedTimestamp());
           }
         } else {
           // We reached our target server, but it returned an error
           // alert("Could not retrieve set data - connection successful, but data failed");
-          if (setDB !== null) {
+          if (BC.SetDatabase.getDecodedSetDatabase() !== null) {
             // If we've got localStorage data we're in good shape, move along
             updateSetDataTimestamp(getSetDBDataRetrievedTimestamp());
           } else {
@@ -363,7 +380,7 @@ BC.SetDatabase = function() {
       request.onerror = function() {
         // There was a connection error of some sort
         // alert("Could not retrieve set data - connection error");
-        if (setDB !== null) {
+        if (BC.SetDatabase.getDecodedSetDatabase() !== null) {
           // If we've got localStorage data we're in good shape, move along
           updateSetDataTimestamp(getSetDBDataRetrievedTimestamp());
         } else {
@@ -377,7 +394,7 @@ BC.SetDatabase = function() {
       request.send();
     } catch (e) {
       // console.log(e);
-      if (setDB !== null) {
+      if (BC.SetDatabase.getDecodedSetDatabase() !== null) {
         // Something went wrong with the data request, but we've got localStorage data, so move along
         updateSetDataTimestamp(getSetDBDataRetrievedTimestamp());
         BC.Overlay.hide();
@@ -392,7 +409,7 @@ BC.SetDatabase = function() {
   }
 
   const initialize = function initialize() {
-    setDB = getDecodedSetDatabase();
+    const setDB = BC.SetDatabase.getDecodedSetDatabase();
     const dataRetrieved = getSetDBDataRetrievedTimestamp();
     if (setDB === null) {
       // If there's no data to work with, put up the overlay so the form can't be used
@@ -421,6 +438,8 @@ BC.Values = function() {
         ebayProfitFieldId = "ebay-profit",
         showLookupFormClass = "bc-show-lookup-form";
 
+  let setDB;
+
   function calculate(setNumber, purchasePrice) {
     const setData = setDB[setNumber];
 
@@ -432,6 +451,10 @@ BC.Values = function() {
     } else {
       alert("Set Number Not Found")
     }
+  }
+
+  const updateCachedSetDatabase = function updateSetDb(data) {
+    setDB = data;
   }
 
   function showValues() {
@@ -459,11 +482,13 @@ BC.Values = function() {
 
   function initialize() {
     addEventListeners();
+    updateCachedSetDatabase(BC.SetDatabase.getDecodedSetDatabase());
   }
 
   return {
     calculate: calculate,
-    initialize: initialize
+    initialize: initialize,
+    updateCachedSetDatabase: updateCachedSetDatabase
   }
 }();
 

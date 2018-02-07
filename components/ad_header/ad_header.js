@@ -5,11 +5,15 @@ BC.AdHeader = function() {
   let adHeader;
 
   function showAds() {
-    adHeader.setAttribute("style", "display: block;");
+    if (adHeader !== null) {
+      adHeader.setAttribute("style", "display: block;");
+    }
   }
 
   function hideAds() {
-    adHeader.removeAttribute("style");
+    if (adHeader !== null) {
+      adHeader.removeAttribute("style");
+    }
   }
 
   function setAdDisplay() {
