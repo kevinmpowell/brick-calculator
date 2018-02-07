@@ -34,6 +34,7 @@ BC.SignInForm = function() {
     e.preventDefault();
     document.activeElement.blur();
     disableForm();
+    BC.Overlay.show("Sit tight.", "Signing you in.", true);
     var request = new XMLHttpRequest();
     const apiDomain = apiMapping[currentDomain],
           params = "email=" + emailField.value + "&password=" + passwordField.value,
@@ -50,7 +51,9 @@ BC.SignInForm = function() {
         var decodedData = JSON.parse(BC.Utils.stringDecoder(request.responseText));
         BC.Utils.saveToLocalStorage(localStorageKeys.authToken, decodedData.auth_token);
         BC.Utils.saveToLocalStorage(localStorageKeys.userSettings, request.responseText);
+
         // TODO: Broadcast event that user settings have been loaded
+        BC.Overlay.hide();
         BC.ToastMessage.create("Signed in. Welcome back.", "success");
 
         BC.App.setSignedInState();

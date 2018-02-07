@@ -274,7 +274,9 @@ BC.PortletLayout = function() {
       portletLineItemTemplate,
       headerTemplate,
       gridTemplate,
-      portletWrapper;
+      portletWrapper,
+      lastSetLookupData,
+      lastSetLookupCost;
 
   function getLayout() {
     const userSettings = BC.App.getUserSettings();
@@ -451,9 +453,12 @@ BC.PortletLayout = function() {
     const portlets = document.querySelectorAll(".bc-portlet"),
           cost = getSetCostWithTaxes(setCost);
 
+    lastSetLookupData = data;
+    lastSetLookupCost = setCost;
+
     portlets.forEach(function(p){
       updatePortletValues(p, data, cost);
-    })
+    });
   }
 
   const buildLayout = function buildLayout() {
@@ -465,6 +470,10 @@ BC.PortletLayout = function() {
       portletWrapper.append(getPortletGrid(portletSection.portlets, sectionClass));
       sectionClass = sectionClass ? false : zebraStripedPortletSectionsClass;
     });
+
+    if (lastSetLookupData) {
+      updateAllPortletValues(lastSetLookupData, lastSetLookupCost);
+    }
   }
 
   const initialize = function initialize() {
