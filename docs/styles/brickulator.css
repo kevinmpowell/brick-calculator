@@ -277,6 +277,60 @@ input {
   .bc-form-input__clear-button-text::after {
     margin-top: calc(-0.27222em + 0px); }
 
+.bc-form__select {
+  background-clip: padding-box;
+  background-color: none;
+  display: inline-block;
+  height: 40px;
+  position: relative; }
+
+.bc-form__select-input {
+  -webkit-appearance: none;
+     -moz-appearance: none;
+          appearance: none;
+  background: none;
+  border: 0;
+  color: #1E1F1F;
+  cursor: pointer;
+  font-family: "Hiragino Sans", "Helvetica", sans-serif;
+  height: 100%;
+  overflow: hidden;
+  position: relative;
+  width: 100%;
+  z-index: 10; }
+  .bc-form__select-input:focus {
+    outline: none; }
+  .bc-form__select-input:disabled {
+    opacity: 0.3; }
+  .bc-form__select-input:focus::-ms-value {
+    background: transparent;
+    color: inherit; }
+  .bc-form__select-input::-ms-expand {
+    display: none; }
+
+.bc-form__select-visual-wrap {
+  background-clip: padding-box;
+  background: #FFFFFF;
+  border: solid 1px #C6CDCC;
+  bottom: 0;
+  cursor: pointer;
+  left: 0;
+  position: absolute;
+  right: 0;
+  top: 0;
+  z-index: 0; }
+
+.bc-form__select-open-indicator {
+  bottom: 0;
+  content: '';
+  display: block;
+  position: absolute;
+  right: -1px;
+  text-align: center;
+  top: 0;
+  width: 40px;
+  z-index: 5; }
+
 .bc-set-summary {
   display: -webkit-box;
   display: -ms-flexbox;

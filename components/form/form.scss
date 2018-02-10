@@ -136,3 +136,113 @@ input {
   top: -.5px;
 }
 
+.bc-form__select {
+  background-clip: padding-box;
+  background-color: none;
+  display: inline-block;
+  height: $bc-form-field-height;
+  position: relative;
+}
+
+.bc-form__select-input {
+  appearance: none;
+  background: none;
+  border: 0;
+  color: $brickulator-color-text-on-light-primary;
+  cursor: pointer;
+  font-family: $brickulator-font-family-sans-serif;
+  height: 100%;
+  overflow: hidden;
+  position: relative;
+  width: 100%;
+  z-index: 10;
+
+
+  &:focus {
+      outline: none;
+  }
+
+  &:disabled {
+    opacity: $brickulator-opacity-disabled;
+  }
+
+  &:focus::-ms-value { // sass-lint:disable-line no-vendor-prefixes - have to target IE specifically here
+      background: transparent;
+      color: inherit;
+  }
+
+  &::-ms-expand { // sass-lint:disable-line no-vendor-prefixes - have to target IE specifically here
+      display: none;
+  }
+}
+
+.bc-form__select-visual-wrap {
+  background-clip: padding-box;
+  background: $brickulator-color-background-control;
+  border: $brickulator-border-control;
+  bottom: 0;
+  cursor: pointer;
+  left: 0;
+  position: absolute;
+  right: 0;
+  top: 0;
+  z-index: 0;
+
+    // .bc-form__select:hover &,
+    // .bc-form__select--hover & {
+    //     @include hover-styles();
+    // }
+
+    // .bc-form__select-input:focus ~ &,
+    // .bc-form__select--focus & {
+    //     @include focus-styles();
+    // }
+
+    // .bc-form__select--focus:hover & {
+    //     box-shadow: $mds-box-shadow-form-input-border, $mds-box-shadow-form-element-focus;
+    // }
+
+    // .bc-form__select-input:disabled ~ & {
+    //     @include disabled();
+    //     box-shadow: $mds-box-shadow-form-input-border;
+    // }
+
+    // .bc-form--error &,
+    // .bc-form--error .bc-form__select:hover & {
+    //     @include error-styles();
+    // }
+
+    // .bc-form--error .bc-form__select-input:focus ~ & {
+    //     box-shadow: $mds-box-shadow-form-element-focus-input-border-error;
+    // }
+
+}
+
+.bc-form__select-open-indicator {
+  bottom: 0;
+  content: '';
+  display: block;
+  position: absolute;
+  right: -1px;
+  text-align: center;
+  top: 0;
+  width: $bc-form-field-height;
+  z-index: 5;
+
+    // .bc-form__select-input:disabled ~ & {
+    //     @include disabled();
+    // }
+}
+
+// .bc-form__select-open-icon {
+//     cursor: pointer;
+//     display: inline;
+//     fill: $mds-color-form-input;
+//     height: $mds-size-icon-s;
+//     left: 50%;
+//     margin-left: -($mds-size-icon-s / 2);
+//     margin-top: -($mds-size-icon-s / 2);
+//     position: absolute;
+//     top: 50%;
+//     width: $mds-size-icon-s;
+// }

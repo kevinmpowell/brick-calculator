@@ -97,7 +97,7 @@ BC.App = function() {
 
   function promptCurrencySwitch() {
     if (country !== 'US') {
-      BC.ToastMessage.create('Set values currently shown in USD. <a href="#" class="bc-user-settings__change-currency-trigger">Change currency?</a>', false, false, true);
+      BC.ToastMessage.create('Set values currently shown in USD. <a href="#" onclick="BC.UserSettingsPane.showPane()" class="bc-user-settings-pane-show-trigger">Change currency?</a>', false, false, true);
     }
   }
 
@@ -216,7 +216,6 @@ BC.API = function() {
       };
 
       xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
-      // xhr.setRequestHeader('Accept-Language', BC.App.getLocale());
       if (opts.method === 'POST') {
         xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
       }

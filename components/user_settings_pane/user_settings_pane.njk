@@ -5,6 +5,11 @@
     </div>
     <form action="" id="bc-user-settings-form">
       {% call form_field_group() %}
+        {{ form_label(label="Currency", for="bc-user-settings-currency") }}
+        {{ form_select() }}
+      {% endcall %}
+
+      {% call form_field_group() %}
         {{ form_label(label="Tax Rate", for="bc-user-settings-taxRate") }}
         {{ form_input(step="0.01", type="number", suffix="%", id="bc-user-settings-taxRate", disabled=true)}}
       {% endcall %}

@@ -3,10 +3,12 @@ BC.UserSettingsPane = function() {
   const settingsPaneSelector = '.bc-user-settings-pane',
         userTaxRateFieldId = 'bc-user-settings-taxRate',
         paneVisibleClass = 'bc-user-settings-pane--visible',
-        hidePaneSelector = '.bc-user-settings-pane-hide-trigger';
+        hidePaneSelector = '.bc-user-settings-pane-hide-trigger',
+        showPaneSelector = '.bc-user-settings-pane-show-trigger';
 
   let taxRate,
       settingsPane,
+      showPaneTriggers,
       hidePaneTriggers;
 
   function disableTaxesSetting() {
@@ -34,9 +36,14 @@ BC.UserSettingsPane = function() {
     hidePaneTriggers.forEach(function(t){
       t.addEventListener("click", hidePane);
     });
+
+    showPaneTriggers.forEach(function(t){
+      t.addEventListener("click", showPane);
+    });
   }
 
   const showPane = function showPane() {
+    BC.SiteMenu.showMenu();
     settingsPane.classList.add(paneVisibleClass);
   }
 
@@ -53,6 +60,7 @@ BC.UserSettingsPane = function() {
     taxRate = document.getElementById(userTaxRateFieldId);
     settingsPane = document.querySelector(settingsPaneSelector);
     hidePaneTriggers = Array.from(document.querySelectorAll(hidePaneSelector));
+    showPaneTriggers = Array.from(document.querySelectorAll(showPaneSelector));
     update();
     setEventListeners();
   }
