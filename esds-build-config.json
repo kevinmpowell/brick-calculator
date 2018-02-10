@@ -3,6 +3,9 @@
     "webroot": "docs",     
     "versionedDocs": false,
     "latestVersionPath": "",
+    "browserSyncConfig": {
+        "https": true
+    },
     "copyTasks": [
       {
         "name": "script-dependencies",

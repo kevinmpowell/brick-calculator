@@ -22,11 +22,17 @@ BC.SetSummary = function() {
 
   const update = function update(setData) {
     const setNumber = typeof setData.nv === 'undefined' ? setData.n : setData.n + '-' + setData.nv;
+    let msrpString;
+    if (BC.App.getCountry().toLowerCase() !== 'us') {
+      msrpString = parseFloat(setData.msrp, 10) > 0 ? "$" + setData.msrp + " USD" : "Unknown";
+    } else {
+      msrpString = parseFloat(setData.msrp, 10) > 0 ? "$" + setData.msrp : "Unknown";
+    }
     number.innerHTML = setNumber;
     year.innerHTML = setData.y;
     title.innerHTML = setData.t;
     pcs.innerHTML = setData.pcs;
-    msrp.innerHTML = parseFloat(setData.msrp, 10) > 0 ? "$" + setData.msrp : "Unknown";
+    msrp.innerHTML = msrpString;
   }
 
   return {

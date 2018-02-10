@@ -419,7 +419,7 @@ BC.PortletLayout = function() {
         portletValues[marketplaceFeesKey] = marketplaceFees;
         profit -= marketplaceFees;
       } else {
-        console.log("Could not calculate marketplace fees", liKeys);
+        // console.log("Could not calculate marketplace fees", liKeys);
       }
 
       lineItemInputs.forEach(function(i){
@@ -430,7 +430,7 @@ BC.PortletLayout = function() {
       profitInput.value = BC.Utils.formatCurrency(profit);
     } else {
       p.classList.add(emptyPortletClass);
-      console.log("Marketplace Value not found", liKeys);
+      // console.log("Marketplace Value not found", liKeys);
     }
   }
 

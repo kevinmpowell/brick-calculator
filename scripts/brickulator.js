@@ -18,7 +18,7 @@ const ebaySellingFeePercentage = .13, // TODO: Get this from a lookup
         cookieConsent: 'BCCookieConsent'
       },
       apiMapping = {
-        'localhost': 'http://localhost:5000',
+        'localhost': 'https://localhost:5000',
         '10.0.1.15': 'http://10.0.1.15:5000',
         'kevinmpowell.github.io': 'https://brickulator-api.herokuapp.com'
       },
@@ -34,9 +34,8 @@ BC.App = function() {
         userSignedOutClass = 'bc--user-signed-out',
         plusMemberSignedInClass = 'bc--plus-member-signed-in';
   let body,
-      country,
-      language,
-      cookieConsent;
+      country = "US",
+      language = "en"
 
   function setBodyClass(userState) {
     const userSettings = BC.App.getUserSettings();
@@ -56,10 +55,31 @@ BC.App = function() {
     }
   }
 
-  function setLocale() {
-    const localeData = getLocale().split('-');
-    country = localeData[1];
-    language = localeData[0];
+  function geoIpLookup() {
+    return new Promise(function(resolve, reject){
+      const xhr = new XMLHttpRequest();
+      xhr.open("GET", 'https://get.geojs.io/v1/ip');
+      xhr.onload = () => resolve(xhr.responseText);
+      xhr.onerror = () => reject(xhr.statusText);
+      xhr.send();
+    });
+  }
+
+  function countryCodeLookup(ip) {
+    ip = '2.31.255.255'; // Simulate GB IP Address
+    return new Promise(function(resolve, reject){
+      const xhr = new XMLHttpRequest();
+      xhr.open("GET", 'https://get.geojs.io/v1/ip/country/' + ip);
+      xhr.onload = () => resolve(xhr.responseText);
+      xhr.onerror = () => reject(xhr.statusText);
+      xhr.send();
+    });
+  }
+
+  function setLocation() {
+    return geoIpLookup().then(countryCodeLookup).then(function(countryCode){
+      country = countryCode.trim();
+    });
   }
 
   function showCookieConsentMessage() {
@@ -72,6 +92,12 @@ BC.App = function() {
     if (!EUCountryCodes.includes(country)) {
       // If the user's locale is not in the EU, always accept cookie usage and store it in localStorage to improve performance on subsequent visits
       storeCookieUsageAuthorization();
+    }
+  }
+
+  function promptCurrencySwitch() {
+    if (country !== 'US') {
+      BC.ToastMessage.create('Set values currently shown in USD. <a href="#" class="bc-user-settings__change-currency-trigger">Change currency?</a>', false, false, true);
     }
   }
 
@@ -116,23 +142,28 @@ BC.App = function() {
     setSignedInState();
   }
 
-  const getLocale = function getLocale() {
-    // From: https://github.com/maxogden/browser-locale/blob/master/index.js
-    var lang
+  // const getLocale = function getLocale() {
+  //   if (locale) {
+  //     // if local BC.App locale variable has been set, return it, else get it from the navigator
+  //     return locale;
+  //   } else {
+  //     // From: https://github.com/maxogden/browser-locale/blob/master/index.js
+  //     var lang
 
-    if (navigator.languages && navigator.languages.length) {
-      // latest versions of Chrome and Firefox set this correctly
-      lang = navigator.languages[0]
-    } else if (navigator.userLanguage) {
-      // IE only
-      lang = navigator.userLanguage
-    } else {
-      // latest versions of Chrome, Firefox, and Safari set this correctly
-      lang = navigator.language
-    }
+  //     if (navigator.languages && navigator.languages.length) {
+  //       // latest versions of Chrome and Firefox set this correctly
+  //       lang = navigator.languages[0]
+  //     } else if (navigator.userLanguage) {
+  //       // IE only
+  //       lang = navigator.userLanguage
+  //     } else {
+  //       // latest versions of Chrome, Firefox, and Safari set this correctly
+  //       lang = navigator.language
+  //     }
 
-    return lang
-  }
+  //     return lang;
+  //   }
+  // }
 
   const getCountry = function getCountry() {
     return country;
@@ -145,8 +176,10 @@ BC.App = function() {
   const initialize = function initialize() {
     body = document.body;
     setSignedInState();
-    setLocale();
-    showCookieConsentMessage();
+    setLocation().then(function(){
+      showCookieConsentMessage();
+      promptCurrencySwitch();
+    });
   }
 
   return {
@@ -154,7 +187,7 @@ BC.App = function() {
     signOut: signOut,
     setSignedInState: setSignedInState,
     getUserSettings: getUserSettings,
-    getLocale: getLocale,
+    getCountry: getCountry,
     storeCookieUsageAuthorization: storeCookieUsageAuthorization
   };
 }();
@@ -183,7 +216,7 @@ BC.API = function() {
       };
 
       xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
-      xhr.setRequestHeader('Accept-Language', BC.App.getLocale());
+      // xhr.setRequestHeader('Accept-Language', BC.App.getLocale());
       if (opts.method === 'POST') {
         xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
       }
@@ -222,10 +255,258 @@ BC.Utils = function() {
           1: 7,
           2: 8,
           3: 9
-        };
+        },
+        countryToCurrencyMap = {
+          "AF": "AFN",
+          "AL": "ALL",
+          "DZ": "DZD",
+          "AS": "USD",
+          "AD": "EUR",
+          "AO": "AOA",
+          "AI": "XCD",
+          "AG": "XCD",
+          "AR": "ARS",
+          "AM": "AMD",
+          "AW": "AWG",
+          "AU": "AUD",
+          "AT": "EUR",
+          "AZ": "AZN",
+          "BS": "BSD",
+          "BH": "BHD",
+          "BD": "BDT",
+          "BB": "BBD",
+          "BY": "BYN",
+          "BE": "EUR",
+          "BZ": "BZD",
+          "BJ": "XOF",
+          "BM": "BMD",
+          "BT": "INR",
+          "BO": "BOB",
+          "BQ": "USD",
+          "BA": "BAM",
+          "BW": "BWP",
+          "BV": "NOK",
+          "BR": "BRL",
+          "IO": "USD",
+          "VG": "USD",
+          "BN": "BND",
+          "BG": "BGN",
+          "BF": "XOF",
+          "BI": "BIF",
+          "CV": "CVE",
+          "KH": "KHR",
+          "CM": "XAF",
+          "CA": "CAD",
+          "KY": "KYD",
+          "CF": "XAF",
+          "TD": "XAF",
+          "CL": "CLP",
+          "CN": "CNY",
+          "HK": "HKD",
+          "MO": "MOP",
+          "CX": "AUD",
+          "CC": "AUD",
+          "CO": "COP",
+          "KM": "KMF",
+          "CG": "XAF",
+          "CK": "NZD",
+          "CR": "CRC",
+          "HR": "HRK",
+          "CU": "CUP",
+          "CW": "ANG",
+          "CY": "EUR",
+          "CZ": "CZK",
+          "CI": "XOF",
+          "KP": "KPW",
+          "CD": "CDF",
+          "DK": "DKK",
+          "DJ": "DJF",
+          "DM": "XCD",
+          "DO": "DOP",
+          "EC": "USD",
+          "EG": "EGP",
+          "SV": "SVC",
+          "GQ": "XAF",
+          "ER": "ERN",
+          "EE": "EUR",
+          "ET": "ETB",
+          "FO": "DKK",
+          "FJ": "FJD",
+          "FI": "EUR",
+          "FR": "EUR",
+          "GF": "EUR",
+          "PF": "XPF",
+          "TF": "EUR",
+          "GA": "XAF",
+          "GM": "GMD",
+          "GE": "GEL",
+          "DE": "EUR",
+          "GH": "GHS",
+          "GI": "GIP",
+          "GR": "EUR",
+          "GL": "DKK",
+          "GD": "XCD",
+          "GP": "EUR",
+          "GU": "USD",
+          "GT": "GTQ",
+          "GG": "GBP",
+          "GN": "GNF",
+          "GW": "XOF",
+          "GY": "GYD",
+          "HT": "HTG",
+          "HM": "AUD",
+          "VA": "EUR",
+          "HN": "HNL",
+          "HU": "HUF",
+          "IS": "ISK",
+          "IN": "INR",
+          "ID": "IDR",
+          "IR": "IRR",
+          "IQ": "IQD",
+          "IE": "EUR",
+          "IM": "GBP",
+          "IL": "ILS",
+          "IT": "EUR",
+          "JM": "JMD",
+          "JP": "JPY",
+          "JE": "GBP",
+          "JO": "JOD",
+          "KZ": "KZT",
+          "KE": "KES",
+          "KI": "AUD",
+          "KW": "KWD",
+          "KG": "KGS",
+          "LA": "LAK",
+          "LV": "EUR",
+          "LB": "LBP",
+          "LS": "LSL",
+          "LR": "LRD",
+          "LY": "LYD",
+          "LI": "CHF",
+          "LT": "EUR",
+          "LU": "EUR",
+          "MG": "MGA",
+          "MW": "MWK",
+          "MY": "MYR",
+          "MV": "MVR",
+          "ML": "XOF",
+          "MT": "EUR",
+          "MH": "USD",
+          "MQ": "EUR",
+          "MR": "MRO",
+          "MU": "MUR",
+          "YT": "EUR",
+          "MX": "MXN",
+          "FM": "USD",
+          "MC": "EUR",
+          "MN": "MNT",
+          "ME": "EUR",
+          "MS": "XCD",
+          "MA": "MAD",
+          "MZ": "MZN",
+          "MM": "MMK",
+          "NA": "NAD",
+          "NR": "AUD",
+          "NP": "NPR",
+          "NL": "EUR",
+          "NC": "XPF",
+          "NZ": "NZD",
+          "NI": "NIO",
+          "NE": "XOF",
+          "NG": "NGN",
+          "NU": "NZD",
+          "NF": "AUD",
+          "MP": "USD",
+          "NO": "NOK",
+          "OM": "OMR",
+          "PK": "PKR",
+          "PW": "USD",
+          "PA": "PAB",
+          "PG": "PGK",
+          "PY": "PYG",
+          "PE": "PEN",
+          "PH": "PHP",
+          "PN": "NZD",
+          "PL": "PLN",
+          "PT": "EUR",
+          "PR": "USD",
+          "QA": "QAR",
+          "KR": "KRW",
+          "MD": "MDL",
+          "RO": "RON",
+          "RU": "RUB",
+          "RW": "RWF",
+          "RE": "EUR",
+          "BL": "EUR",
+          "SH": "SHP",
+          "KN": "XCD",
+          "LC": "XCD",
+          "MF": "EUR",
+          "PM": "EUR",
+          "VC": "XCD",
+          "WS": "WST",
+          "SM": "EUR",
+          "ST": "STD",
+          "SA": "SAR",
+          "SN": "XOF",
+          "RS": "RSD",
+          "SC": "SCR",
+          "SL": "SLL",
+          "SG": "SGD",
+          "SX": "ANG",
+          "SK": "EUR",
+          "SI": "EUR",
+          "SB": "SBD",
+          "SO": "SOS",
+          "ZA": "ZAR",
+          "SS": "SSP",
+          "ES": "EUR",
+          "LK": "LKR",
+          "SD": "SDG",
+          "SR": "SRD",
+          "SJ": "NOK",
+          "SZ": "SZL",
+          "SE": "SEK",
+          "CH": "CHF",
+          "SY": "SYP",
+          "TJ": "TJS",
+          "TH": "THB",
+          "MK": "MKD",
+          "TL": "USD",
+          "TG": "XOF",
+          "TK": "NZD",
+          "TO": "TOP",
+          "TT": "TTD",
+          "TN": "TND",
+          "TR": "TRY",
+          "TM": "TMT",
+          "TC": "USD",
+          "TV": "AUD",
+          "UG": "UGX",
+          "UA": "UAH",
+          "AE": "AED",
+          "GB": "GBP",
+          "TZ": "TZS",
+          "UM": "USD",
+          "VI": "USD",
+          "US": "USD",
+          "UY": "UYU",
+          "UZ": "UZS",
+          "VU": "VUV",
+          "VE": "VEF",
+          "VN": "VND",
+          "WF": "XPF",
+          "EH": "MAD",
+          "YE": "YER",
+          "ZM": "ZMW",
+          "ZW": "ZWL",
+          "AX": "EUR"
+        }
 
   const formatCurrency = function formatCurrency(number) {
-    return number.toLocaleString('en-US', { style: 'currency', currency: 'USD' });
+    const countryCode = BC.App.getCountry(),
+          currencyCode = countryToCurrencyMap[countryCode.toUpperCase()];
+    return number.toLocaleString(countryCode, { style: 'currency', currency: currencyCode });
   }
 
   const getPayPalTransactionFee = function getPayPalTransactionFee(finalValue) {
