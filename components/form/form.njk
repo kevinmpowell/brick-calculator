@@ -83,3 +83,63 @@
     {{ caller() }}
   </div>
 {% endmacro %}
+
+{% macro form_select(
+            class="",
+            describedby=false,
+            disabled=false,
+            id=false,
+            name=false,
+            icon_path=false,
+            invalid=false,
+            options=[
+                {
+                    text: "Select an option",
+                    value: ""
+                },
+                {
+                    text: "Option 1",
+                    value: "option_1"
+                },
+                {
+                    text: "Option 2",
+                    value: "option_2"
+                }
+            ]) %}
+    <div class="bc-form__select{{ ' ' + class if class }}{{ ' bc-form__select-input--disabled' if disabled }}">
+        <select class="bc-form__select-input"
+                {% if id %}
+                    id="{{ id }}"
+                {% endif %}
+                {% if name %}
+                    name="{{ name }}"
+                {% endif %}
+                {{ 'disabled' if disabled }}
+                {% if describedby %} aria-describedby="{{ describedby }}" {% endif %}
+                {% if invalid %} aria-invalid="true" {% endif %}>
+            {% for option in options %}
+                {{ form_select_option_builder(option) }}
+            {% endfor %}
+        </select>
+        <div class="bc-form__select-visual-wrap"></div>
+        <span class="bc-form__select-open-indicator">
+        </span>
+    </div>
+{% endmacro %}
+
+{% macro form_select_option_builder(option) %}
+    {% if option.children %}
+        <optgroup label="{{ option.text }}">
+            {% for child_option in option.children %}
+                {{ form_select_option_builder(child_option) }}
+            {% endfor %}
+        </optgroup>
+    {% else %}
+        {{ form_select_option(option) }}
+    {% endif %}
+
+{% endmacro %}
+
+{% macro form_select_option(option) %}
+    <option class="bc-form__select-option" value="{{ option.value }}" {{ 'selected' if option.selected }}>{{ option.text }}</option>
+{% endmacro %}

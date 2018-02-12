@@ -10,7 +10,16 @@ BC.SetSummary = function() {
       year,
       title,
       pcs,
-      msrp;
+      msrp,
+      currencyCode = "USD";
+
+  function handleCurrencyUpdate() {
+    currencyCode = BC.Utils.getFromLocalStorage(localStorageKeys.currency) || "USD";
+  }
+
+  function setEventListeners() {
+    document.addEventListener(customEvents.currencyUpdated, handleCurrencyUpdate);
+  }
 
   const initialize = function initialize() {
     number = document.querySelector(numberSelector);
@@ -18,15 +27,23 @@ BC.SetSummary = function() {
     title = document.querySelector(titleSelector);
     pcs = document.querySelector(pcsSelector);
     msrp = document.querySelector(msrpSelector);
+    handleCurrencyUpdate();
+    setEventListeners();
   }
 
   const update = function update(setData) {
     const setNumber = typeof setData.nv === 'undefined' ? setData.n : setData.n + '-' + setData.nv;
+    let msrpString;
+    if (currencyCode !== 'USD') {
+      msrpString = parseFloat(setData.msrp, 10) > 0 ? "$" + setData.msrp + " USD" : "Unknown";
+    } else {
+      msrpString = parseFloat(setData.msrp, 10) > 0 ? "$" + setData.msrp : "Unknown";
+    }
     number.innerHTML = setNumber;
     year.innerHTML = setData.y;
     title.innerHTML = setData.t;
     pcs.innerHTML = setData.pcs;
-    msrp.innerHTML = parseFloat(setData.msrp, 10) > 0 ? "$" + setData.msrp : "Unknown";
+    msrp.innerHTML = msrpString;
   }
 
   return {

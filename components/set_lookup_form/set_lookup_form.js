@@ -11,7 +11,8 @@ BC.SetLookupForm = function() {
       setNumber,
       purchasePrice,
       taxRateAmount,
-      taxRate;
+      taxRate,
+      currencySymbol;
 
   function handleFormSubmit(e) {
     e.preventDefault();
@@ -34,18 +35,29 @@ BC.SetLookupForm = function() {
     setTaxRateDisplay(userSettings);
   }
 
+  function updatePurchasePriceCurrencySymbol() {
+    const currency = BC.Utils.getFromLocalStorage(localStorageKeys.currency) || "USD",
+          country = BC.Utils.getFromLocalStorage(localStorageKeys.country) || "US",
+          symbolAndPosition = BC.Utils.getCurrencySymbolAndPositionForCurrencyAndCountry(currency, country);
+
+    currencySymbol.textContent = symbolAndPosition.symbol;
+  }
+
   function setEventListeners() {
     form.addEventListener("submit", handleFormSubmit);
     document.addEventListener(customEvents.userSignedIn, updateFormDisplayForSignedInUser);
     document.addEventListener(customEvents.userSignedOut, updateFormDisplayForSignedInUser);
+    document.addEventListener(customEvents.currencyUpdated, updatePurchasePriceCurrencySymbol);
   }
 
   const initialize = function initialize() {
     form = document.getElementById(formId);
     setNumber = document.getElementById(setNumberFieldId);
     purchasePrice = document.getElementById(purchasePriceFieldId);
+    currencySymbol = purchasePrice.parentNode.querySelector(".bc-form-input-prefix");
     taxRate = form.querySelector(taxRateSelector);
     taxRateAmount = form.querySelector(taxRateAmountSelector);
+    updatePurchasePriceCurrencySymbol();
     setEventListeners();
   }
 

@@ -1,13 +1,25 @@
 {% macro user_settings_pane(class) %}
   <div class="bc-user-settings-pane{{ ' ' + class if class }}">
     <div class="bc-user-settings-pane__actions">
-      {{ button(text="< Back", class="bc-button--primary bc-button--size-s bc-user-settings-pane-hide-trigger") }}
+      {{ button(text="< Back", class="bc-button--size-s bc-user-settings-pane-hide-trigger") }}
     </div>
-    <form action="" id="bc-user-settings-form">
+    <form action="" id="bc-user-settings-form" name="bcUserSettings">
+      {% call form_field_group() %}
+        {{ form_label(label="Country", for="bc-user-settings-country") }}
+        {{ form_select(id="bc-user-settings-country", name="country") }}
+      {% endcall %}
+
+      {% call form_field_group() %}
+        {{ form_label(label="Currency", for="bc-user-settings-currency") }}
+        {{ form_select(id="bc-user-settings-currency", name="currency") }}
+      {% endcall %}
+
       {% call form_field_group() %}
         {{ form_label(label="Tax Rate", for="bc-user-settings-taxRate") }}
         {{ form_input(step="0.01", type="number", suffix="%", id="bc-user-settings-taxRate", disabled=true)}}
       {% endcall %}
+
+      {{ button(type="submit", name="bcUserSettingsSubmit", text="Save Settings", class="bc-button--primary")}}
     </form>
   </div>
 {% endmacro %}

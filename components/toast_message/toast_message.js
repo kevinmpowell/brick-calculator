@@ -67,10 +67,13 @@ BC.ToastMessage = function() {
         removeMessage(toastMessage);
       }, timeout);
     }
+
+    return toastMessage;
   }
 
   return {
     initialize: initialize,
-    create: create
+    create: create,
+    removeMessage: removeMessage
   }
 }();

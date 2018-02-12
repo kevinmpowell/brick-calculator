@@ -53,6 +53,10 @@ input {
   width: 100%;
 }
 
+a {
+  color: $brickulator-color-link;
+}
+
 #bc-results {
   display: none; // Comment out to display results for debugging
   padding-top: 0;
