@@ -15,7 +15,9 @@ const ebaySellingFeePercentage = .13, // TODO: Get this from a lookup
         setDB: 'BCSetDB',
         setDBTimestamp: 'BCSetDataRetrieved',
         apiVersionNumber: 'BCSetDBVersionNumber',
-        cookieConsent: 'BCCookieConsent'
+        cookieConsent: 'BCCookieConsent',
+        currency: 'BCCurrency',
+        country: 'BCCountry'
       },
       apiMapping = {
         'localhost': 'https://localhost:5000',
@@ -26,7 +28,8 @@ const ebaySellingFeePercentage = .13, // TODO: Get this from a lookup
       customEvents = {
         userSignedIn: 'bc-user-signed-in',
         userSignedOut: 'bc-user-signed-out',
-        locationUpdated: 'bc-location-updated'
+        locationUpdated: 'bc-location-updated',
+        currencyUpdated: 'bc-currency-updated'
       },
       EUCountryCodes = ['BE', 'BG', 'CZ', 'DK', 'DE', 'EE', 'IE', 'EL', 'ES', 'FR', 'IT', 'CY', 'LV', 'UK', 'LT', 'LU', 'HU', 'MT', 'NL', 'AT', 'PL', 'PT', 'RO', 'SI', 'SK', 'FI', 'SE', 'GB'];
 
@@ -78,10 +81,14 @@ BC.App = function() {
   }
 
   function setLocation() {
-    return geoIpLookup().then(countryCodeLookup).then(function(countryCode){
-      country = countryCode.trim();
-      BC.Utils.broadcastEvent(customEvents.locationUpdated);
-    });
+    if (BC.Utils.getFromLocalStorage(localStorageKeys.country) === null) {
+      return geoIpLookup().then(countryCodeLookup).then(function(countryCode){
+        country = countryCode.trim();
+        BC.Utils.broadcastEvent(customEvents.locationUpdated);
+      });
+    } else {
+      return Promise.resolve();
+    }
   }
 
   function showCookieConsentMessage() {
@@ -94,12 +101,6 @@ BC.App = function() {
     if (!EUCountryCodes.includes(country)) {
       // If the user's locale is not in the EU, always accept cookie usage and store it in localStorage to improve performance on subsequent visits
       storeCookieUsageAuthorization();
-    }
-  }
-
-  function promptCurrencySwitch() {
-    if (country !== 'US') {
-      BC.ToastMessage.create('Set values currently shown in USD. <a href="#" onclick="BC.UserSettingsPane.showPane()" class="bc-user-settings-pane-show-trigger">Change currency?</a>', false, false, true);
     }
   }
 
@@ -180,7 +181,6 @@ BC.App = function() {
     setSignedInState();
     setLocation().then(function(){
       showCookieConsentMessage();
-      promptCurrencySwitch();
     });
   }
 
@@ -504,10 +504,11 @@ BC.Utils = function() {
           "AX": "EUR"
         }
 
+  let currencyFormattingCode = "USD",
+      countryFormattingCode = "US";
+
   const formatCurrency = function formatCurrency(number) {
-    const countryCode = BC.App.getCountry(),
-          currencyCode = countryToCurrencyMap[countryCode.toUpperCase()];
-    return number.toLocaleString(countryCode, { style: 'currency', currency: currencyCode });
+    return number.toLocaleString(countryFormattingCode, { style: 'currency', currency: currencyFormattingCode });
   }
 
   const getPayPalTransactionFee = function getPayPalTransactionFee(finalValue) {
@@ -634,6 +635,9 @@ BC.SetDatabase = function() {
         setDataCachedMessage = document.querySelector(".bc-lookup-set-data-status-message"),
         setDataCachedMessageHiddenClass = "bc-lookup-set-data-status-message--hidden";
 
+  let currencyCode = BC.Utils.getFromLocalStorage(localStorageKeys.currency),
+      countryCode = BC.Utils.getFromLocalStorage(localStorageKeys.country);
+
   function saveSetDBToLocalStorage(rawJSON) {
     localStorage.setItem(localStorageKeys.setDB, rawJSON);
   }
@@ -651,7 +655,6 @@ BC.SetDatabase = function() {
   function clearLocalSetDatabase() {
     localStorage.removeItem(localStorageKeys.setDB);
     localStorage.removeItem(localStorageKeys.setDBTimestamp);
-    localStorage.removeItem(localStorageKeys.apiVersionNumber);
   }
 
   function getEncodedSetDatabase() {
@@ -675,11 +678,19 @@ BC.SetDatabase = function() {
 
   const retrieveFreshSetData = function retrieveFreshSetData(year) {
     year = typeof year === 'undefined' ? currentYear : year;
+
+    let apiUrl = apiDomain + '/lego_sets?year=' + year;
+
+    // Get results in a specific currency
+    if (currencyCode && currencyCode !== 'USD') {
+      apiUrl += '&currency=' + currencyCode;
+    }
+
     var request = new XMLHttpRequest();
 
     showLoadingSpinner();
     try {
-      request.open('GET', apiDomain + '/lego_sets?year=' + year, true);
+      request.open('GET', apiUrl, true);
       request.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
 
       request.onload = function() {
@@ -768,8 +779,20 @@ BC.SetDatabase = function() {
     }
   }
 
+  function handleCurrencyUpdate() {
+    // clear the locally stored database and kick up a fresh set data retrieval
+    currencyCode = BC.Utils.getFromLocalStorage(localStorageKeys.currency); // set the local currencyCode variable within this object    
+    clearLocalSetDatabase();
+    retrieveFreshSetData(); 
+  }
+
+  function setEventListeners() {
+    document.addEventListener(customEvents.currencyUpdated, handleCurrencyUpdate);
+  }
+
   const initialize = function initialize() {
     checkforDataApiVersionChange();
+    setEventListeners();
     const setDB = BC.SetDatabase.getDecodedSetDatabase();
     const dataRetrieved = getSetDBDataRetrievedTimestamp();
     if (setDB === null) {

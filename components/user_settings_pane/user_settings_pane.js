@@ -16,7 +16,8 @@ BC.UserSettingsPane = function() {
       showPaneTriggers,
       hidePaneTriggers,
       countrySelect,
-      currencySelect;
+      currencySelect,
+      currencyToastMessage;
 
   function disableTaxesSetting() {
     taxRate.value = '';
@@ -38,16 +39,51 @@ BC.UserSettingsPane = function() {
   }
 
   function setSelectedCountryAndCurrency() {
-    const countryCode = BC.App.getCountry(),
-          currencyCode = BC.Utils.countryToCurrencyMap[countryCode];
+    const countryCode = BC.Utils.getFromLocalStorage(localStorageKeys.country) || BC.App.getCountry() || "US",
+          currencyCode = BC.Utils.getFromLocalStorage(localStorageKeys.currency) || BC.Utils.countryToCurrencyMap[countryCode] || "USD";
     countrySelect.value = countryCode;
     currencySelect.value = currencyCode;
+  }
+
+  function saveAndUpdateCurrencyAndCountry(country, currency) {
+    BC.Utils.saveToLocalStorage(localStorageKeys.country, country);
+    BC.Utils.saveToLocalStorage(localStorageKeys.currency, currency);
+    BC.Utils.broadcastEvent(customEvents.currencyUpdated);
+    BC.Utils.broadcastEvent(customEvents.locationUpdated);
+  }
+
+  function handleSettingsFormSubmit(e) {
+    e.preventDefault();
+    const country = countrySelect.value,
+          currency = currencySelect.value;
+
+    saveAndUpdateCurrencyAndCountry(country, currency);
+    BC.ToastMessage.create('Your Settings have been saved.', 'success');
+
+    hidePane();
+    BC.SiteMenu.hideMenu();
+  }
+
+  function promptCurrencySwitch() {
+    const countryCode = BC.App.getCountry();
+
+    if (countryCode !== 'US' && BC.Utils.getFromLocalStorage(localStorageKeys.country) === null) {
+      currencyToastMessage = BC.ToastMessage.create('Set values currently shown in USD. <a href="#" class="bc-user-settings-pane-show-trigger">Change currency?</a>', false, false, true, false, 'bc-change-currency-toast-message');
+      const showSettingsTrigger = currencyToastMessage.querySelector(".bc-user-settings-pane-show-trigger");
+      showSettingsTrigger.addEventListener("click", changeCurrencyFromToastMessage);
+    }
+  }
+
+  function handleLocationUpdate() {
+    setSelectedCountryAndCurrency();
+    promptCurrencySwitch();
   }
 
   function setEventListeners() {
     document.addEventListener(customEvents.userSignedIn, update);
     document.addEventListener(customEvents.userSignedOut, update);
-    document.addEventListener(customEvents.locationUpdated, setSelectedCountryAndCurrency);
+    document.addEventListener(customEvents.locationUpdated, handleLocationUpdate);
+    settingsForm.addEventListener("submit", handleSettingsFormSubmit);
     hidePaneTriggers.forEach(function(t){
       t.addEventListener("click", hidePane);
     });
@@ -86,6 +122,11 @@ BC.UserSettingsPane = function() {
     currencySelect.innerHTML = options;
   }
 
+  const changeCurrencyFromToastMessage = function changeCurrencyFromToastMessage() {
+    BC.ToastMessage.removeMessage(currencyToastMessage);
+    showPane();
+  }
+
   const showPane = function showPane() {
     BC.SiteMenu.showMenu();
     settingsPane.classList.add(paneVisibleClass);
@@ -112,12 +153,14 @@ BC.UserSettingsPane = function() {
     buildCurrencySelector();
     update();
     setEventListeners();
+    setSelectedCountryAndCurrency();
   }
 
   return {
     initialize: initialize,
     update: update,
     showPane: showPane,
-    hidePane: hidePane
+    hidePane: hidePane,
+    changeCurrencyFromToastMessage: changeCurrencyFromToastMessage
   }
 }();
