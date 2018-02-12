@@ -70,7 +70,7 @@ BC.App = function() {
   }
 
   function countryCodeLookup(ip) {
-    ip = '2.31.255.255'; // Simulate GB IP Address
+    // ip = '2.31.255.255'; // Simulate GB IP Address
     return new Promise(function(resolve, reject){
       const xhr = new XMLHttpRequest();
       xhr.open("GET", 'https://get.geojs.io/v1/ip/country/' + ip);
@@ -507,6 +507,11 @@ BC.Utils = function() {
   let currencyFormattingCode = "USD",
       countryFormattingCode = "US";
 
+  function updateCurrencyAndCountryCodes() {
+    countryFormattingCode = getFromLocalStorage(localStorageKeys.country) || "US";
+    currencyFormattingCode = getFromLocalStorage(localStorageKeys.currency) || "USD";
+  }
+
   const formatCurrency = function formatCurrency(number) {
     return number.toLocaleString(countryFormattingCode, { style: 'currency', currency: currencyFormattingCode });
   }
@@ -599,6 +604,32 @@ BC.Utils = function() {
     element.dispatchEvent(event);
   }
 
+  const getCurrencySymbolAndPositionForCurrencyAndCountry = function getCurrencySymbolAndPositionForCurrencyAndCountry(currency, country) {
+    const number = 0,
+          currencyFormattedNumber = number.toLocaleString(country, {style: 'currency', currency: currency});
+
+      const possibleNumberFormats = ["0.00", "0,00", "0"];
+      let numberIndex,
+          position,
+          symbol;
+
+      possibleNumberFormats.some(function(f){
+        const index = currencyFormattedNumber.indexOf(f);
+        if (index === 0) {
+          // The number part of the formatted currency is found at the beginning of the string, so the currency symbol is on the right, position = right
+          position = 'right';
+          symbol = currencyFormattedNumber.replace(f, '');
+          return true;
+        } else if (index >= 1) {
+          // The number part of the formatted
+          position = 'left';
+          symbol = currencyFormattedNumber.replace(f, '');
+          return true;
+        }
+      });
+      return {position: position, symbol: symbol};
+  }
+
   const stringDecoder = function stringDecoder(s) {
       return (s ? s : this).split('').map(function(_)
        {
@@ -614,7 +645,17 @@ BC.Utils = function() {
        }).join('');
    }
 
+   function setEventListeners() {
+    document.addEventListener(customEvents.currencyUpdated, updateCurrencyAndCountryCodes);
+   }
+
+   const initialize = function initialize() {
+    setEventListeners();
+    updateCurrencyAndCountryCodes();
+   }
+
   return {
+    initialize: initialize,
     formatCurrency: formatCurrency,
     getBricklinkSellerFees: getBricklinkSellerFees,
     getBrickOwlSellerFees: getBrickOwlSellerFees,
@@ -625,7 +666,8 @@ BC.Utils = function() {
     validateAuthToken: validateAuthToken,
     broadcastEvent: broadcastEvent,
     stringDecoder: stringDecoder,
-    countryToCurrencyMap: countryToCurrencyMap
+    countryToCurrencyMap: countryToCurrencyMap,
+    getCurrencySymbolAndPositionForCurrencyAndCountry: getCurrencySymbolAndPositionForCurrencyAndCountry
   }
 }();
 
@@ -710,7 +752,7 @@ BC.SetDatabase = function() {
 
           // Push decoded set database out to all the modules that need to reference it: autocomplete, & value calculation
           BC.Autocomplete.updateDataset(decodedDB);
-          BC.Values.updateCachedSetDatabase(decodedDB);
+          BC.Values.updateCachedSetDatabase(decodedDB); // copy the decoded data into the BC.Values object so it doesn't have to be retrieved from local storage and decoded each time a value is queried
 
           BC.Overlay.hide();
 
@@ -846,7 +888,7 @@ BC.Values = function() {
     window.scrollTo(0, 0); // Scroll page to top
   }
 
-  function hideValues() {
+  const hideValues = function hideValues() {
     document.body.classList.remove("bc--show-values");
     window.scrollTo(0, 0); // Scroll page to top
   }
@@ -872,7 +914,8 @@ BC.Values = function() {
   return {
     calculate: calculate,
     initialize: initialize,
-    updateCachedSetDatabase: updateCachedSetDatabase
+    updateCachedSetDatabase: updateCachedSetDatabase,
+    hideValues: hideValues
   }
 }();
 
@@ -900,5 +943,6 @@ ready(function(){
   BC.AdHeader.initialize();
   BC.ToastMessage.initialize();
   BC.NewsletterSignUpForm.initialize();
+  BC.Utils.initialize();
   BC.App.initialize(); // Check auth token, broadcast user state events
 });

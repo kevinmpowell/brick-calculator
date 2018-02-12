@@ -447,6 +447,7 @@ BC.PortletLayout = function() {
   function setEventListeners() {
     document.addEventListener(customEvents.userSignedIn, buildLayout);
     document.addEventListener(customEvents.userSignedOut, buildLayout);
+    document.addEventListener(customEvents.currencyUpdated, buildLayout);
   }
 
   const updateAllPortletValues = function updateAllPortletValues(data, setCost) {

@@ -60,8 +60,10 @@ BC.UserSettingsPane = function() {
     saveAndUpdateCurrencyAndCountry(country, currency);
     BC.ToastMessage.create('Your Settings have been saved.', 'success');
 
-    hidePane();
-    BC.SiteMenu.hideMenu();
+
+    hidePane(); // Hide user settings
+    BC.SiteMenu.hideMenu(); // Close the Menu
+    BC.Values.hideValues(); // Return to the setLookup Form, since any calculated values will be off until settings are updated
   }
 
   function promptCurrencySwitch() {
