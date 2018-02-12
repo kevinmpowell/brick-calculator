@@ -4,12 +4,19 @@ BC.UserSettingsPane = function() {
         userTaxRateFieldId = 'bc-user-settings-taxRate',
         paneVisibleClass = 'bc-user-settings-pane--visible',
         hidePaneSelector = '.bc-user-settings-pane-hide-trigger',
-        showPaneSelector = '.bc-user-settings-pane-show-trigger';
+        showPaneSelector = '.bc-user-settings-pane-show-trigger',
+        settingsFormName = 'bcUserSettings',
+        countrySelectName = 'country',
+        currencySelectName = 'currency',
+        topWorldCurrencies = ["USD","EUR","JPY","GBP","CHF","CAD","AUD"];
 
   let taxRate,
+      settingsForm,
       settingsPane,
       showPaneTriggers,
-      hidePaneTriggers;
+      hidePaneTriggers,
+      countrySelect,
+      currencySelect;
 
   function disableTaxesSetting() {
     taxRate.value = '';
@@ -30,9 +37,17 @@ BC.UserSettingsPane = function() {
     }
   }
 
+  function setSelectedCountryAndCurrency() {
+    const countryCode = BC.App.getCountry(),
+          currencyCode = BC.Utils.countryToCurrencyMap[countryCode];
+    countrySelect.value = countryCode;
+    currencySelect.value = currencyCode;
+  }
+
   function setEventListeners() {
     document.addEventListener(customEvents.userSignedIn, update);
     document.addEventListener(customEvents.userSignedOut, update);
+    document.addEventListener(customEvents.locationUpdated, setSelectedCountryAndCurrency);
     hidePaneTriggers.forEach(function(t){
       t.addEventListener("click", hidePane);
     });
@@ -40,6 +55,35 @@ BC.UserSettingsPane = function() {
     showPaneTriggers.forEach(function(t){
       t.addEventListener("click", showPane);
     });
+  }
+
+  function buildCountrySelector() {
+    const countryCodes = Object.keys(BC.Utils.countryToCurrencyMap);
+    let options = '';
+    countryCodes.sort().  forEach(function(c){
+      options += '<option value="' + c + '">' + c + "</option>";
+    });
+    countrySelect.innerHTML = options;
+  }
+
+  function buildCurrencySelector() {
+    const currencyCodes = Object.values(BC.Utils.countryToCurrencyMap);
+    let options = '',
+        usedCurrencies = [];
+
+    topWorldCurrencies.forEach(function(c){
+      options += '<option value="' + c + '">' + c + "</option>";
+    });
+
+    options += '<option disabled>&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;</option>';
+
+    currencyCodes.sort().forEach(function(c){
+      if (usedCurrencies.indexOf(c) === -1) {
+        options += '<option value="' + c + '">' + c + "</option>";
+        usedCurrencies.push(c);
+      }
+    });
+    currencySelect.innerHTML = options;
   }
 
   const showPane = function showPane() {
@@ -61,6 +105,11 @@ BC.UserSettingsPane = function() {
     settingsPane = document.querySelector(settingsPaneSelector);
     hidePaneTriggers = Array.from(document.querySelectorAll(hidePaneSelector));
     showPaneTriggers = Array.from(document.querySelectorAll(showPaneSelector));
+    settingsForm = document[settingsFormName];
+    countrySelect = settingsForm[countrySelectName];
+    currencySelect = settingsForm[currencySelectName];
+    buildCountrySelector();
+    buildCurrencySelector();
     update();
     setEventListeners();
   }

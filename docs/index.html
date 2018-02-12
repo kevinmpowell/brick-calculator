@@ -585,12 +585,68 @@
     
      type="button" 
     
-    class="bc-button bc-button--primary bc-button--size-s bc-user-settings-pane-hide-trigger">
+    class="bc-button bc-button--size-s bc-user-settings-pane-hide-trigger">
     < Back
   </button>
 
     </div>
-    <form action="" id="bc-user-settings-form">
+    <form action="" id="bc-user-settings-form" name="bcUserSettings">
+      
+  <div class="bc-form-field-group">
+    
+        
+  <label for="bc-user-settings-country" class="bc-form-label">Country</label>
+
+        
+    <div class="bc-form__select">
+        <select class="bc-form__select-input"
+                
+                    id="bc-user-settings-country"
+                
+                
+                    name="country"
+                
+                
+                
+                >
+            
+                
+    
+        
+    <option class="bc-form__select-option" value="" >Select an option</option>
+
+    
+
+
+            
+                
+    
+        
+    <option class="bc-form__select-option" value="option_1" >Option 1</option>
+
+    
+
+
+            
+                
+    
+        
+    <option class="bc-form__select-option" value="option_2" >Option 2</option>
+
+    
+
+
+            
+        </select>
+        <div class="bc-form__select-visual-wrap"></div>
+        <span class="bc-form__select-open-indicator">
+        </span>
+    </div>
+
+      
+  </div>
+
+
       
   <div class="bc-form-field-group">
     
@@ -601,6 +657,10 @@
     <div class="bc-form__select">
         <select class="bc-form__select-input"
                 
+                    id="bc-user-settings-currency"
+                
+                
+                    name="currency"
                 
                 
                 
@@ -686,6 +746,19 @@
 
       
   </div>
+
+
+      
+  
+  
+
+  <button
+    
+     type="submit" 
+    
+    class="bc-button bc-button--primary">
+    Save Settings
+  </button>
 
     </form>
   </div>

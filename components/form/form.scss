@@ -141,7 +141,9 @@ input {
   background-color: none;
   display: inline-block;
   height: $bc-form-field-height;
+  max-width: 400px;
   position: relative;
+  width: 100%;
 }
 
 .bc-form__select-input {
@@ -151,15 +153,17 @@ input {
   color: $brickulator-color-text-on-light-primary;
   cursor: pointer;
   font-family: $brickulator-font-family-sans-serif;
+  font-size: $brickulator-font-size-m;
   height: 100%;
   overflow: hidden;
+  padding: $brickulator-space-inset-1-x;
   position: relative;
   width: 100%;
   z-index: 10;
 
 
   &:focus {
-      outline: none;
+    outline: none;
   }
 
   &:disabled {
@@ -177,8 +181,8 @@ input {
 }
 
 .bc-form__select-visual-wrap {
-  background-clip: padding-box;
   background: $brickulator-color-background-control;
+  background-clip: padding-box;
   border: $brickulator-border-control;
   bottom: 0;
   cursor: pointer;
@@ -187,38 +191,10 @@ input {
   right: 0;
   top: 0;
   z-index: 0;
-
-    // .bc-form__select:hover &,
-    // .bc-form__select--hover & {
-    //     @include hover-styles();
-    // }
-
-    // .bc-form__select-input:focus ~ &,
-    // .bc-form__select--focus & {
-    //     @include focus-styles();
-    // }
-
-    // .bc-form__select--focus:hover & {
-    //     box-shadow: $mds-box-shadow-form-input-border, $mds-box-shadow-form-element-focus;
-    // }
-
-    // .bc-form__select-input:disabled ~ & {
-    //     @include disabled();
-    //     box-shadow: $mds-box-shadow-form-input-border;
-    // }
-
-    // .bc-form--error &,
-    // .bc-form--error .bc-form__select:hover & {
-    //     @include error-styles();
-    // }
-
-    // .bc-form--error .bc-form__select-input:focus ~ & {
-    //     box-shadow: $mds-box-shadow-form-element-focus-input-border-error;
-    // }
-
 }
 
 .bc-form__select-open-indicator {
+  border-left: $brickulator-border-control;
   bottom: 0;
   content: '';
   display: block;
@@ -229,20 +205,16 @@ input {
   width: $bc-form-field-height;
   z-index: 5;
 
-    // .bc-form__select-input:disabled ~ & {
-    //     @include disabled();
-    // }
+  &:before {
+    border-color: $brickulator-color-brand transparent transparent;
+    border-style: solid;
+    border-width: 10px;
+    content: '';
+    height: 0;
+    left: 50%;
+    position: absolute;
+    top: 50%;
+    transform: translate(-50%, -25%);
+    width: 0;
+  }
 }
-
-// .bc-form__select-open-icon {
-//     cursor: pointer;
-//     display: inline;
-//     fill: $mds-color-form-input;
-//     height: $mds-size-icon-s;
-//     left: 50%;
-//     margin-left: -($mds-size-icon-s / 2);
-//     margin-top: -($mds-size-icon-s / 2);
-//     position: absolute;
-//     top: 50%;
-//     width: $mds-size-icon-s;
-// }

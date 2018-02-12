@@ -25,7 +25,8 @@ const ebaySellingFeePercentage = .13, // TODO: Get this from a lookup
       apiDomain = apiMapping[currentDomain],
       customEvents = {
         userSignedIn: 'bc-user-signed-in',
-        userSignedOut: 'bc-user-signed-out'
+        userSignedOut: 'bc-user-signed-out',
+        locationUpdated: 'bc-location-updated'
       },
       EUCountryCodes = ['BE', 'BG', 'CZ', 'DK', 'DE', 'EE', 'IE', 'EL', 'ES', 'FR', 'IT', 'CY', 'LV', 'UK', 'LT', 'LU', 'HU', 'MT', 'NL', 'AT', 'PL', 'PT', 'RO', 'SI', 'SK', 'FI', 'SE', 'GB'];
 
@@ -79,6 +80,7 @@ BC.App = function() {
   function setLocation() {
     return geoIpLookup().then(countryCodeLookup).then(function(countryCode){
       country = countryCode.trim();
+      BC.Utils.broadcastEvent(customEvents.locationUpdated);
     });
   }
 
@@ -621,7 +623,8 @@ BC.Utils = function() {
     removeFromLocalStorage: removeFromLocalStorage,
     validateAuthToken: validateAuthToken,
     broadcastEvent: broadcastEvent,
-    stringDecoder: stringDecoder
+    stringDecoder: stringDecoder,
+    countryToCurrencyMap: countryToCurrencyMap
   }
 }();
 
