@@ -10,6 +10,7 @@ BC.PortletLayout = function() {
                 title: "Bricklink",
                 retrievedAtKey: "blRA",
                 listingsCountKey: "blCSNLC",
+                marketplaceUrl: 'bricklinkCurrentListingsUrl',
                 lineItems: [
                   {
                     key: "blCSNA",
@@ -29,6 +30,7 @@ BC.PortletLayout = function() {
                 title: "Brick Owl",
                 retrievedAtKey: "boRA",
                 listingsCountKey: "boCSNLC",
+                marketplaceUrl: 'brickOwlListingsUrl',
                 lineItems: [
                   {
                     key: "boCSNA",
@@ -48,6 +50,7 @@ BC.PortletLayout = function() {
                 title: "eBay",
                 retrievedAtKey: "eRA",
                 listingsCountKey: "eCSNLC",
+                marketplaceUrl: 'ebayCurrentListingsNewUrl',
                 lineItems: [
                   {
                     key: "eCSNA",
@@ -72,6 +75,7 @@ BC.PortletLayout = function() {
                 title: "Bricklink",
                 retrievedAtKey: "blRA",
                 listingsCountKey: "blCSULC",
+                marketplaceUrl: 'bricklinkCurrentListingsUrl',
                 lineItems: [
                   {
                     key: "blCSUA",
@@ -91,6 +95,7 @@ BC.PortletLayout = function() {
                 title: "Brick Owl",
                 retrievedAtKey: "boRA",
                 listingsCountKey: "boCSULC",
+                marketplaceUrl: 'brickOwlListingsUrl',
                 lineItems: [
                   {
                     key: "boCSUA",
@@ -110,6 +115,7 @@ BC.PortletLayout = function() {
                 title: "eBay",
                 retrievedAtKey: "eRA",
                 listingsCountKey: "eCSULC",
+                marketplaceUrl: 'ebayCurrentListingsUsedUrl',
                 lineItems: [
                   {
                     key: "eCSUA",
@@ -137,6 +143,7 @@ BC.PortletLayout = function() {
                 listingsCountKey: "blCSCLNLC",
                 timestampLabel: "In the last 6 months",
                 listingsCountSuffix: "sold",
+                marketplaceUrl: 'bricklinkSoldListingsUrl',
                 lineItems: [
                   {
                     key: "blCSCLNM",
@@ -158,6 +165,7 @@ BC.PortletLayout = function() {
                 listingsCountKey: "boCSCLNLC",
                 timestampLabel: "In the last 6 months",
                 listingsCountSuffix: "sold",
+                marketplaceUrl: 'brickOwlListingsUrl',
                 lineItems: [
                   {
                     key: "boCSCLNA",
@@ -179,6 +187,7 @@ BC.PortletLayout = function() {
                 listingsCountKey: "eCSCLNLC",
                 timestampLabel: "In the last 3 months",
                 listingsCountSuffix: "sold",
+                marketplaceUrl: 'ebaySoldListingsNewUrl',
                 lineItems: [
                   {
                     key: "eCSCLNM",
@@ -206,6 +215,7 @@ BC.PortletLayout = function() {
                 listingsCountKey: "blCSCLULC",
                 timestampLabel: "In the last 6 months",
                 listingsCountSuffix: "sold",
+                marketplaceUrl: 'bricklinkSoldListingsUrl',
                 lineItems: [
                   {
                     key: "blCSCLUM",
@@ -227,6 +237,7 @@ BC.PortletLayout = function() {
                 listingsCountKey: "boCSCLULC",
                 timestampLabel: "In the last 6 months",
                 listingsCountSuffix: "sold",
+                marketplaceUrl: 'brickOwlListingsUrl',
                 lineItems: [
                   {
                     key: "boCSCLUA",
@@ -248,6 +259,7 @@ BC.PortletLayout = function() {
                 listingsCountKey: "eCSCLULC",
                 timestampLabel: "In the last 3 months",
                 listingsCountSuffix: "sold",
+                marketplaceUrl: 'ebaySoldListingsUsedUrl',
                 lineItems: [
                   {
                     key: "eCSCLUM",
@@ -320,9 +332,13 @@ BC.PortletLayout = function() {
         portletListingsCountAmount = portletListingsCount.querySelector(".bc-portlet__listings-count-amount"),
         portletListingsCountSuffix = portletListingsCount.querySelector(".bc-portlet__listings-count-suffix"),
         portletLineItems = portletNode.querySelector(".bc-portlet__line-items");
-    
+
     // Portlet Title
     portletNodeTitle.innerHTML = portlet.title;
+
+    if (portlet.marketplaceUrl) {
+      portletNode.setAttribute('data-marketplace-url', BC.Utils[portlet.marketplaceUrl]);
+    }
 
     // Override retrieved at timestamp label with a string
     if (portlet.timestampLabel) {
@@ -387,6 +403,7 @@ BC.PortletLayout = function() {
     const lineItemInputs = Array.from(p.querySelectorAll(".bc-portlet__line-item-input")),
           profitInput = p.querySelector(".bc-portlet__profit-input"),
           portletRetrievedAt = p.querySelector(".bc-portlet__data-retrieved-at"),
+          portletNodeLink = p.querySelector(".bc-portlet__external-link"),
           retrievedAtKey = portletRetrievedAt === null ? false : portletRetrievedAt.getAttribute("data-retrieved-at-key"),
           portletListingsCountAmount = p.querySelector(".bc-portlet__listings-count-amount"),
           listingsCountKey = portletListingsCountAmount === null ? false : portletListingsCountAmount.getAttribute("data-listings-count-key"),
@@ -403,6 +420,16 @@ BC.PortletLayout = function() {
 
     if (listingsCountKey && data.hasOwnProperty(listingsCountKey)) {
       portletListingsCountAmount.innerHTML = data[listingsCountKey];
+    }
+
+    if (p.dataset['marketplace-url']) {
+      const baseUrl = p.dataset['marketplace-url'];
+      let href = baseUrl.replace(/!{setNumber}/, data.n);
+      
+      if (data.boURL) {
+        href = href.replace(/!{brickOwlUrl}/, data.boURL);
+      }
+      portletNodeLink.setAttribute('href', href);
     }
 
     let profit = Math.abs(setCost) * -1, 

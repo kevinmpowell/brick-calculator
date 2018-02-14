@@ -503,7 +503,14 @@ BC.Utils = function() {
           "ZW": "ZWL",
           "AX": "EUR"
         },
-        decimalPointCountryCodes = ['AU','BD','BW','BN','KH','CN','HK','MO','DO','EG','SV','GH','GT','HN','IN','IE','IL','JP','JO','KE','KP','KR','LB','LI','LU','MY','MV','MT','MX','MM','NA','NP','NZ','NI','NG','PK','PS','PA','PH','PR','SG','LK','TW','TZ','TH','UG','GB','US','ZW'];
+        decimalPointCountryCodes = ['AU','BD','BW','BN','KH','CN','HK','MO','DO','EG','SV','GH','GT','HN','IN','IE','IL','JP','JO','KE','KP','KR','LB','LI','LU','MY','MV','MT','MX','MM','NA','NP','NZ','NI','NG','PK','PS','PA','PH','PR','SG','LK','TW','TZ','TH','UG','GB','US','ZW'],
+        brickOwlListingsUrl = 'https://www.brickowl.com/catalog/!{brickOwlUrl}',
+        bricklinkCurrentListingsUrl = 'https://www.bricklink.com/v2/catalog/catalogitem.page?S=!{setNumber}',
+        ebayCurrentListingsUsedUrl = 'https://www.ebay.com/sch/19006/i.html?LH_ItemCondition3000&_nkw=Lego+!{setNumber}',
+        ebayCurrentListingsNewUrl = 'https://www.ebay.com/sch/19006/i.html?LH_ItemCondition1000&_nkw=Lego+!{setNumber}',
+        ebaySoldListingsNewUrl = 'https://www.ebay.com/sch/19006/i.html?LH_ItemCondition1000&LH_Complete=1&LH_Sold=1&_nkw=Lego+!{setNumber}',
+        ebaySoldListingsUsedUrl = 'https://www.ebay.com/sch/19006/i.html?LH_ItemCondition3000&LH_Complete=1&LH_Sold=1&_nkw=Lego+!{setNumber}',
+        bricklinkSoldListingsUrl = 'https://www.bricklink.com/v2/catalog/catalogitem.page?S=!{setNumber}#T=P';
 
   let currencyFormattingCode = "USD",
       countryFormattingCode = "US";
@@ -536,16 +543,15 @@ BC.Utils = function() {
         parseableNumber = numberString.replace(/[^0-9-,]/g, '').replace(/,/g, '.');
       }
     }
-    console.log({parseableNumber});
     // parse float, round 2
     return parseFloat(parseableNumber, 10);
-  }
+  };
 
   const getPayPalTransactionFee = function getPayPalTransactionFee(finalValue) {
     const payPalTransactionPercent = 2.9,
           payPalPerTransactionCharge = 0.3;
     return ((payPalTransactionPercent / 100) * finalValue) + payPalPerTransactionCharge;
-  }
+  };
 
   const getBrickOwlSellerFees = function getBrickOwlSellerFees(finalValue) {
     const brickOwlCommissionPercent = 2.5,
@@ -694,8 +700,15 @@ BC.Utils = function() {
     countryToCurrencyMap: countryToCurrencyMap,
     getCurrencySymbolAndPositionForCurrencyAndCountry: getCurrencySymbolAndPositionForCurrencyAndCountry,
     currencyToFloat: currencyToFloat,
-    decimalPointCountryCodes: decimalPointCountryCodes
-  }
+    decimalPointCountryCodes: decimalPointCountryCodes,
+    bricklinkCurrentListingsUrl: bricklinkCurrentListingsUrl,
+    bricklinkSoldListingsUrl: bricklinkSoldListingsUrl,
+    ebayCurrentListingsUsedUrl: ebayCurrentListingsUsedUrl,
+    ebayCurrentListingsNewUrl: ebayCurrentListingsNewUrl,
+    ebaySoldListingsNewUrl: ebaySoldListingsNewUrl,
+    ebaySoldListingsUsedUrl: ebaySoldListingsUsedUrl,
+    brickOwlListingsUrl: brickOwlListingsUrl
+  };
 }();
 
 BC.SetDatabase = function() {

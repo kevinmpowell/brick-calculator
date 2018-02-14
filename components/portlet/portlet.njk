@@ -7,7 +7,9 @@
             cost,
             profit) %}
   <div class="bc-portlet{{ ' ' + class if class }}" {% if id %} id="{{ id }}" {% endif %}>
-      <h2 class="bc-portlet__title">{{ title }}</h2>
+      <a href="#" class="bc-portlet__external-link">
+        <h2 class="bc-portlet__title">{{ title }}</h2>
+      </a>
       <div class="bc-portlet__data-timestamp">
         As of <span class="bc-portlet__data-retrieved-at"></span>
       </div>
