@@ -468,6 +468,49 @@ img {
   .bc-long-form-text__cta-price strike {
     font-size: 12px; }
 
+.bc-modal-wrapper {
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  background: rgba(83, 85, 85, 0);
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  height: 100vh;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  left: 0;
+  padding: 8px;
+  pointer-events: none;
+  position: fixed;
+  top: 0;
+  width: 100vw;
+  z-index: 500; }
+  .bc--modal-visible .bc-modal-wrapper {
+    background: rgba(83, 85, 85, 0.8);
+    pointer-events: auto; }
+
+.bc-modal {
+  background: #FFFFFF;
+  border-radius: 8px;
+  max-width: 600px;
+  padding: 16px;
+  padding-top: 32px;
+  position: relative;
+  width: 100%; }
+
+.bc-modal__close-button {
+  position: absolute;
+  right: 8px;
+  top: 8px;
+  z-index: 500; }
+
+.bc-modal__content {
+  height: 100%;
+  max-height: 80vh;
+  overflow-y: auto; }
+
 .bc-newsletter-sign-up-form--hidden {
   display: none; }
 

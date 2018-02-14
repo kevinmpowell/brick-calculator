@@ -6,6 +6,8 @@ color:
     dark: "#535555"
     control: "#FFFFFF"
     portlet: "#F7FFFE"
+    overlay-transparent: "rgba($brickulator-color-background-dark, 0)"
+    overlay-opaque: "rgba($brickulator-color-background-dark, 0.8)"
   text:
     on-brand:
       primary: "#FFFFFF"

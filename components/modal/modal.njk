@@ -1,0 +1,20 @@
+{% macro modal(class='', id, text, actions={}, closable=true) %}
+
+  <div {% if id %} id="{{ id }}" {% endif %} 
+        class="bc-modal{{ ' ' + class if class }}">
+    <div class="bc-modal__content">
+      <div class="bc-modal__content-text">
+        {{ text | safe }}
+      </div>
+    </div>
+    {% if closable %}
+      {{ button(class="bc-form-input__clear-button  bc-modal__close-button", text="<span class='bc-form-input__clear-button-text'>&times;</span>") }}
+    {% endif %}
+  </div>
+{% endmacro %}
+
+{% macro modal_wrapper() %}
+  <div class="bc-modal-wrapper">
+    {{ caller() }}
+  </div>
+{% endmacro %}

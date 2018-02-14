@@ -968,6 +968,7 @@ ready(function(){
   BC.SetLookupForm.initialize();
   BC.FormInput.initialize();
   BC.AdHeader.initialize();
+  BC.Modal.initialize();
   BC.ToastMessage.initialize();
   BC.NewsletterSignUpForm.initialize();
   BC.Utils.initialize();
