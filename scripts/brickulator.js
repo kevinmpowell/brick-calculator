@@ -968,8 +968,10 @@ ready(function(){
   BC.SetLookupForm.initialize();
   BC.FormInput.initialize();
   BC.AdHeader.initialize();
+  BC.Modal.initialize();
   BC.ToastMessage.initialize();
   BC.NewsletterSignUpForm.initialize();
+  BC.Tos.initialize();
   BC.Utils.initialize();
   BC.App.initialize(); // Check auth token, broadcast user state events
 });

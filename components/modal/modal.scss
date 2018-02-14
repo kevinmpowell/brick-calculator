@@ -1,0 +1,42 @@
+.bc-modal-wrapper {
+  align-items: center;
+  background: $brickulator-color-background-overlay-transparent;
+  display: flex;
+  height: 100vh;
+  justify-content: center;
+  left: 0;
+  padding: $brickulator-space-inset-1-x;
+  pointer-events: none;
+  position: fixed;
+  top: 0;
+  width: 100vw;
+  z-index: $brickulator-z-index-overlay;
+
+  .bc--modal-visible & {
+    background: $brickulator-color-background-overlay-opaque;
+    pointer-events: auto;
+  }
+}
+
+.bc-modal {
+  background: $brickulator-color-background-panel;
+  border-radius: $brickulator-border-radius-panel;
+  max-width: 600px;
+  padding: $brickulator-space-inset-2-x;
+  padding-top: $brickulator-space-generic-4-x; // make space for close button to not collide with scrollbar
+  position: relative;
+  width: 100%;
+}
+
+.bc-modal__close-button {
+  position: absolute;
+  right: $brickulator-space-generic-1-x;
+  top: $brickulator-space-generic-1-x;
+  z-index: $brickulator-z-index-overlay;
+}
+
+.bc-modal__content {
+  height: 100%;
+  max-height: 80vh;
+  overflow-y: auto;
+}

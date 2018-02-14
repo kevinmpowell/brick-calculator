@@ -1,7 +1,7 @@
 $bc-site-menu-max-width: 320px;
 
 .bc-site-menu {
-  background: rgba($brickulator-color-background-dark, 0);
+  background: $brickulator-color-background-overlay-transparent;
   position: fixed;
   left: 0;
   top: 0;
@@ -14,7 +14,7 @@ $bc-site-menu-max-width: 320px;
 }
 
 .bc-site-menu--visible {
-  background: rgba($brickulator-color-background-dark, 0.8);
+  background: $brickulator-color-background-overlay-opaque;
   transition: background .2s ease-in;
 }
 
