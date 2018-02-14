@@ -16,8 +16,13 @@ BC.SetLookupForm = function() {
 
   function handleFormSubmit(e) {
     e.preventDefault();
-    BC.Values.calculate(setNumber.value, purchasePrice.value);
-    document.activeElement.blur();
+    const formattedPurchasePrice = BC.Utils.currencyToFloat(purchasePrice.value);
+    if (isNaN(formattedPurchasePrice)) {
+      alert("Invalid purchase price. Please use only numbers and periods for decimal points.");
+    } else {
+      BC.Values.calculate(setNumber.value, formattedPurchasePrice);
+      document.activeElement.blur();
+    }
   }
 
   function setTaxRateDisplay(userSettings) {
@@ -35,19 +40,33 @@ BC.SetLookupForm = function() {
     setTaxRateDisplay(userSettings);
   }
 
-  function updatePurchasePriceCurrencySymbol() {
+  function changePurchasePriceInputType(country) {
+    if (BC.Utils.decimalPointCountryCodes.indexOf(country) === -1) {
+      // The selected country doesn't use decimal points for decimal separators, switch the input type from 'number' to 'text' so the numbers can validate
+      purchasePrice.setAttribute('type', 'text');
+    } else {
+      purchasePrice.setAttribute('type', 'number');
+    }
+  }
+
+  function handleCurrencyUpdate() {
     const currency = BC.Utils.getFromLocalStorage(localStorageKeys.currency) || "USD",
           country = BC.Utils.getFromLocalStorage(localStorageKeys.country) || "US",
           symbolAndPosition = BC.Utils.getCurrencySymbolAndPositionForCurrencyAndCountry(currency, country);
 
-    currencySymbol.textContent = symbolAndPosition.symbol;
+    changePurchasePriceInputType(country);
+    updatePurchasePriceCurrencySymbol(symbolAndPosition.symbol);
+  }
+
+  function updatePurchasePriceCurrencySymbol(symbol) {
+    currencySymbol.textContent = symbol;
   }
 
   function setEventListeners() {
     form.addEventListener("submit", handleFormSubmit);
     document.addEventListener(customEvents.userSignedIn, updateFormDisplayForSignedInUser);
     document.addEventListener(customEvents.userSignedOut, updateFormDisplayForSignedInUser);
-    document.addEventListener(customEvents.currencyUpdated, updatePurchasePriceCurrencySymbol);
+    document.addEventListener(customEvents.currencyUpdated, handleCurrencyUpdate);
   }
 
   const initialize = function initialize() {
@@ -57,7 +76,7 @@ BC.SetLookupForm = function() {
     currencySymbol = purchasePrice.parentNode.querySelector(".bc-form-input-prefix");
     taxRate = form.querySelector(taxRateSelector);
     taxRateAmount = form.querySelector(taxRateAmountSelector);
-    updatePurchasePriceCurrencySymbol();
+    handleCurrencyUpdate();
     setEventListeners();
   }
 
