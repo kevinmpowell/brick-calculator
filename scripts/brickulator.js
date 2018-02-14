@@ -502,7 +502,8 @@ BC.Utils = function() {
           "ZM": "ZMW",
           "ZW": "ZWL",
           "AX": "EUR"
-        }
+        },
+        decimalPointCountryCodes = ['AU','BD','BW','BN','KH','CN','HK','MO','DO','EG','SV','GH','GT','HN','IN','IE','IL','JP','JO','KE','KP','KR','LB','LI','LU','MY','MV','MT','MX','MM','NA','NP','NZ','NI','NG','PK','PS','PA','PH','PR','SG','LK','TW','TZ','TH','UG','GB','US','ZW'];
 
   let currencyFormattingCode = "USD",
       countryFormattingCode = "US";
@@ -514,6 +515,30 @@ BC.Utils = function() {
 
   const formatCurrency = function formatCurrency(number) {
     return number.toLocaleString(countryFormattingCode, { style: 'currency', currency: currencyFormattingCode });
+  }
+
+  const currencyToFloat = function currencyToFloat(numberString) {
+    const containsCommas = numberString.indexOf(',') !== -1,
+        containsPeriods = numberString.indexOf('.') !== -1,
+        containsSpaces = numberString.indexOf(' ') !== -1;
+    let parseableNumber = numberString.replace(/[^0-9-.,]/g, ''),
+        radixCharacter;
+    // If there are both commas and periods
+    if (containsCommas || containsSpaces) {
+      // Find the character in the third place from the end and determine if it's a comma or a period
+      radixCharacter = numberString[numberString.length - 3];
+
+      if (radixCharacter === '.') {
+        // If a period, strip commas
+        parseableNumber = numberString.replace(/[^0-9-.]/g, '');
+      } else if (radixCharacter === ',') {
+        // If a comma, strip periods, replace commas with periods
+        parseableNumber = numberString.replace(/[^0-9-,]/g, '').replace(/,/g, '.');
+      }
+    }
+    console.log({parseableNumber});
+    // parse float, round 2
+    return parseFloat(parseableNumber, 10);
   }
 
   const getPayPalTransactionFee = function getPayPalTransactionFee(finalValue) {
@@ -667,7 +692,9 @@ BC.Utils = function() {
     broadcastEvent: broadcastEvent,
     stringDecoder: stringDecoder,
     countryToCurrencyMap: countryToCurrencyMap,
-    getCurrencySymbolAndPositionForCurrencyAndCountry: getCurrencySymbolAndPositionForCurrencyAndCountry
+    getCurrencySymbolAndPositionForCurrencyAndCountry: getCurrencySymbolAndPositionForCurrencyAndCountry,
+    currencyToFloat: currencyToFloat,
+    decimalPointCountryCodes: decimalPointCountryCodes
   }
 }();
 
