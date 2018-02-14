@@ -20,6 +20,7 @@
 @import '../components/sign_up_form/sign_up_form';
 @import '../components/sign_in_form/sign_in_form';
 @import '../components/site_header/site_header';
+@import '../components/site_footer/site_footer';
 @import '../components/set_lookup_form/set_lookup_form';
 @import '../components/tag/tag';
 @import '../components/toast_message/toast_message';
@@ -122,4 +123,8 @@ input::-webkit-inner-spin-button {
 .bc-end-of-results-actions {
   margin: $brickulator-space-stack-4-x;
   padding: $brickulator-space-inset-1-x;
+
+  .bc-button {
+    margin: 0 auto;
+  }
 }

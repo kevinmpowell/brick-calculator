@@ -1,6 +1,6 @@
 'use strict';
 BC.Tos = function() {
-  const termsOfServiceContentUrl = 'terms-of-service.html',
+  const termsOfServiceContentUrl = 'terms-and-conditions.html',
         showTriggerSelector = '.bc-tos--show-trigger';
 
   function getTosContent() {
