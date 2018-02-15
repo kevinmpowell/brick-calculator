@@ -146,8 +146,8 @@ BC.PortletLayout = function() {
                 marketplaceUrl: 'bricklinkSoldListingsUrl',
                 lineItems: [
                   {
-                    key: "blCSCLNM",
-                    label: "Median Value"
+                    key: "blCSCLNA",
+                    label: "Avg Value"
                   },
                   {
                     key: "blFees",
@@ -169,7 +169,7 @@ BC.PortletLayout = function() {
                 lineItems: [
                   {
                     key: "boCSCLNA",
-                    label: "Average Value"
+                    label: "Avg Value"
                   },
                   {
                     key: "boFees",
@@ -190,8 +190,8 @@ BC.PortletLayout = function() {
                 marketplaceUrl: 'ebaySoldListingsNewUrl',
                 lineItems: [
                   {
-                    key: "eCSCLNM",
-                    label: "Median Value"
+                    key: "eCSCLNA",
+                    label: "Avg Value"
                   },
                   {
                     key: "eFees",
@@ -218,8 +218,8 @@ BC.PortletLayout = function() {
                 marketplaceUrl: 'bricklinkSoldListingsUrl',
                 lineItems: [
                   {
-                    key: "blCSCLUM",
-                    label: "Median Value"
+                    key: "blCSCLUA",
+                    label: "Avg Value"
                   },
                   {
                     key: "blFees",
@@ -241,7 +241,7 @@ BC.PortletLayout = function() {
                 lineItems: [
                   {
                     key: "boCSCLUA",
-                    label: "Average Value"
+                    label: "Avg Value"
                   },
                   {
                     key: "boFees",
@@ -262,8 +262,8 @@ BC.PortletLayout = function() {
                 marketplaceUrl: 'ebaySoldListingsUsedUrl',
                 lineItems: [
                   {
-                    key: "eCSCLUM",
-                    label: "Median Value"
+                    key: "eCSCLUA",
+                    label: "Avg Value"
                   },
                   {
                     key: "eFees",
@@ -404,6 +404,7 @@ BC.PortletLayout = function() {
           profitInput = p.querySelector(".bc-portlet__profit-input"),
           portletRetrievedAt = p.querySelector(".bc-portlet__data-retrieved-at"),
           portletNodeLink = p.querySelector(".bc-portlet__external-link"),
+          title = p.querySelector(".bc-portlet__title").textContent,
           retrievedAtKey = portletRetrievedAt === null ? false : portletRetrievedAt.getAttribute("data-retrieved-at-key"),
           portletListingsCountAmount = p.querySelector(".bc-portlet__listings-count-amount"),
           listingsCountKey = portletListingsCountAmount === null ? false : portletListingsCountAmount.getAttribute("data-listings-count-key"),
@@ -419,7 +420,12 @@ BC.PortletLayout = function() {
     }
 
     if (listingsCountKey && data.hasOwnProperty(listingsCountKey)) {
-      portletListingsCountAmount.innerHTML = data[listingsCountKey];
+      let listingsCount = data[listingsCountKey];
+
+      if (title === "eBay" && data[listingsCountKey] >= 50) {
+        listingsCount = "Over " + listingsCount;
+      }
+      portletListingsCountAmount.innerHTML = listingsCount;
     }
 
     if (p.dataset['marketplace-url']) {
