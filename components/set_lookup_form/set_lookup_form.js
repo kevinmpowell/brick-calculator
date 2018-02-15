@@ -21,8 +21,14 @@ BC.SetLookupForm = function() {
       alert("Invalid purchase price. Please use only numbers and periods for decimal points.");
     } else {
       BC.Values.calculate(setNumber.value, formattedPurchasePrice);
+      updateUrlWithLookupParams(setNumber.value, formattedPurchasePrice);
       document.activeElement.blur();
     }
+  }
+
+  function updateUrlWithLookupParams(setNumber, purchasePrice) {
+    const lookupParams = '?' + "setNumber=" + setNumber + "&purchasePrice=" + purchasePrice;
+    window.history.pushState('', '', lookupParams);
   }
 
   function setTaxRateDisplay(userSettings) {
@@ -69,6 +75,27 @@ BC.SetLookupForm = function() {
     document.addEventListener(customEvents.currencyUpdated, handleCurrencyUpdate);
   }
 
+  function setInputValuesFromQueryParams() {
+    // Happens only on page load
+    const paramSetNumber = BC.Utils.getUrlParameterByName("setNumber"),
+          paramPurchasePrice = BC.Utils.getUrlParameterByName("purchasePrice");
+
+    var keyup = document.createEvent('HTMLEvents');
+    keyup.initEvent('keyup', true, false);
+
+    if (paramSetNumber !== null) {
+      setNumber.value = paramSetNumber;
+      setTimeout(function() {
+        setNumber.dispatchEvent(keyup);
+      }, 500); // Trigger this after a delay so Autocomplete can wire up
+    }
+
+    if (paramPurchasePrice !== null) {
+      purchasePrice.value = paramPurchasePrice;
+      purchasePrice.dispatchEvent(keyup);
+    }
+  }
+
   const initialize = function initialize() {
     form = document.getElementById(formId);
     setNumber = document.getElementById(setNumberFieldId);
@@ -78,9 +105,10 @@ BC.SetLookupForm = function() {
     taxRateAmount = form.querySelector(taxRateAmountSelector);
     handleCurrencyUpdate();
     setEventListeners();
-  }
+    setInputValuesFromQueryParams();
+  };
 
   return {
     initialize: initialize
-  }
+  };
 }();

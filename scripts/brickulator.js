@@ -522,7 +522,7 @@ BC.Utils = function() {
 
   const formatCurrency = function formatCurrency(number) {
     return number.toLocaleString(countryFormattingCode, { style: 'currency', currency: currencyFormattingCode });
-  }
+  };
 
   const currencyToFloat = function currencyToFloat(numberString) {
     const containsCommas = numberString.indexOf(',') !== -1,
@@ -674,7 +674,17 @@ BC.Utils = function() {
           var k = (_.toLowerCase().charCodeAt(0) - 83) % 26 || 26;
           return String.fromCharCode(k + ((c == 0) ? 64 : 96));
        }).join('');
-   }
+   };
+
+   const getUrlParameterByName = function getUrlParameterByName(name, url) {
+      if (!url) url = window.location.href;
+      name = name.replace(/[\[\]]/g, "\\$&");
+      var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
+          results = regex.exec(url);
+      if (!results) return null;
+      if (!results[2]) return '';
+      return decodeURIComponent(results[2].replace(/\+/g, " "));
+  }
 
    function setEventListeners() {
     document.addEventListener(customEvents.currencyUpdated, updateCurrencyAndCountryCodes);
@@ -707,7 +717,8 @@ BC.Utils = function() {
     ebayCurrentListingsNewUrl: ebayCurrentListingsNewUrl,
     ebaySoldListingsNewUrl: ebaySoldListingsNewUrl,
     ebaySoldListingsUsedUrl: ebaySoldListingsUsedUrl,
-    brickOwlListingsUrl: brickOwlListingsUrl
+    brickOwlListingsUrl: brickOwlListingsUrl,
+    getUrlParameterByName: getUrlParameterByName
   };
 }();
 
@@ -978,7 +989,6 @@ ready(function(){
   BC.SiteMenu.initialize();
   BC.UserSettingsPane.initialize();
   BC.SignInForm.initialize();
-  BC.SetLookupForm.initialize();
   BC.FormInput.initialize();
   BC.AdHeader.initialize();
   BC.Modal.initialize();
@@ -987,4 +997,5 @@ ready(function(){
   BC.Tos.initialize();
   BC.Utils.initialize();
   BC.App.initialize(); // Check auth token, broadcast user state events
+  BC.SetLookupForm.initialize();
 });
