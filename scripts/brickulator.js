@@ -29,7 +29,8 @@ const ebaySellingFeePercentage = .13, // TODO: Get this from a lookup
         userSignedIn: 'bc-user-signed-in',
         userSignedOut: 'bc-user-signed-out',
         locationUpdated: 'bc-location-updated',
-        currencyUpdated: 'bc-currency-updated'
+        currencyUpdated: 'bc-currency-updated',
+        preferencesUpdated: 'bc-preferences-updated'
       },
       EUCountryCodes = ['BE', 'BG', 'CZ', 'DK', 'DE', 'EE', 'IE', 'EL', 'ES', 'FR', 'IT', 'CY', 'LV', 'UK', 'LT', 'LU', 'HU', 'MT', 'NL', 'AT', 'PL', 'PT', 'RO', 'SI', 'SK', 'FI', 'SE', 'GB'];
 
@@ -106,7 +107,7 @@ BC.App = function() {
 
   const storeCookieUsageAuthorization = function storeCookieUsageAuthorization() {
     BC.Utils.saveToLocalStorage(localStorageKeys.cookieConsent, true);
-  }
+  };
 
   const getUserSettings = function getUserSettings() {
     const userSettingsRaw = localStorage.getItem(localStorageKeys.userSettings);
@@ -115,15 +116,15 @@ BC.App = function() {
     } else {
       return JSON.parse(BC.Utils.stringDecoder(userSettingsRaw)).preferences;
     }
-  }
+  };
 
   const clearUserSettings = function clearUserSettings() {
     localStorage.removeItem(localStorageKeys.userSettings);
-  }
+  };
 
   const clearAuthToken = function clearAuthToken() {
     localStorage.removeItem(localStorageKeys.authToken);
-  }
+  };
 
   const setSignedInState = function setSignedInState() {
     BC.Utils.validateAuthToken()
@@ -137,7 +138,7 @@ BC.App = function() {
       clearAuthToken();
       clearUserSettings();
     });
-  }
+  };
 
   const signOut = function signOut() {
     BC.Utils.removeFromLocalStorage(localStorageKeys.authToken);

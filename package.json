@@ -19,7 +19,8 @@
   "homepage": "https://github.com/kevinmpowell/brickulator#readme",
   "devDependencies": {
     "esds-build": "git+ssh://git@github.com/EightShapes/esds-build.git#a49138563e93f13ab0012b756a6685990431d650",
-    "gulp": "git+https://github.com/gulpjs/gulp.git#4.0"
+    "gulp": "git+https://github.com/gulpjs/gulp.git#4.0",
+    "gulp-clean-css": "^3.9.2"
   },
   "dependencies": {
     "gulp-javascript-obfuscator": "^1.1.4",
