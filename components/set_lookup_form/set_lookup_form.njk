@@ -26,8 +26,10 @@
       </label>
         {{ form_input(step="0.01", type="number", id="bc-set-lookup-form__purchase-price-input", name="purchasePrice", clear_button=true, prefix="$") }}
     {% endcall %}
-
-    {{ button(text="Brickulate!", type="submit", class="bc-button--primary") }}
+    
+    <div class="bc-set-lookup-form__actions">
+      {{ button(text="Brickulate!", type="submit", class="bc-button--primary bc-set-lookup-form__submit-button") }}
+    </div>
   </form>
   
 {% endmacro %}

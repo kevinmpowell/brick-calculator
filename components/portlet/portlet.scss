@@ -63,8 +63,8 @@
 .bc-portlet__line-item-label {
   background: none;
   border: 0;
-  height: auto;
   font-size: $brickulator-font-size-xs;
+  height: auto;
   padding: 0;
 }
 
@@ -72,6 +72,16 @@
   display: none;
 
   .bc--plus-member-signed-in & {
+    display: inline;
+  }
+}
+
+
+// Show the "Cost w/taxes" label in search results
+.bc-portlet__line-item-label-taxes-included-snippet {
+  display: none;
+
+  .bc--plus-member-taxes-enabled & {
     display: inline;
   }
 }

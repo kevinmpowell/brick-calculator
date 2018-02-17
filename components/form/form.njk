@@ -143,3 +143,59 @@
 {% macro form_select_option(option) %}
     <option class="bc-form__select-option" value="{{ option.value }}" {{ 'selected' if option.selected }}>{{ option.text }}</option>
 {% endmacro %}
+
+
+{% macro form_checkbox(
+    id="checkbox-1",
+    name,
+    checked=false,
+    label="Selected",
+    class,
+    describedby,
+    value="on",
+    disabled=false) %}
+    {% if name == undefined %}
+      {% set name = id %}
+    {% endif %}
+    <label for="{{ id }}" class="bc-form__checkbox">
+      <input
+        class="bc-form__checkbox-input"
+        type="checkbox"
+        name="{{ name }}"
+        id="{{ id }}"
+        {% if class %} class="{{ class }}" {% endif %}
+        value="{{ value }}"
+        {{ 'checked' if checked }}
+        {{ 'disabled' if disabled }}
+        {% if describedby %} aria-describedby="{{ describedby }}" {% endif %}
+      >
+      <span class="bc-form__checkbox-visual"></span>
+      <span class="bc-form__checkbox-label-text">{{ label }}</span>
+    </label>
+{% endmacro %}
+
+{% macro form_radio(
+    id="radio-1",
+    name,
+    value="on",
+    checked=false,
+    label="Selected",
+    class,
+    describedby,
+    disabled=false) %}
+  <label for="{{ id }}" class="bc-form__radio">
+    <input
+      class="bc-form__radio-button-input"
+      type="radio"
+      name="{{ name }}"
+      id="{{ id }}"
+      {% if class %} class="{{ class }}" {% endif %}
+      {% if value %} value="{{ value }}" {% endif %}
+      {{ 'checked' if checked }}
+      {{ 'disabled' if disabled }}
+      {% if describedby %} aria-describedby="{{ describedby }}" {% endif %}
+    >
+    <span class="bc-form__radio-button-visual"></span>
+    <span class="bc-form__radio-button-label-text">{{ label }}</span>
+  </label>
+{% endmacro %}

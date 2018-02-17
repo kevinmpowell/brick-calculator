@@ -6,6 +6,7 @@
 BC.UserSettingsPane = function() {
   const settingsPaneSelector = '.bc-user-settings-pane',
         userTaxRateFieldId = 'bc-user-settings-taxRate',
+        userEnableTaxRateFieldId = 'bc-user-settings-enableTaxes',
         paneVisibleClass = 'bc-user-settings-pane--visible',
         hidePaneSelector = '.bc-user-settings-pane-hide-trigger',
         showPaneSelector = '.bc-user-settings-pane-show-trigger',
@@ -15,6 +16,7 @@ BC.UserSettingsPane = function() {
         topWorldCurrencies = ["USD", "EUR", "JPY", "GBP", "CHF", "CAD", "AUD"];
 
   let taxRate,
+      enableTaxes,
       settingsForm,
       settingsPane,
       showPaneTriggers,
@@ -23,22 +25,29 @@ BC.UserSettingsPane = function() {
       currencySelect,
       currencyToastMessage;
 
-  function disableTaxesSetting() {
+  function disableTaxSettings() {
     taxRate.value = '';
     taxRate.setAttribute('disabled', true);
+    enableTaxes.checked = false;
+    enableTaxes.setAttribute('disabled', true);
   }
 
-  function enableTaxesSetting(userSettings) {
+  function enableTaxSettings(userSettings) {
     taxRate.removeAttribute('disabled');
+    enableTaxes.removeAttribute('disabled');
     if (userSettings.taxRate) {
       taxRate.value = userSettings.taxRate; // If they've previously saved a tax rate, restore that value here
     }
+
+    if (userSettings.enableTaxes) { // If they've previously enabled taxes, check the box
+      enableTaxes.checked = userSettings.enableTaxes;
+    }
   }
 
-  function updateTaxesSetting(userSettings) {
-    disableTaxesSetting();
+  function togglePlusMemberSettings(userSettings) {
+    disableTaxSettings();
     if (userSettings !== null && userSettings.plus_member) {
-      enableTaxesSetting(userSettings); // If they're a plus member, give them access to the tax rate settings
+      enableTaxSettings(userSettings); // If they're a plus member, give them access to the tax rate settings
     }
   }
 
@@ -56,7 +65,7 @@ BC.UserSettingsPane = function() {
     BC.Utils.broadcastEvent(customEvents.locationUpdated);
   }
 
-  function saveAndUpdateUserSettings(taxRateValue, country, currency) {
+  function saveAndUpdateUserSettings(enableTaxesValue, taxRateValue, country, currency) {
     const storedToken = BC.Utils.getFromLocalStorage(localStorageKeys.authToken);
     return BC.API.makeRequest({
       method: 'POST',
@@ -65,7 +74,7 @@ BC.UserSettingsPane = function() {
         Authorization: storedToken
       },
       params: {
-        preferences: JSON.stringify({taxRate: taxRateValue, country: country, currency: currency})
+        preferences: JSON.stringify({enableTaxes: enableTaxesValue, taxRate: taxRateValue, country: country, currency: currency})
       }
     });
   }
@@ -74,10 +83,11 @@ BC.UserSettingsPane = function() {
     e.preventDefault();
     const country = countrySelect.value,
           currency = currencySelect.value,
-          taxRateValue = taxRate.value;
+          taxRateValue = taxRate.value,
+          enableTaxesValue = enableTaxes.checked;
 
     saveAndUpdateCurrencyAndCountry(country, currency);
-    saveAndUpdateUserSettings(taxRateValue, country, currency).then(function(data){
+    saveAndUpdateUserSettings(enableTaxesValue, taxRateValue, country, currency).then(function(data){
       BC.ToastMessage.create('Your Settings have been saved.', 'success');
       BC.Utils.saveToLocalStorage(localStorageKeys.userSettings, data);
       BC.Utils.broadcastEvent(customEvents.preferencesUpdated);
@@ -85,8 +95,6 @@ BC.UserSettingsPane = function() {
       BC.SiteMenu.hideMenu(); // Close the Menu
       BC.Values.hideValues(); // Return to the setLookup Form, since any calculated values will be off until settings are updated
     });
-
-
   }
 
   function promptCurrencySwitch() {
@@ -121,7 +129,7 @@ BC.UserSettingsPane = function() {
   function buildCountrySelector() {
     const countryCodes = Object.keys(BC.Utils.countryToCurrencyMap);
     let options = '';
-    countryCodes.sort().  forEach(function(c){
+    countryCodes.sort().forEach(function(c){
       options += '<option value="' + c + '">' + c + "</option>";
     });
     countrySelect.innerHTML = options;
@@ -163,11 +171,12 @@ BC.UserSettingsPane = function() {
 
   const update = function update() {
     const userSettings = BC.App.getUserSettings();
-    updateTaxesSetting(userSettings);
+    togglePlusMemberSettings(userSettings);
   };
 
   const initialize = function initialize() {
     taxRate = document.getElementById(userTaxRateFieldId);
+    enableTaxes = document.getElementById(userEnableTaxRateFieldId);
     settingsPane = document.querySelector(settingsPaneSelector);
     hidePaneTriggers = Array.from(document.querySelectorAll(hidePaneSelector));
     showPaneTriggers = Array.from(document.querySelectorAll(showPaneSelector));

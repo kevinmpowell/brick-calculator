@@ -348,6 +348,71 @@ input {
             transform: translate(-50%, -25%);
     width: 0; }
 
+.bc-form__radio,
+.bc-form__checkbox {
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  background: none;
+  cursor: pointer;
+  display: -webkit-inline-box;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+  width: 100%; }
+
+.bc-form__radio-button-visual,
+.bc-form__checkbox-visual {
+  background: #FFFFFF;
+  border: solid 1px #C6CDCC;
+  border-radius: 50%;
+  display: block;
+  height: 20px;
+  position: relative;
+  width: 20px; }
+  .bc-form__checkbox-input:checked + .bc-form__radio-button-visual, .bc-form__checkbox-input:checked +
+  .bc-form__checkbox-visual {
+    background: #FE8A18; }
+    .bc-form__checkbox-input:checked + .bc-form__radio-button-visual::after, .bc-form__checkbox-input:checked +
+    .bc-form__checkbox-visual::after {
+      color: #FFFFFF;
+      content: '\2714';
+      font-size: 14px;
+      height: 14px;
+      left: 50%;
+      position: absolute;
+      text-align: center;
+      top: 50%;
+      -webkit-transform: translate(-50%, -50%);
+              transform: translate(-50%, -50%);
+      width: 14px; }
+
+.bc-form__checkbox-visual {
+  border-radius: 2px; }
+
+.bc-form__radio-label-text,
+.bc-form__checkbox-label-text {
+  color: #1E1F1F;
+  display: inline;
+  font-size: 12px;
+  margin: 0 0 0 4px;
+  position: relative; }
+
+.bc-form__radio-button-input,
+.bc-form__checkbox-input {
+  clip: rect(1px, 1px, 1px, 1px);
+  position: absolute !important;
+  left: -10000px; }
+  .bc-form__radio-button-input:disabled ~ .bc-form__radio-button-label-text,
+  .bc-form__radio-button-input:disabled ~ .bc-form__radio-button-visual,
+  .bc-form__radio-button-input:disabled ~ .bc-form__checkbox-label-text,
+  .bc-form__radio-button-input:disabled ~ .bc-form__checkbox-visual,
+  .bc-form__checkbox-input:disabled ~ .bc-form__radio-button-label-text,
+  .bc-form__checkbox-input:disabled ~ .bc-form__radio-button-visual,
+  .bc-form__checkbox-input:disabled ~ .bc-form__checkbox-label-text,
+  .bc-form__checkbox-input:disabled ~ .bc-form__checkbox-visual {
+    cursor: not-allowed;
+    opacity: 0.3; }
+
 .bc-set-summary {
   display: -webkit-box;
   display: -ms-flexbox;
@@ -639,13 +704,18 @@ img {
 .bc-portlet__line-item-label {
   background: none;
   border: 0;
-  height: auto;
   font-size: 10px;
+  height: auto;
   padding: 0; }
 
 .bc-portlet__line-item-label-plus-member-snippet {
   display: none; }
   .bc--plus-member-signed-in .bc-portlet__line-item-label-plus-member-snippet {
+    display: inline; }
+
+.bc-portlet__line-item-label-taxes-included-snippet {
+  display: none; }
+  .bc--plus-member-taxes-enabled .bc-portlet__line-item-label-taxes-included-snippet {
     display: inline; }
 
 .bc-portlet__listings-count,
@@ -985,6 +1055,12 @@ img {
 
 .bc-set-lookup-form__tax-message--visible {
   display: inline; }
+
+.bc-set-lookup-form__submit-button {
+  margin: 0 auto; }
+
+.bc-set-lookup-form__actions {
+  text-align: center; }
 
 .bc-tag {
   line-height: 1.3;

@@ -22,7 +22,7 @@ BC.PortletLayout = function() {
                   },
                   {
                     key: "setCost",
-                    label: "Cost<span class='bc-portlet__line-item-label-plus-member-snippet'> w/taxes</span>"
+                    label: "Cost<span class='bc-portlet__line-item-label-taxes-included-snippet'> w/taxes</span>"
                   }
                 ]
               },
@@ -42,7 +42,7 @@ BC.PortletLayout = function() {
                   },
                   {
                     key: "setCost",
-                    label: "Cost<span class='bc-portlet__line-item-label-plus-member-snippet'> w/taxes</span>"
+                    label: "Cost<span class='bc-portlet__line-item-label-taxes-included-snippet'> w/taxes</span>"
                   }
                 ]
               },
@@ -62,7 +62,7 @@ BC.PortletLayout = function() {
                   },
                   {
                     key: "setCost",
-                    label: "Cost<span class='bc-portlet__line-item-label-plus-member-snippet'> w/taxes</span>"
+                    label: "Cost<span class='bc-portlet__line-item-label-taxes-included-snippet'> w/taxes</span>"
                   }
                 ]
               }
@@ -87,7 +87,7 @@ BC.PortletLayout = function() {
                   },
                   {
                     key: "setCost",
-                    label: "Cost<span class='bc-portlet__line-item-label-plus-member-snippet'> w/taxes</span>"
+                    label: "Cost<span class='bc-portlet__line-item-label-taxes-included-snippet'> w/taxes</span>"
                   }
                 ]
               },
@@ -107,7 +107,7 @@ BC.PortletLayout = function() {
                   },
                   {
                     key: "setCost",
-                    label: "Cost<span class='bc-portlet__line-item-label-plus-member-snippet'> w/taxes</span>"
+                    label: "Cost<span class='bc-portlet__line-item-label-taxes-included-snippet'> w/taxes</span>"
                   }
                 ]
               },
@@ -127,7 +127,7 @@ BC.PortletLayout = function() {
                   },
                   {
                     key: "setCost",
-                    label: "Cost<span class='bc-portlet__line-item-label-plus-member-snippet'> w/taxes</span>"
+                    label: "Cost<span class='bc-portlet__line-item-label-taxes-included-snippet'> w/taxes</span>"
                   }
                 ]
               }
@@ -155,7 +155,7 @@ BC.PortletLayout = function() {
                   },
                   {
                     key: "setCost",
-                    label: "Cost<span class='bc-portlet__line-item-label-plus-member-snippet'> w/taxes</span>"
+                    label: "Cost<span class='bc-portlet__line-item-label-taxes-included-snippet'> w/taxes</span>"
                   }
                 ]
               },
@@ -177,7 +177,7 @@ BC.PortletLayout = function() {
                   },
                   {
                     key: "setCost",
-                    label: "Cost<span class='bc-portlet__line-item-label-plus-member-snippet'> w/taxes</span>"
+                    label: "Cost<span class='bc-portlet__line-item-label-taxes-included-snippet'> w/taxes</span>"
                   }
                 ]
               },
@@ -199,7 +199,7 @@ BC.PortletLayout = function() {
                   },
                   {
                     key: "setCost",
-                    label: "Cost<span class='bc-portlet__line-item-label-plus-member-snippet'> w/taxes</span>"
+                    label: "Cost<span class='bc-portlet__line-item-label-taxes-included-snippet'> w/taxes</span>"
                   }
                 ]
               }
@@ -227,7 +227,7 @@ BC.PortletLayout = function() {
                   },
                   {
                     key: "setCost",
-                    label: "Cost<span class='bc-portlet__line-item-label-plus-member-snippet'> w/taxes</span>"
+                    label: "Cost<span class='bc-portlet__line-item-label-taxes-included-snippet'> w/taxes</span>"
                   }
                 ]
               },
@@ -249,7 +249,7 @@ BC.PortletLayout = function() {
                   },
                   {
                     key: "setCost",
-                    label: "Cost<span class='bc-portlet__line-item-label-plus-member-snippet'> w/taxes</span>"
+                    label: "Cost<span class='bc-portlet__line-item-label-taxes-included-snippet'> w/taxes</span>"
                   }
                 ]
               },
@@ -271,7 +271,7 @@ BC.PortletLayout = function() {
                   },
                   {
                     key: "setCost",
-                    label: "Cost<span class='bc-portlet__line-item-label-plus-member-snippet'> w/taxes</span>"
+                    label: "Cost<span class='bc-portlet__line-item-label-taxes-included-snippet'> w/taxes</span>"
                   }
                 ]
               }
@@ -470,7 +470,7 @@ BC.PortletLayout = function() {
   function getSetCostWithTaxes(setCost) {
     const userSettings = BC.App.getUserSettings();
     setCost = parseFloat(setCost, 10);
-    if (userSettings !== null && userSettings.plus_member && userSettings.taxRate) {
+    if (userSettings !== null && userSettings.plus_member && userSettings.taxRate && userSettings.enableTaxes) {
       const taxes = parseFloat(userSettings.taxRate / 100, 10) * setCost;
       setCost += taxes;
     }
