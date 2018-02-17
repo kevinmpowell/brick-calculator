@@ -36,7 +36,7 @@ BC.SetLookupForm = function() {
   }
 
   function setTaxRateDisplay(userSettings) {
-    if (userSettings !== null && userSettings.plus_member && userSettings.taxRate) {
+    if (userSettings !== null && userSettings.plus_member && userSettings.taxRate && userSettings.enableTaxes) {
       taxRateAmount.innerHTML = userSettings.taxRate;
       taxRate.classList.add(taxRateVisibleClass);
     } else {

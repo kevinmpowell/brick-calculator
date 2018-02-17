@@ -37,7 +37,8 @@ const ebaySellingFeePercentage = .13, // TODO: Get this from a lookup
 BC.App = function() {
   const userSignedInClass = 'bc--user-signed-in',
         userSignedOutClass = 'bc--user-signed-out',
-        plusMemberSignedInClass = 'bc--plus-member-signed-in';
+        plusMemberSignedInClass = 'bc--plus-member-signed-in',
+        plusMemberTaxesEnabledClass = 'bc--plus-member-taxes-enabled';
   let body,
       country = "US",
       language = "en"
@@ -57,6 +58,16 @@ BC.App = function() {
       body.classList.add(plusMemberSignedInClass);
     } else {
       body.classList.remove(plusMemberSignedInClass);
+    }
+  }
+
+  function setBodyClassesForPreferences() {
+    const userSettings = BC.App.getUserSettings();
+
+    if (userSettings !== null && userSettings.plus_member && userSettings.enableTaxes) {
+      body.classList.add(plusMemberTaxesEnabledClass);
+    } else {
+      body.classList.remove(plusMemberTaxesEnabledClass);
     }
   }
 
@@ -105,6 +116,10 @@ BC.App = function() {
     }
   }
 
+  function setEventListeners() {
+    document.addEventListener(customEvents.preferencesUpdated, setBodyClassesForPreferences);
+  }
+
   const storeCookieUsageAuthorization = function storeCookieUsageAuthorization() {
     BC.Utils.saveToLocalStorage(localStorageKeys.cookieConsent, true);
   };
@@ -144,46 +159,25 @@ BC.App = function() {
     BC.Utils.removeFromLocalStorage(localStorageKeys.authToken);
     BC.Utils.removeFromLocalStorage(localStorageKeys.userSettings);
     setSignedInState();
-  }
-
-  // const getLocale = function getLocale() {
-  //   if (locale) {
-  //     // if local BC.App locale variable has been set, return it, else get it from the navigator
-  //     return locale;
-  //   } else {
-  //     // From: https://github.com/maxogden/browser-locale/blob/master/index.js
-  //     var lang
-
-  //     if (navigator.languages && navigator.languages.length) {
-  //       // latest versions of Chrome and Firefox set this correctly
-  //       lang = navigator.languages[0]
-  //     } else if (navigator.userLanguage) {
-  //       // IE only
-  //       lang = navigator.userLanguage
-  //     } else {
-  //       // latest versions of Chrome, Firefox, and Safari set this correctly
-  //       lang = navigator.language
-  //     }
-
-  //     return lang;
-  //   }
-  // }
+  };
 
   const getCountry = function getCountry() {
     return country;
-  }
+  };
 
   const getLanguage = function getLanguage() {
     return language;
-  }
+  };
 
   const initialize = function initialize() {
     body = document.body;
     setSignedInState();
+    setEventListeners();
+    setBodyClassesForPreferences();
     setLocation().then(function(){
       showCookieConsentMessage();
     });
-  }
+  };
 
   return {
     initialize: initialize,

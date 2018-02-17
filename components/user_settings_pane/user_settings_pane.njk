@@ -14,6 +14,11 @@
         {{ form_select(id="bc-user-settings-currency", name="currency") }}
       {% endcall %}
 
+      {{ form_label(label="Taxes") }}
+      {% call form_field_group() %}
+        {{ form_checkbox(label="Automatically add taxes to purchase price", id="bc-user-settings-enableTaxes", disabled=true) }}
+      {% endcall %}
+
       {% call form_field_group() %}
         {{ form_label(label="Tax Rate", for="bc-user-settings-taxRate") }}
         {{ form_input(step="0.01", type="number", suffix="%", id="bc-user-settings-taxRate", disabled=true)}}
