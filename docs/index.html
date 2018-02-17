@@ -129,7 +129,7 @@
     
   <div class="bc-form-field-group">
     
-      <label class="bc-form-label" for="bc-set-lookup-form__set-number-input">Set Number</label>
+      <label class="bc-form__label" for="bc-set-lookup-form__set-number-input">Set Number</label>
       
   <div class="bc-autocomplete">
     
@@ -206,7 +206,7 @@
     
   <div class="bc-form-field-group">
     
-      <label class="bc-form-label" for="bc-set-lookup-form__purchase-price-input">
+      <label class="bc-form__label" for="bc-set-lookup-form__purchase-price-input">
         Purchase Price
         <span class="bc-set-lookup-form__tax-message">
           (<span class="bc-set-lookup-form__tax-amount"></span>% sales tax will be added)
@@ -294,7 +294,7 @@
   <div class="bc-form-field-group">
     
         
-  <label for="" class="bc-form-label bc-form-label--size-s">Subscribe for updates</label>
+  <label for="" class="bc-form__label bc-form__label--size-s">Subscribe for updates</label>
 
         
         
@@ -459,7 +459,7 @@
   <div class="bc-form-field-group">
     
       
-  <label for="bc-sign-in-form-email" class="bc-form-label bc-form-label--on-dark bc-form-label--size-m">Email</label>
+  <label for="bc-sign-in-form-email" class="bc-form__label bc-form__label--on-dark bc-form__label--size-m">Email</label>
 
       
   
@@ -496,7 +496,7 @@
   <div class="bc-form-field-group">
     
       
-  <label for="bc-sign-in-form-password" class="bc-form-label bc-form-label--on-dark bc-form-label--size-m">Password</label>
+  <label for="bc-sign-in-form-password" class="bc-form__label bc-form__label--on-dark bc-form__label--size-m">Password</label>
 
       
   
@@ -598,7 +598,7 @@
   <div class="bc-form-field-group">
     
         
-  <label for="bc-user-settings-country" class="bc-form-label">Country</label>
+  <label for="bc-user-settings-country" class="bc-form__label">Country</label>
 
         
     <div class="bc-form__select">
@@ -654,7 +654,7 @@
   <div class="bc-form-field-group">
     
         
-  <label for="bc-user-settings-currency" class="bc-form-label">Currency</label>
+  <label for="bc-user-settings-currency" class="bc-form__label">Currency</label>
 
         
     <div class="bc-form__select">
@@ -706,13 +706,18 @@
   </div>
 
 
-      
-  <label for="" class="bc-form-label">Taxes</label>
-
-      
+      <div class="bc-user-settings__plus-member-settings bc-user-settings__plus-member-settings--disabled">
+        <div class="bc-long-form-text">
+          <h3>Taxes 
+  <span class="bc-tag">
+    <span class='bc-tag__brand-plus'>&plus;</span> <span class='bc-tag__text'>Member</span>
+  </span>
+</h3>
+        </div>
+        
   <div class="bc-form-field-group">
     
-        
+          
     
       
     
@@ -727,22 +732,23 @@
         
         disabled
         
+        
       >
       <span class="bc-form__checkbox-visual"></span>
       <span class="bc-form__checkbox-label-text">Automatically add taxes to purchase price</span>
     </label>
 
-      
+        
   </div>
 
 
-      
+        
   <div class="bc-form-field-group">
     
-        
-  <label for="bc-user-settings-taxRate" class="bc-form-label">Tax Rate</label>
+          
+  <label for="bc-user-settings-taxRate" class="bc-form__label">Tax Rate</label>
 
-        
+          
   
   
 
@@ -777,9 +783,318 @@
     </div>
   
 
-      
+        
   </div>
 
+
+        <div class="bc-long-form-text">
+          <h3>Results Settings 
+  <span class="bc-tag">
+    <span class='bc-tag__brand-plus'>&plus;</span> <span class='bc-tag__text'>Member</span>
+  </span>
+</h3>
+          <p>Uncheck any results you don't want to display when you lookup set values.</p>
+        </div>
+        
+  <fieldset class="bc-form__checkbox-group">
+    
+      <legend class="bc-form__checkbox-group-label">Current Listings, New</legend>
+    
+    <div class="bc-form__checkbox-group-checkboxes">
+      
+          
+    
+      
+    
+    <label for="bc-user-settings-blCLN" class="bc-form__checkbox">
+      <input
+        class="bc-form__checkbox-input"
+        type="checkbox"
+        name="bc-user-settings-blCLN"
+        id="bc-user-settings-blCLN"
+        
+        value="on"
+        
+        disabled
+        data-portlet-config-checkbox-value='blCLN'
+        
+      >
+      <span class="bc-form__checkbox-visual"></span>
+      <span class="bc-form__checkbox-label-text">Bricklink Listings</span>
+    </label>
+
+          
+    
+      
+    
+    <label for="bc-user-settings-boCLN" class="bc-form__checkbox">
+      <input
+        class="bc-form__checkbox-input"
+        type="checkbox"
+        name="bc-user-settings-boCLN"
+        id="bc-user-settings-boCLN"
+        
+        value="on"
+        
+        disabled
+        data-portlet-config-checkbox-value='boCLN'
+        
+      >
+      <span class="bc-form__checkbox-visual"></span>
+      <span class="bc-form__checkbox-label-text">Brick Owl Listings</span>
+    </label>
+
+          
+    
+      
+    
+    <label for="bc-user-settings-eCLN" class="bc-form__checkbox">
+      <input
+        class="bc-form__checkbox-input"
+        type="checkbox"
+        name="bc-user-settings-eCLN"
+        id="bc-user-settings-eCLN"
+        
+        value="on"
+        
+        disabled
+        data-portlet-config-checkbox-value='eCLN'
+        
+      >
+      <span class="bc-form__checkbox-visual"></span>
+      <span class="bc-form__checkbox-label-text">eBay Listings</span>
+    </label>
+
+        
+    </div>
+  </fieldset>
+
+
+        
+  <fieldset class="bc-form__checkbox-group">
+    
+      <legend class="bc-form__checkbox-group-label">Current Listings, Used</legend>
+    
+    <div class="bc-form__checkbox-group-checkboxes">
+      
+          
+    
+      
+    
+    <label for="bc-user-settings-blCLU" class="bc-form__checkbox">
+      <input
+        class="bc-form__checkbox-input"
+        type="checkbox"
+        name="bc-user-settings-blCLU"
+        id="bc-user-settings-blCLU"
+        
+        value="on"
+        
+        disabled
+        data-portlet-config-checkbox-value='blCLU'
+        
+      >
+      <span class="bc-form__checkbox-visual"></span>
+      <span class="bc-form__checkbox-label-text">Bricklink Listings</span>
+    </label>
+
+          
+    
+      
+    
+    <label for="bc-user-settings-boCLU" class="bc-form__checkbox">
+      <input
+        class="bc-form__checkbox-input"
+        type="checkbox"
+        name="bc-user-settings-boCLU"
+        id="bc-user-settings-boCLU"
+        
+        value="on"
+        
+        disabled
+        data-portlet-config-checkbox-value='boCLU'
+        
+      >
+      <span class="bc-form__checkbox-visual"></span>
+      <span class="bc-form__checkbox-label-text">Brick Owl Listings</span>
+    </label>
+
+          
+    
+      
+    
+    <label for="bc-user-settings-eCLU" class="bc-form__checkbox">
+      <input
+        class="bc-form__checkbox-input"
+        type="checkbox"
+        name="bc-user-settings-eCLU"
+        id="bc-user-settings-eCLU"
+        
+        value="on"
+        
+        disabled
+        data-portlet-config-checkbox-value='eCLU'
+        
+      >
+      <span class="bc-form__checkbox-visual"></span>
+      <span class="bc-form__checkbox-label-text">eBay Listings</span>
+    </label>
+
+        
+    </div>
+  </fieldset>
+
+
+        
+  <fieldset class="bc-form__checkbox-group">
+    
+      <legend class="bc-form__checkbox-group-label">Sold Values, New</legend>
+    
+    <div class="bc-form__checkbox-group-checkboxes">
+      
+          
+    
+      
+    
+    <label for="bc-user-settings-blSVN" class="bc-form__checkbox">
+      <input
+        class="bc-form__checkbox-input"
+        type="checkbox"
+        name="bc-user-settings-blSVN"
+        id="bc-user-settings-blSVN"
+        
+        value="on"
+        
+        disabled
+        data-portlet-config-checkbox-value='blSVN'
+        
+      >
+      <span class="bc-form__checkbox-visual"></span>
+      <span class="bc-form__checkbox-label-text">Bricklink Values</span>
+    </label>
+
+          
+    
+      
+    
+    <label for="bc-user-settings-boSVN" class="bc-form__checkbox">
+      <input
+        class="bc-form__checkbox-input"
+        type="checkbox"
+        name="bc-user-settings-boSVN"
+        id="bc-user-settings-boSVN"
+        
+        value="on"
+        
+        disabled
+        data-portlet-config-checkbox-value='boSVN'
+        
+      >
+      <span class="bc-form__checkbox-visual"></span>
+      <span class="bc-form__checkbox-label-text">Brick Owl Values</span>
+    </label>
+
+          
+    
+      
+    
+    <label for="bc-user-settings-eSVN" class="bc-form__checkbox">
+      <input
+        class="bc-form__checkbox-input"
+        type="checkbox"
+        name="bc-user-settings-eSVN"
+        id="bc-user-settings-eSVN"
+        
+        value="on"
+        
+        disabled
+        data-portlet-config-checkbox-value='eSVN'
+        
+      >
+      <span class="bc-form__checkbox-visual"></span>
+      <span class="bc-form__checkbox-label-text">eBay Values</span>
+    </label>
+
+        
+    </div>
+  </fieldset>
+
+
+        
+  <fieldset class="bc-form__checkbox-group">
+    
+      <legend class="bc-form__checkbox-group-label">Sold Values, Used</legend>
+    
+    <div class="bc-form__checkbox-group-checkboxes">
+      
+          
+    
+      
+    
+    <label for="bc-user-settings-blSVU" class="bc-form__checkbox">
+      <input
+        class="bc-form__checkbox-input"
+        type="checkbox"
+        name="bc-user-settings-blSVU"
+        id="bc-user-settings-blSVU"
+        
+        value="on"
+        
+        disabled
+        data-portlet-config-checkbox-value='blSVU'
+        
+      >
+      <span class="bc-form__checkbox-visual"></span>
+      <span class="bc-form__checkbox-label-text">Bricklink Values</span>
+    </label>
+
+          
+    
+      
+    
+    <label for="bc-user-settings-boSVU" class="bc-form__checkbox">
+      <input
+        class="bc-form__checkbox-input"
+        type="checkbox"
+        name="bc-user-settings-boSVU"
+        id="bc-user-settings-boSVU"
+        
+        value="on"
+        
+        disabled
+        data-portlet-config-checkbox-value='boSVU'
+        
+      >
+      <span class="bc-form__checkbox-visual"></span>
+      <span class="bc-form__checkbox-label-text">Brick Owl Values</span>
+    </label>
+
+          
+    
+      
+    
+    <label for="bc-user-settings-eSVU" class="bc-form__checkbox">
+      <input
+        class="bc-form__checkbox-input"
+        type="checkbox"
+        name="bc-user-settings-eSVU"
+        id="bc-user-settings-eSVU"
+        
+        value="on"
+        
+        disabled
+        data-portlet-config-checkbox-value='eSVU'
+        
+      >
+      <span class="bc-form__checkbox-visual"></span>
+      <span class="bc-form__checkbox-label-text">eBay Values</span>
+    </label>
+
+        
+    </div>
+  </fieldset>
+
+      </div>
 
       
   
@@ -872,14 +1187,14 @@
       </div>
       <div class="bc-field-group">
         
-  <label for="bc-sign-up-form-email" class="bc-form-label">Email</label>
+  <label for="bc-sign-up-form-email" class="bc-form__label">Email</label>
 
         <input autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" name="bc-sign-up-form-email" id="bc-sign-up-form-email" type="email" tabindex="-1">
       </div>
 
       <div class="bc-field-group">
         
-  <label for="bc-sign-up-form-password" class="bc-form-label">Create Password</label>
+  <label for="bc-sign-up-form-password" class="bc-form__label">Create Password</label>
 
         <input name="bc-sign-up-form-password" id="bc-sign-up-form-password" type="password" tabindex="-1">
       </div>

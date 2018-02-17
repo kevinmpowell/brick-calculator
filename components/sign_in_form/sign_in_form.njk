@@ -1,12 +1,12 @@
 {% macro sign_in_form(class) %}
   <form action="" method="POST" id="bc-sign-in-form">
     {% call form_field_group() %}
-      {{ form_label(for="bc-sign-in-form-email", label="Email", class="bc-form-label--on-dark bc-form-label--size-m") }}
+      {{ form_label(for="bc-sign-in-form-email", label="Email", class="bc-form__label--on-dark bc-form__label--size-m") }}
       {{ form_input(id="bc-sign-in-form-email", type="email", class="bc-form-input--size-m", tabindex="-1")}}
     {% endcall %}
 
     {% call form_field_group() %}
-      {{ form_label(for="bc-sign-in-form-password", label="Password", class="bc-form-label--on-dark bc-form-label--size-m") }}
+      {{ form_label(for="bc-sign-in-form-password", label="Password", class="bc-form__label--on-dark bc-form__label--size-m") }}
       {{ form_input(id="bc-sign-in-form-password", type="password", class="bc-form-input--size-m", tabindex="-1")}}
     {% endcall %}
 

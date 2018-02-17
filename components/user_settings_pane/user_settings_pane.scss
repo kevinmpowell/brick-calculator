@@ -1,6 +1,6 @@
 .bc-user-settings-pane {
   background: $brickulator-color-background-light;
-  height: 100%;
+  height: 100vh;
   left: 0;
   overflow-y: auto;
   position: absolute;
@@ -28,4 +28,18 @@
 
 #bc-user-settings-taxRate {
   max-width: 80px;
+}
+
+// Plus Member Settings
+.bc-user-settings__plus-member-settings {
+
+  &.bc-user-settings__plus-member-settings--disabled {
+
+    .bc-form__checkbox-group-label,
+    .bc-form__label,
+    .bc-form-input-suffix,
+    .bc-long-form-text {
+      opacity: $brickulator-opacity-disabled;
+    }
+  }
 }

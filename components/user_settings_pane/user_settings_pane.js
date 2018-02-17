@@ -8,6 +8,9 @@ BC.UserSettingsPane = function() {
         userTaxRateFieldId = 'bc-user-settings-taxRate',
         userEnableTaxRateFieldId = 'bc-user-settings-enableTaxes',
         paneVisibleClass = 'bc-user-settings-pane--visible',
+        plusMemberSettingsSectionSelector = '.bc-user-settings__plus-member-settings',
+        plusMemberSettingsDisabledClass = 'bc-user-settings__plus-member-settings--disabled',
+        portletConfigCheckboxSelector = '[data-portlet-config-checkbox-value]',
         hidePaneSelector = '.bc-user-settings-pane-hide-trigger',
         showPaneSelector = '.bc-user-settings-pane-show-trigger',
         settingsFormName = 'bcUserSettings',
@@ -23,7 +26,9 @@ BC.UserSettingsPane = function() {
       hidePaneTriggers,
       countrySelect,
       currencySelect,
-      currencyToastMessage;
+      currencyToastMessage,
+      plusMemberSettingsSection,
+      portletConfigCheckboxes;
 
   function disableTaxSettings() {
     taxRate.value = '';
@@ -31,6 +36,7 @@ BC.UserSettingsPane = function() {
     enableTaxes.checked = false;
     enableTaxes.setAttribute('disabled', true);
   }
+
 
   function enableTaxSettings(userSettings) {
     taxRate.removeAttribute('disabled');
@@ -44,10 +50,37 @@ BC.UserSettingsPane = function() {
     }
   }
 
+  function disablePortletConfigSettings() {
+    portletConfigCheckboxes.forEach(function(c){
+      c.checked = false;
+      c.setAttribute('disabled', true);
+    });
+  }
+
+  function enablePortletConfigSettings(userSettings) {
+    const portletConfig = userSettings.portletConfig;
+
+    portletConfigCheckboxes.forEach(function(c){
+      c.removeAttribute('disabled');
+      if (portletConfig && portletConfig[c.dataset['portlet-config-checkbox-value']] === false) {
+        c.checked = false;
+      } else if (portletConfig && portletConfig[c.dataset['portlet-config-checkbox-value']] === true) {
+        c.checked = true;
+      }
+    });
+  }
+
   function togglePlusMemberSettings(userSettings) {
     disableTaxSettings();
+    disablePortletConfigSettings();
+
     if (userSettings !== null && userSettings.plus_member) {
+      // Enable plus member settings section
+      plusMemberSettingsSection.classList.remove(plusMemberSettingsDisabledClass);
       enableTaxSettings(userSettings); // If they're a plus member, give them access to the tax rate settings
+      enablePortletConfigSettings(userSettings);
+    } else {
+      plusMemberSettingsSection.classList.add(plusMemberSettingsDisabledClass);
     }
   }
 
@@ -65,7 +98,7 @@ BC.UserSettingsPane = function() {
     BC.Utils.broadcastEvent(customEvents.locationUpdated);
   }
 
-  function saveAndUpdateUserSettings(enableTaxesValue, taxRateValue, country, currency) {
+  function saveAndUpdateUserSettings(enableTaxesValue, taxRateValue, country, currency, portletConfig) {
     const storedToken = BC.Utils.getFromLocalStorage(localStorageKeys.authToken);
     return BC.API.makeRequest({
       method: 'POST',
@@ -74,9 +107,17 @@ BC.UserSettingsPane = function() {
         Authorization: storedToken
       },
       params: {
-        preferences: JSON.stringify({enableTaxes: enableTaxesValue, taxRate: taxRateValue, country: country, currency: currency})
+        preferences: JSON.stringify({enableTaxes: enableTaxesValue, taxRate: taxRateValue, country: country, currency: currency, portletConfig: portletConfig})
       }
     });
+  }
+
+  function getPlusMemberPortletConfig() {
+    const portletConfig = {};
+    portletConfigCheckboxes.forEach(function(c){
+      portletConfig[c.dataset['portlet-config-checkbox-value']] = c.checked;
+    });
+    return portletConfig;
   }
 
   function handleSettingsFormSubmit(e) {
@@ -84,16 +125,17 @@ BC.UserSettingsPane = function() {
     const country = countrySelect.value,
           currency = currencySelect.value,
           taxRateValue = taxRate.value,
-          enableTaxesValue = enableTaxes.checked;
+          enableTaxesValue = enableTaxes.checked,
+          portletConfig = getPlusMemberPortletConfig();
 
     saveAndUpdateCurrencyAndCountry(country, currency);
-    saveAndUpdateUserSettings(enableTaxesValue, taxRateValue, country, currency).then(function(data){
+    saveAndUpdateUserSettings(enableTaxesValue, taxRateValue, country, currency, portletConfig).then(function(data){
       BC.ToastMessage.create('Your Settings have been saved.', 'success');
       BC.Utils.saveToLocalStorage(localStorageKeys.userSettings, data);
-      BC.Utils.broadcastEvent(customEvents.preferencesUpdated);
       hidePane(); // Hide user settings
       BC.SiteMenu.hideMenu(); // Close the Menu
       BC.Values.hideValues(); // Return to the setLookup Form, since any calculated values will be off until settings are updated
+      BC.Utils.broadcastEvent(customEvents.preferencesUpdated);
     });
   }
 
@@ -178,6 +220,9 @@ BC.UserSettingsPane = function() {
     taxRate = document.getElementById(userTaxRateFieldId);
     enableTaxes = document.getElementById(userEnableTaxRateFieldId);
     settingsPane = document.querySelector(settingsPaneSelector);
+    plusMemberSettingsSection = document.querySelector(plusMemberSettingsSectionSelector);
+    portletConfigCheckboxes = Array.from(document.querySelectorAll(portletConfigCheckboxSelector));
+    console.log({portletConfigCheckboxes});
     hidePaneTriggers = Array.from(document.querySelectorAll(hidePaneSelector));
     showPaneTriggers = Array.from(document.querySelectorAll(showPaneSelector));
     settingsForm = document[settingsFormName];

@@ -7,6 +7,7 @@ BC.PortletLayout = function() {
             header: "Current Listings (New)",
             portlets: [
               {
+                id: "blCLN",
                 title: "Bricklink",
                 retrievedAtKey: "blRA",
                 listingsCountKey: "blCSNLC",
@@ -27,6 +28,7 @@ BC.PortletLayout = function() {
                 ]
               },
               {
+                id: "boCLN",
                 title: "Brick Owl",
                 retrievedAtKey: "boRA",
                 listingsCountKey: "boCSNLC",
@@ -47,6 +49,7 @@ BC.PortletLayout = function() {
                 ]
               },
               {
+                id: "eCLN",
                 title: "eBay",
                 retrievedAtKey: "eRA",
                 listingsCountKey: "eCSNLC",
@@ -72,6 +75,7 @@ BC.PortletLayout = function() {
             header: "Current Listings (Used)",
             portlets: [
               {
+                id: "blCLU",
                 title: "Bricklink",
                 retrievedAtKey: "blRA",
                 listingsCountKey: "blCSULC",
@@ -92,6 +96,7 @@ BC.PortletLayout = function() {
                 ]
               },
               {
+                id: "boCLU",
                 title: "Brick Owl",
                 retrievedAtKey: "boRA",
                 listingsCountKey: "boCSULC",
@@ -112,6 +117,7 @@ BC.PortletLayout = function() {
                 ]
               },
               {
+                id: "eCLU",
                 title: "eBay",
                 retrievedAtKey: "eRA",
                 listingsCountKey: "eCSULC",
@@ -134,10 +140,11 @@ BC.PortletLayout = function() {
             ]
           },
           {
-            header: "Sold Listings (New)",
+            header: "Sold Values (New)",
             headerClass: "",
             portlets: [
               {
+                id: "blSVN",
                 title: "Bricklink",
                 retrievedAtKey: "blRA",
                 listingsCountKey: "blCSCLNLC",
@@ -160,6 +167,7 @@ BC.PortletLayout = function() {
                 ]
               },
               {
+                id: "boSVN",
                 title: "Brick Owl",
                 retrievedAtKey: "boRA",
                 listingsCountKey: "boCSCLNLC",
@@ -182,6 +190,7 @@ BC.PortletLayout = function() {
                 ]
               },
               {
+                id: "eSVN",
                 title: "eBay",
                 retrievedAtKey: "eRA",
                 listingsCountKey: "eCSCLNLC",
@@ -206,10 +215,11 @@ BC.PortletLayout = function() {
             ]
           },
           {
-            header: "Sold Listings (Used)",
+            header: "Sold Values (Used)",
             headerClass: "",
             portlets: [
               {
+                id: "blSVU",
                 title: "Bricklink",
                 retrievedAtKey: "blRA",
                 listingsCountKey: "blCSCLULC",
@@ -232,6 +242,7 @@ BC.PortletLayout = function() {
                 ]
               },
               {
+                id: "boSVU",
                 title: "Brick Owl",
                 retrievedAtKey: "boRA",
                 listingsCountKey: "boCSCLULC",
@@ -254,6 +265,7 @@ BC.PortletLayout = function() {
                 ]
               },
               {
+                id: "eSVU",
                 title: "eBay",
                 retrievedAtKey: "eRA",
                 listingsCountKey: "eCSCLULC",
@@ -277,9 +289,6 @@ BC.PortletLayout = function() {
               }
             ]
           }
-        ],
-        plusMemberPortlets = [
-          
         ];
 
   let portletTemplate,
@@ -292,10 +301,33 @@ BC.PortletLayout = function() {
 
   function getLayout() {
     const userSettings = BC.App.getUserSettings();
-    let layout = defaultLayout.slice(); // Using .slice() to clone so it's not referenced
+    let layout = JSON.parse(JSON.stringify(defaultLayout));
 
-    if (userSettings !== null && userSettings.plus_member) {
-      layout = defaultLayout.slice().concat(plusMemberPortlets.slice()); 
+    // If this is a plus member
+    if (userSettings !== null && userSettings.plus_member && userSettings.portletConfig) {
+      // Loop over all sections
+      for (let i = 0; i < layout.length; i++) {
+        const section = layout[i];
+
+        // Loop over all portlets within a section
+        for (let j = 0; j < section.portlets.length; j++) {
+          // If the plus member has chosen to hide a portlet, flag it as hidden
+          const portlet = section.portlets[j];
+          if (userSettings.portletConfig[portlet.id] === false) {
+            portlet.hide = true;
+          } else {
+            portlet.hide = false;
+          }
+        }
+
+        // After looping over all the portlets in this section, see if ALL of them are hidden, if so hide the whole section
+        const hiddenPortlets = section.portlets.filter(function(p){ return p.hide; });
+        if (hiddenPortlets.length === section.portlets.length) {
+          section.hide = true;
+        } else {
+          section.hide = false;
+        }
+      }
     }
 
     return layout;
@@ -373,7 +405,9 @@ BC.PortletLayout = function() {
   function getPortletGrid(portlets, sectionClass) {
     let gridNode = gridTemplate.cloneNode(true);
     portlets.forEach(function(portlet){
-      gridNode.append(getPortlet(portlet));
+      if (!portlet.hide) {
+        gridNode.append(getPortlet(portlet));
+      }
     });
 
     if (sectionClass) {
@@ -481,6 +515,7 @@ BC.PortletLayout = function() {
     document.addEventListener(customEvents.userSignedIn, buildLayout);
     document.addEventListener(customEvents.userSignedOut, buildLayout);
     document.addEventListener(customEvents.currencyUpdated, buildLayout);
+    document.addEventListener(customEvents.preferencesUpdated, buildLayout);
   }
 
   const updateAllPortletValues = function updateAllPortletValues(data, setCost) {
@@ -500,9 +535,11 @@ BC.PortletLayout = function() {
     let sectionClass = false;
     portletWrapper.innerHTML = ''; // Clear the portlet wrapper
     layout.forEach(function(portletSection){
-      portletWrapper.append(getSectionHeader(portletSection.header, portletSection.headerClass, sectionClass));
-      portletWrapper.append(getPortletGrid(portletSection.portlets, sectionClass));
-      sectionClass = sectionClass ? false : zebraStripedPortletSectionsClass;
+      if (!portletSection.hide) {
+        portletWrapper.append(getSectionHeader(portletSection.header, portletSection.headerClass, sectionClass));
+        portletWrapper.append(getPortletGrid(portletSection.portlets, sectionClass));
+        sectionClass = sectionClass ? false : zebraStripedPortletSectionsClass;
+      }
     });
 
     if (lastSetLookupData) {

@@ -14,7 +14,7 @@ BC.SiteMenu = function() {
       menu;
 
   const showMenu = function showMenu() {
-    menu.classList.add(menuVisibleClass);
+    document.body.classList.add(menuVisibleClass);
     const inputs = Array.from(menu.querySelectorAll("input"));
     inputs.forEach(function(i){
       i.removeAttribute("tabindex");
@@ -22,7 +22,7 @@ BC.SiteMenu = function() {
   }
 
   const hideMenu = function showMenu() {
-    menu.classList.remove(menuVisibleClass);
+    document.body.classList.remove(menuVisibleClass);
     const inputs = Array.from(menu.querySelectorAll("input"));
     inputs.forEach(function(i){
       i.setAttribute("tabindex", "-1");
