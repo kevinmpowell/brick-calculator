@@ -1,3 +1,7 @@
+/*
+  global BC, customEvents, localStorageKeys
+*/
+
 'use strict';
 BC.SetLookupForm = function() {
   const formId = 'bc-set-lookup-form',
@@ -72,6 +76,7 @@ BC.SetLookupForm = function() {
     form.addEventListener("submit", handleFormSubmit);
     document.addEventListener(customEvents.userSignedIn, updateFormDisplayForSignedInUser);
     document.addEventListener(customEvents.userSignedOut, updateFormDisplayForSignedInUser);
+    document.addEventListener(customEvents.preferencesUpdated, updateFormDisplayForSignedInUser);
     document.addEventListener(customEvents.currencyUpdated, handleCurrencyUpdate);
   }
 

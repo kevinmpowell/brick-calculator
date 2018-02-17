@@ -1,3 +1,7 @@
+/*
+  global BC, localStorageKeys, customEvents
+*/
+
 'use strict';
 BC.UserSettingsPane = function() {
   const settingsPaneSelector = '.bc-user-settings-pane',
@@ -8,7 +12,7 @@ BC.UserSettingsPane = function() {
         settingsFormName = 'bcUserSettings',
         countrySelectName = 'country',
         currencySelectName = 'currency',
-        topWorldCurrencies = ["USD","EUR","JPY","GBP","CHF","CAD","AUD"];
+        topWorldCurrencies = ["USD", "EUR", "JPY", "GBP", "CHF", "CAD", "AUD"];
 
   let taxRate,
       settingsForm,
@@ -52,18 +56,37 @@ BC.UserSettingsPane = function() {
     BC.Utils.broadcastEvent(customEvents.locationUpdated);
   }
 
+  function saveAndUpdateUserSettings(taxRateValue, country, currency) {
+    const storedToken = BC.Utils.getFromLocalStorage(localStorageKeys.authToken);
+    return BC.API.makeRequest({
+      method: 'POST',
+      url: '/users/update',
+      headers: {
+        Authorization: storedToken
+      },
+      params: {
+        preferences: JSON.stringify({taxRate: taxRateValue, country: country, currency: currency})
+      }
+    });
+  }
+
   function handleSettingsFormSubmit(e) {
     e.preventDefault();
     const country = countrySelect.value,
-          currency = currencySelect.value;
+          currency = currencySelect.value,
+          taxRateValue = taxRate.value;
 
     saveAndUpdateCurrencyAndCountry(country, currency);
-    BC.ToastMessage.create('Your Settings have been saved.', 'success');
+    saveAndUpdateUserSettings(taxRateValue, country, currency).then(function(data){
+      BC.ToastMessage.create('Your Settings have been saved.', 'success');
+      BC.Utils.saveToLocalStorage(localStorageKeys.userSettings, data);
+      BC.Utils.broadcastEvent(customEvents.preferencesUpdated);
+      hidePane(); // Hide user settings
+      BC.SiteMenu.hideMenu(); // Close the Menu
+      BC.Values.hideValues(); // Return to the setLookup Form, since any calculated values will be off until settings are updated
+    });
 
 
-    hidePane(); // Hide user settings
-    BC.SiteMenu.hideMenu(); // Close the Menu
-    BC.Values.hideValues(); // Return to the setLookup Form, since any calculated values will be off until settings are updated
   }
 
   function promptCurrencySwitch() {
@@ -127,21 +150,21 @@ BC.UserSettingsPane = function() {
   const changeCurrencyFromToastMessage = function changeCurrencyFromToastMessage() {
     BC.ToastMessage.removeMessage(currencyToastMessage);
     showPane();
-  }
+  };
 
   const showPane = function showPane() {
     BC.SiteMenu.showMenu();
     settingsPane.classList.add(paneVisibleClass);
-  }
+  };
 
   const hidePane = function hidePane() {
     settingsPane.classList.remove(paneVisibleClass);
-  }
+  };
 
   const update = function update() {
     const userSettings = BC.App.getUserSettings();
     updateTaxesSetting(userSettings);
-  }
+  };
 
   const initialize = function initialize() {
     taxRate = document.getElementById(userTaxRateFieldId);
@@ -156,7 +179,7 @@ BC.UserSettingsPane = function() {
     update();
     setEventListeners();
     setSelectedCountryAndCurrency();
-  }
+  };
 
   return {
     initialize: initialize,
@@ -164,5 +187,5 @@ BC.UserSettingsPane = function() {
     showPane: showPane,
     hidePane: hidePane,
     changeCurrencyFromToastMessage: changeCurrencyFromToastMessage
-  }
+  };
 }();
