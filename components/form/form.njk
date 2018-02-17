@@ -5,7 +5,7 @@
 {% endmacro %}
 
 {% macro form_label(class, for, label) %}
-  <label for="{{ for }}" class="bc-form-label{{ ' ' + class if class }}">{{ label }}</label>
+  <label for="{{ for }}" class="bc-form__label{{ ' ' + class if class }}">{{ label }}</label>
 {% endmacro %}
 
 {% macro form_input(
@@ -153,7 +153,8 @@
     class,
     describedby,
     value="on",
-    disabled=false) %}
+    disabled=false,
+    attributes) %}
     {% if name == undefined %}
       {% set name = id %}
     {% endif %}
@@ -167,6 +168,7 @@
         value="{{ value }}"
         {{ 'checked' if checked }}
         {{ 'disabled' if disabled }}
+        {{ attributes | safe if attributes }}
         {% if describedby %} aria-describedby="{{ describedby }}" {% endif %}
       >
       <span class="bc-form__checkbox-visual"></span>
@@ -182,7 +184,8 @@
     label="Selected",
     class,
     describedby,
-    disabled=false) %}
+    disabled=false,
+    attributes) %}
   <label for="{{ id }}" class="bc-form__radio">
     <input
       class="bc-form__radio-button-input"
@@ -193,9 +196,21 @@
       {% if value %} value="{{ value }}" {% endif %}
       {{ 'checked' if checked }}
       {{ 'disabled' if disabled }}
+      {{ attributes | safe if attributes }}
       {% if describedby %} aria-describedby="{{ describedby }}" {% endif %}
     >
     <span class="bc-form__radio-button-visual"></span>
     <span class="bc-form__radio-button-label-text">{{ label }}</span>
   </label>
+{% endmacro %}
+
+{% macro form_checkbox_group(class, label) %}
+  <fieldset class="bc-form__checkbox-group{{ ' ' + class if class }}">
+    {% if label %}
+      <legend class="bc-form__checkbox-group-label">{{ label }}</legend>
+    {% endif %}
+    <div class="bc-form__checkbox-group-checkboxes">
+      {{ caller() }}
+    </div>
+  </fieldset>
 {% endmacro %}

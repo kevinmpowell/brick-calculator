@@ -2,21 +2,21 @@ $bc-form-field-height: 40px;
 $bc-form-field-height-s: 36px;
 
 
-.bc-form-label {
+.bc-form__label {
   color: $brickulator-color-text-on-light-primary;
   font-size: $brickulator-font-size-m;
   margin: $brickulator-space-stack-1-half-x;
 }
 
-.bc-form-label--size-s {
+.bc-form__label--size-s {
   font-size: $brickulator-font-size-s;
 }
 
-.bc-form-label--size-m {
+.bc-form__label--size-m {
   font-size: $brickulator-font-size-s;
 }
 
-.bc-form-label--on-dark {
+.bc-form__label--on-dark {
   color: $brickulator-color-text-on-dark-primary;
 }
 
@@ -70,7 +70,7 @@ input {
   + input {
     border-bottom-left-radius: 0;
     border-top-left-radius: 0;
-  } 
+  }
 
   .bc-form-input-wrap--size-m & {
     height: $bc-form-field-height-s;
@@ -234,9 +234,10 @@ input {
   border: $brickulator-border-control;
   border-radius: 50%;
   display: block;
-  height: $brickulator-font-size-xl;
+  height: 30px;
+  flex-shrink: 0;
   position: relative;
-  width: $brickulator-font-size-xl;
+  width: 30px;
 
   .bc-form__checkbox-input:checked + & {
     background: $brickulator-color-brand;
@@ -266,8 +267,8 @@ input {
   // @include bc-text-crop-sans-serif;
   color: $brickulator-color-text-on-light-primary;
   display: inline;
-  font-size: $brickulator-font-size-s;
-  margin: $brickulator-space-inline-left-1-half-x;
+  font-size: $brickulator-font-size-m;
+  margin: $brickulator-space-inline-left-1-x;
   position: relative;
 }
 
@@ -325,4 +326,20 @@ input {
       opacity: $brickulator-opacity-disabled;
     }
   }
+}
+
+.bc-form__checkbox-group {
+  border: 0;
+  padding: 0;
+  margin: $brickulator-space-stack-2-x;
+
+  .bc-form__checkbox {
+    margin-left: $brickulator-space-generic-2-x;
+    margin-bottom: $brickulator-space-generic-1-x;
+  }
+}
+
+.bc-form__checkbox-group-label {
+  font-size: $brickulator-font-size-m;
+  margin: $brickulator-space-stack-1-half-x;
 }

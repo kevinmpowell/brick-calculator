@@ -33,6 +33,10 @@ body {
   line-height: $brickulator-line-height-body;
   margin: 0;
   padding: 0;
+
+  &.bc-site-menu--visible {
+    overflow: hidden; // Prevent scrolling of body when menu is open
+  }
 }
 
 * {

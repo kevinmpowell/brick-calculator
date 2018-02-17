@@ -144,18 +144,18 @@
   text-decoration: underline;
   text-transform: none; }
 
-.bc-form-label {
+.bc-form__label {
   color: #1E1F1F;
   font-size: 14px;
   margin: 0 0 4px; }
 
-.bc-form-label--size-s {
+.bc-form__label--size-s {
   font-size: 12px; }
 
-.bc-form-label--size-m {
+.bc-form__label--size-m {
   font-size: 12px; }
 
-.bc-form-label--on-dark {
+.bc-form__label--on-dark {
   color: #FFFFFF; }
 
 .bc-form-input--size-m {
@@ -366,9 +366,11 @@ input {
   border: solid 1px #C6CDCC;
   border-radius: 50%;
   display: block;
-  height: 20px;
+  height: 30px;
+  -ms-flex-negative: 0;
+      flex-shrink: 0;
   position: relative;
-  width: 20px; }
+  width: 30px; }
   .bc-form__checkbox-input:checked + .bc-form__radio-button-visual, .bc-form__checkbox-input:checked +
   .bc-form__checkbox-visual {
     background: #FE8A18; }
@@ -393,8 +395,8 @@ input {
 .bc-form__checkbox-label-text {
   color: #1E1F1F;
   display: inline;
-  font-size: 12px;
-  margin: 0 0 0 4px;
+  font-size: 14px;
+  margin: 0 0 0 8px;
   position: relative; }
 
 .bc-form__radio-button-input,
@@ -412,6 +414,18 @@ input {
   .bc-form__checkbox-input:disabled ~ .bc-form__checkbox-visual {
     cursor: not-allowed;
     opacity: 0.3; }
+
+.bc-form__checkbox-group {
+  border: 0;
+  padding: 0;
+  margin: 0 0 16px; }
+  .bc-form__checkbox-group .bc-form__checkbox {
+    margin-left: 16px;
+    margin-bottom: 8px; }
+
+.bc-form__checkbox-group-label {
+  font-size: 14px;
+  margin: 0 0 4px; }
 
 .bc-set-summary {
   display: -webkit-box;
@@ -514,6 +528,10 @@ img {
 
 .bc-long-form-text h3 {
   font-size: 16px;
+  margin: 0 0 8px; }
+
+.bc-long-form-text h4 {
+  font-size: 14px;
   margin: 0 0 8px; }
 
 .bc-long-form-text p {
@@ -1191,7 +1209,7 @@ img {
 
 .bc-user-settings-pane {
   background: #EEF5F4;
-  height: 100%;
+  height: 100vh;
   left: 0;
   overflow-y: auto;
   position: absolute;
@@ -1226,6 +1244,12 @@ img {
 #bc-user-settings-taxRate {
   max-width: 80px; }
 
+.bc-user-settings__plus-member-settings.bc-user-settings__plus-member-settings--disabled .bc-form__checkbox-group-label,
+.bc-user-settings__plus-member-settings.bc-user-settings__plus-member-settings--disabled .bc-form__label,
+.bc-user-settings__plus-member-settings.bc-user-settings__plus-member-settings--disabled .bc-form-input-suffix,
+.bc-user-settings__plus-member-settings.bc-user-settings__plus-member-settings--disabled .bc-long-form-text {
+  opacity: 0.3; }
+
 body {
   background: #EEF5F4;
   background: #EEF5F4;
@@ -1233,6 +1257,8 @@ body {
   line-height: 1.2;
   margin: 0;
   padding: 0; }
+  body.bc-site-menu--visible {
+    overflow: hidden; }
 
 * {
   -webkit-box-sizing: border-box;
