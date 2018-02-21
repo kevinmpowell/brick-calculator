@@ -26,7 +26,9 @@
               wrapper_class,
               tabindex,
               clear_button,
-              number_stepper=false) %}
+              number_stepper=false,
+              min,
+              max) %}
   
   {% if clear_button %}
     {% if wrapper_class %}
@@ -76,6 +78,12 @@
               {% endif %}
               {% if value %}
                 value="{{ value }}"
+              {% endif %}
+              {% if min %}
+                min="{{ min }}"
+              {% endif %}
+              {% if max %}
+                max="{{ max }}"
               {% endif %}
               >
     {% if number_stepper %}

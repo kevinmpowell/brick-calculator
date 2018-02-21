@@ -65,12 +65,12 @@ input {
   background: $brickulator-color-background-control;
   border: $brickulator-border-control;
   border-radius: $brickulator-border-radius-control 0 0 $brickulator-border-radius-control;
+  border-right: 0;
+  display: flex;
   font-family: $brickulator-font-family-sans-serif;
   font-size: $brickulator-font-size-xl;
-  display: flex;
   height: $bc-form-field-height;
   padding: $brickulator-space-inset-1-half-x;
-  border-right: 0;
 
   + input {
     border-bottom-left-radius: 0;

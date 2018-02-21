@@ -195,14 +195,14 @@ input {
   background: #FFFFFF;
   border: solid 1px #C6CDCC;
   border-radius: 2px 0 0 2px;
-  font-family: "Hiragino Sans", "Helvetica", sans-serif;
-  font-size: 20px;
+  border-right: 0;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
+  font-family: "Hiragino Sans", "Helvetica", sans-serif;
+  font-size: 20px;
   height: 40px;
-  padding: 4px;
-  border-right: 0; }
+  padding: 4px; }
   .bc-form-input-prefix + input,
   .bc-form-input-suffix + input {
     border-bottom-left-radius: 0;
