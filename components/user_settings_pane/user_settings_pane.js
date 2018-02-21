@@ -153,6 +153,9 @@ BC.UserSettingsPane = function() {
       BC.SiteMenu.hideMenu(); // Close the Menu
       BC.Values.hideValues(); // Return to the setLookup Form, since any calculated values will be off until settings are updated
       BC.Utils.broadcastEvent(customEvents.preferencesUpdated);
+    }, function(error){
+      console.log("ERROR");
+      console.log(error);
     });
   }
 

@@ -5,10 +5,18 @@
   border-radius: 30px;
   color: $brickulator-color-text-on-brand-primary;
   display: inline-flex;
-  padding: $brickulator-space-inset-1-half-x;
+  padding: $brickulator-space-inset-squish-1-x;
   font-size: $brickulator-font-size-xs;
   vertical-align: middle;
   white-space: nowrap;
+}
+
+.bc-tag__brand-plus {
+  @include bc-text-crop-monospace;
+  font-size: $brickulator-font-size-s;
+  margin-right: $brickulator-space-generic-1-half-x;
+  position: relative;
+  top: -1px;
 }
 
 .bc-tag__text {

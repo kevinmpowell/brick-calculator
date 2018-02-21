@@ -4,7 +4,7 @@
     "versionedDocs": false,
     "latestVersionPath": "",
     "browserSyncConfig": {
-        "https": true
+        "https": false
     },
     "copyTasks": [
       {
