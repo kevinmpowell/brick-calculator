@@ -1,5 +1,6 @@
 .bc-sign-up-form-pane {
   background: $brickulator-color-background-light;
+  bottom: 0;
   height: 100vh;
   left: 0;
   overflow-y: scroll;
@@ -22,7 +23,7 @@
 }
 
 #bc-sign-up-form {
-  display: none;
+  // display: none;
   padding: $brickulator-space-inset-squish-2-x;
 }
 

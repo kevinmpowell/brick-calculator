@@ -3,6 +3,25 @@
     <div class="bc-sign-up-form-pane__actions">
       {{ button(text="&times; Close", class="bc-button--size-s bc-sign-up-form-pane-hide-trigger") }}
     </div>
+    <form action="" method="POST" id="bc-sign-up-form">
+      <div class="bc-long-form-text">
+        {% filter markdown %}
+          ### Create your account
+        {% endfilter %}
+      </div>
+      {% call form_field_group() %}
+        {{ form_label(for="bc-sign-up-form-email", label="Email") }}
+        <input autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" name="bc-sign-up-form-email" id="bc-sign-up-form-email" type="email" tabindex="-1">
+      {% endcall %}
+
+      {% call form_field_group() %}
+        {{ form_label(for="bc-sign-up-form-password", label="Create Password") }}
+        <input name="bc-sign-up-form-password" id="bc-sign-up-form-password" type="password" tabindex="-1">
+      {% endcall %}
+
+      {{ button(type="submit", text="Sign Up", class="bc-button--primary bc-sign-up-form__submit-button") }}
+    </form>
+
     <div class="bc-sign-up-form-pane__brickulator-plus-details bc-long-form-text">
       {% filter markdown %}
         ## Brickulator Plus
@@ -35,23 +54,5 @@
       {{ button(text="Sign Up", class="bc-button--primary") }}
     </div>
 
-    <form action="" method="POST" id="bc-sign-up-form">
-      <div class="bc-long-form-text">
-        {% filter markdown %}
-          ### Create your account
-        {% endfilter %}
-      </div>
-      <div class="bc-field-group">
-        {{ form_label(for="bc-sign-up-form-email", label="Email") }}
-        <input autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" name="bc-sign-up-form-email" id="bc-sign-up-form-email" type="email" tabindex="-1">
-      </div>
-
-      <div class="bc-field-group">
-        {{ form_label(for="bc-sign-up-form-password", label="Create Password") }}
-        <input name="bc-sign-up-form-password" id="bc-sign-up-form-password" type="password" tabindex="-1">
-      </div>
-
-      {{ button(type="submit", text="Sign Up", class="bc-button--primary bc-sign-up-form__submit-button") }}
-    </form>
   </div>
 {% endmacro %}

@@ -32,7 +32,12 @@
 }
 
 .bc-set-lookup-form__purchase-quantity-wrap {
+  display: none;
   flex-grow: 0;
   margin-left: $brickulator-space-generic-2-x;
   width: 130px;
+
+  .bc-set-lookup-form--purchase-quantity-visible & {
+    display: block;
+  }
 }

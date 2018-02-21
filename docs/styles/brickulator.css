@@ -987,6 +987,7 @@ img {
 
 .bc-sign-up-form-pane {
   background: #EEF5F4;
+  bottom: 0;
   height: 100vh;
   left: 0;
   overflow-y: scroll;
@@ -1014,7 +1015,6 @@ img {
   padding: 8px 16px; }
 
 #bc-sign-up-form {
-  display: none;
   padding: 8px 16px; }
 
 .bc-sign-up-form-pane__brickulator-plus-details {
@@ -1158,11 +1158,14 @@ img {
   width: 160px; }
 
 .bc-set-lookup-form__purchase-quantity-wrap {
+  display: none;
   -webkit-box-flex: 0;
       -ms-flex-positive: 0;
           flex-grow: 0;
   margin-left: 16px;
   width: 130px; }
+  .bc-set-lookup-form--purchase-quantity-visible .bc-set-lookup-form__purchase-quantity-wrap {
+    display: block; }
 
 .bc-tag {
   line-height: 1.3;
@@ -1293,6 +1296,7 @@ img {
 
 .bc-user-settings-pane {
   background: #EEF5F4;
+  bottom: 0;
   height: 100vh;
   left: 0;
   overflow-y: auto;

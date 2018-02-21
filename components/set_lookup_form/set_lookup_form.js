@@ -8,6 +8,7 @@ BC.SetLookupForm = function() {
         setNumberFieldId = "bc-set-lookup-form__set-number-input",
         purchasePriceFieldId = "bc-set-lookup-form__purchase-price-input",
         purchaseQuantityFieldId = "bc-set-lookup-form__purchase-quantity-input",
+        purchaseQuantityVisibleClass = "bc-set-lookup-form--purchase-quantity-visible",
         taxRateSelector = ".bc-set-lookup-form__tax-message",
         taxRateAmountSelector = ".bc-set-lookup-form__tax-amount",
         taxRateVisibleClass = "bc-set-lookup-form__tax-message--visible";
@@ -28,7 +29,7 @@ BC.SetLookupForm = function() {
 
 
     // Retrieve quantity if this is a plus member
-    if (userSettings.plus_member === true) {
+    if (userSettings && userSettings.plus_member === true) {
       quantity = parseInt(purchaseQuantity.value, 10);
     }
 
@@ -41,8 +42,8 @@ BC.SetLookupForm = function() {
     }
   }
 
-  function updateUrlWithLookupParams(setNumber, purchasePrice) {
-    const lookupParams = '?' + "setNumber=" + setNumber + "&purchasePrice=" + purchasePrice;
+  function updateUrlWithLookupParams(setNumberValue, purchasePriceValue) {
+    const lookupParams = '?' + "setNumber=" + setNumberValue + "&purchasePrice=" + purchasePriceValue;
     window.history.pushState('', '', lookupParams);
   }
 
@@ -56,9 +57,20 @@ BC.SetLookupForm = function() {
     }
   }
 
+  function setPurchaseQuantityDisplay(userSettings) {
+    if (userSettings !== null && userSettings.plus_member && userSettings.enablePurchaseQuantity) {
+      purchaseQuantity.value = 1;
+      form.classList.add(purchaseQuantityVisibleClass);
+    } else {
+      purchaseQuantity.value = 1;
+      form.classList.remove(purchaseQuantityVisibleClass);
+    }
+  }
+
   function updateFormDisplayForSignedInUser() {
     const userSettings = BC.App.getUserSettings();
     setTaxRateDisplay(userSettings);
+    setPurchaseQuantityDisplay(userSettings);
   }
 
   function changePurchasePriceInputType(country) {
