@@ -912,16 +912,16 @@ BC.Values = function() {
 
   let setDB;
 
-  function calculate(setNumber, purchasePrice) {
+  function calculate(setNumber, purchasePrice, quantity) {
     const setData = setDB[setNumber];
 
     if (setData) {
       BC.SetSummary.update(setData);
-      BC.PortletLayout.updateAllPortletValues(setData, purchasePrice);
+      BC.PortletLayout.updateAllPortletValues(setData, purchasePrice, quantity);
 
       showValues();
     } else {
-      alert("Set Number Not Found")
+      alert("Set Number Not Found");
     }
   }
 

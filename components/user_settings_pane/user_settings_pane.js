@@ -7,6 +7,7 @@ BC.UserSettingsPane = function() {
   const settingsPaneSelector = '.bc-user-settings-pane',
         userTaxRateFieldId = 'bc-user-settings-taxRate',
         userEnableTaxRateFieldId = 'bc-user-settings-enableTaxes',
+        enablePurchaseQuantityFieldId = 'bc-user-settings-enablePurchaseQuantity',
         paneVisibleClass = 'bc-user-settings-pane--visible',
         plusMemberSettingsSectionSelector = '.bc-user-settings__plus-member-settings',
         plusMemberSettingsDisabledClass = 'bc-user-settings__plus-member-settings--disabled',
@@ -20,6 +21,7 @@ BC.UserSettingsPane = function() {
 
   let taxRate,
       enableTaxes,
+      enablePurchaseQuantity,
       settingsForm,
       settingsPane,
       showPaneTriggers,
@@ -37,6 +39,10 @@ BC.UserSettingsPane = function() {
     enableTaxes.setAttribute('disabled', true);
   }
 
+  function disablePurchaseQuantity() {
+    enablePurchaseQuantity.checked = false;
+    enablePurchaseQuantity.setAttribute('disabled', true);
+  }
 
   function enableTaxSettings(userSettings) {
     taxRate.removeAttribute('disabled');
@@ -57,6 +63,14 @@ BC.UserSettingsPane = function() {
     });
   }
 
+  function enablePurchaseQuantitySettings(userSettings) {
+    enablePurchaseQuantity.removeAttribute('disabled');
+
+    if (userSettings.enablePurchaseQuantity) {
+      enablePurchaseQuantity.checked = userSettings.enablePurchaseQuantity;
+    }
+  }
+
   function enablePortletConfigSettings(userSettings) {
     const portletConfig = userSettings.portletConfig;
 
@@ -71,6 +85,7 @@ BC.UserSettingsPane = function() {
   }
 
   function togglePlusMemberSettings(userSettings) {
+    disablePurchaseQuantity();
     disableTaxSettings();
     disablePortletConfigSettings();
 
@@ -79,6 +94,7 @@ BC.UserSettingsPane = function() {
       plusMemberSettingsSection.classList.remove(plusMemberSettingsDisabledClass);
       enableTaxSettings(userSettings); // If they're a plus member, give them access to the tax rate settings
       enablePortletConfigSettings(userSettings);
+      enablePurchaseQuantitySettings(userSettings);
     } else {
       plusMemberSettingsSection.classList.add(plusMemberSettingsDisabledClass);
     }
@@ -98,7 +114,7 @@ BC.UserSettingsPane = function() {
     BC.Utils.broadcastEvent(customEvents.locationUpdated);
   }
 
-  function saveAndUpdateUserSettings(enableTaxesValue, taxRateValue, country, currency, portletConfig) {
+  function saveAndUpdateUserSettings(enablePurchaseQuantityValue, enableTaxesValue, taxRateValue, country, currency, portletConfig) {
     const storedToken = BC.Utils.getFromLocalStorage(localStorageKeys.authToken);
     return BC.API.makeRequest({
       method: 'POST',
@@ -107,7 +123,7 @@ BC.UserSettingsPane = function() {
         Authorization: storedToken
       },
       params: {
-        preferences: JSON.stringify({enableTaxes: enableTaxesValue, taxRate: taxRateValue, country: country, currency: currency, portletConfig: portletConfig})
+        preferences: JSON.stringify({enablePurchaseQuantity: enablePurchaseQuantityValue, enableTaxes: enableTaxesValue, taxRate: taxRateValue, country: country, currency: currency, portletConfig: portletConfig})
       }
     });
   }
@@ -126,10 +142,11 @@ BC.UserSettingsPane = function() {
           currency = currencySelect.value,
           taxRateValue = taxRate.value,
           enableTaxesValue = enableTaxes.checked,
+          enablePurchaseQuantityValue = enablePurchaseQuantity.checked,
           portletConfig = getPlusMemberPortletConfig();
 
     saveAndUpdateCurrencyAndCountry(country, currency);
-    saveAndUpdateUserSettings(enableTaxesValue, taxRateValue, country, currency, portletConfig).then(function(data){
+    saveAndUpdateUserSettings(enablePurchaseQuantityValue, enableTaxesValue, taxRateValue, country, currency, portletConfig).then(function(data){
       BC.ToastMessage.create('Your Settings have been saved.', 'success');
       BC.Utils.saveToLocalStorage(localStorageKeys.userSettings, data);
       hidePane(); // Hide user settings
@@ -219,6 +236,7 @@ BC.UserSettingsPane = function() {
   const initialize = function initialize() {
     taxRate = document.getElementById(userTaxRateFieldId);
     enableTaxes = document.getElementById(userEnableTaxRateFieldId);
+    enablePurchaseQuantity = document.getElementById(enablePurchaseQuantityFieldId);
     settingsPane = document.querySelector(settingsPaneSelector);
     plusMemberSettingsSection = document.querySelector(plusMemberSettingsSectionSelector);
     portletConfigCheckboxes = Array.from(document.querySelectorAll(portletConfigCheckboxSelector));

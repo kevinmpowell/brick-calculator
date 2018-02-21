@@ -5,7 +5,8 @@
             avg,
             fees,
             cost,
-            profit) %}
+            profit,
+            profit_each) %}
   <div class="bc-portlet{{ ' ' + class if class }}" {% if id %} id="{{ id }}" {% endif %}>
       <a href="#" class="bc-portlet__external-link">
         <h2 class="bc-portlet__title">{{ title }}</h2>
@@ -28,6 +29,7 @@
         </div>
       </div>
       <div class="bc-portlet__profit">
+        <input class="bc-portlet__profit-each-input" value="{{ profit_each }}" type="text" readonly="true" disabled>
         <input class="bc-portlet__profit-input" value="{{ profit }}" type="text" readonly="true" disabled>
       </div>
   </div>

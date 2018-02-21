@@ -178,7 +178,11 @@
               
               
               
+              
+              
+              
               >
+    
   
     </div>
   
@@ -203,15 +207,16 @@
   </div>
 
 
+    <div class="bc-set-lookup-form__purchase-inputs">
+      
+  <div class="bc-form-field-group bc-set-lookup-form__purchase-price-wrap">
     
-  <div class="bc-form-field-group">
-    
-      <label class="bc-form__label" for="bc-set-lookup-form__purchase-price-input">
-        Purchase Price
-        <span class="bc-set-lookup-form__tax-message">
-          (<span class="bc-set-lookup-form__tax-amount"></span>% sales tax will be added)
-        </span>
-      </label>
+        <label class="bc-form__label" for="bc-set-lookup-form__purchase-price-input">
+          Purchase Price
+          <span class="bc-set-lookup-form__tax-message">
+            + <span class="bc-set-lookup-form__tax-amount"></span>% sales tax
+          </span>
+        </label>
         
   
   
@@ -259,13 +264,95 @@
               
               
               
+              
+              
+              
               >
+    
   
     </div>
   
 
-    
+      
   </div>
+
+      
+      
+  <div class="bc-form-field-group bc-set-lookup-form__purchase-quantity-wrap">
+    
+        <label class="bc-form__label" for="bc-set-lookup-form__purchase-quantity-input">
+          How Many?
+        </label>
+        
+  
+  
+
+
+  
+    <div class="bc-form-input-wrap bc-form-input-wrap--with-number-stepper">
+  
+    
+    
+    
+      <input type="number" 
+              class="bc-form-input"
+              id="bc-set-lookup-form__purchase-quantity-input" 
+              name="bc-set-lookup-form__purchase-quantity-input"
+              autocomplete="off" 
+              autocorrect="off" 
+              autocapitalize="off" 
+              spellcheck="false"
+              
+              
+              step="1"
+              
+              
+              
+              
+              
+                value="1"
+              
+              
+                min="1"
+              
+              
+                max="100"
+              
+              >
+    
+      
+  
+  
+
+  <button
+    
+     type="button" 
+    
+    class="bc-button bc-form-input__number-stepper-button bc-form-input__number-stepper-button--decrease">
+    <span class='bc-form-input__number-stepper-button-text'>-</span>
+  </button>
+
+      
+  
+  
+
+  <button
+    
+     type="button" 
+    
+    class="bc-button bc-form-input__number-stepper-button bc-form-input__number-stepper-button--increase">
+    <span class='bc-form-input__number-stepper-button-text'>+</span>
+  </button>
+
+    
+  
+    </div>
+  
+
+      
+  </div>
+
+    </div>
 
     
     <div class="bc-set-lookup-form__actions">
@@ -336,7 +423,11 @@
                 placeholder="Your email address"
               
               
+              
+              
+              
               >
+    
   
     </div>
   
@@ -398,6 +489,7 @@
         </div>
       </div>
       <div class="bc-portlet__profit">
+        <input class="bc-portlet__profit-each-input" value="" type="text" readonly="true" disabled>
         <input class="bc-portlet__profit-input" value="" type="text" readonly="true" disabled>
       </div>
   </div>
@@ -485,7 +577,11 @@
               
                 tabindex="-1"
               
+              
+              
+              
               >
+    
   
 
     
@@ -522,7 +618,11 @@
               
                 tabindex="-1"
               
+              
+              
+              
               >
+    
   
 
     
@@ -778,10 +878,52 @@
               
               
               
+              
+              
+              
               >
+    
   
     </div>
   
+
+        
+  </div>
+        
+
+        <div class="bc-long-form-text">
+          <h3>Quantity Multiplier 
+  <span class="bc-tag">
+    <span class='bc-tag__brand-plus'>&plus;</span> <span class='bc-tag__text'>Member</span>
+  </span>
+</h3>
+          <p>
+            Brickulate your profit when you purchase multiples.
+          </p>
+        </div>
+        
+  <div class="bc-form-field-group">
+    
+          
+    
+      
+    
+    <label for="bc-user-settings-enablePurchaseQuantity" class="bc-form__checkbox">
+      <input
+        class="bc-form__checkbox-input"
+        type="checkbox"
+        name="bc-user-settings-enablePurchaseQuantity"
+        id="bc-user-settings-enablePurchaseQuantity"
+        
+        value="on"
+        
+        disabled
+        
+        
+      >
+      <span class="bc-form__checkbox-visual"></span>
+      <span class="bc-form__checkbox-label-text">Show Quantity Multiplier</span>
+    </label>
 
         
   </div>
@@ -1127,6 +1269,47 @@
   </button>
 
     </div>
+    <form action="" method="POST" id="bc-sign-up-form">
+      <div class="bc-long-form-text">
+        <h3 id="create-your-account">Create your account</h3>
+
+      </div>
+      
+  <div class="bc-form-field-group">
+    
+        
+  <label for="bc-sign-up-form-email" class="bc-form__label">Email</label>
+
+        <input autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" name="bc-sign-up-form-email" id="bc-sign-up-form-email" type="email" tabindex="-1">
+      
+  </div>
+
+
+      
+  <div class="bc-form-field-group">
+    
+        
+  <label for="bc-sign-up-form-password" class="bc-form__label">Create Password</label>
+
+        <input name="bc-sign-up-form-password" id="bc-sign-up-form-password" type="password" tabindex="-1">
+      
+  </div>
+
+
+      
+  
+  
+
+  <button
+    
+     type="submit" 
+    
+    class="bc-button bc-button--primary bc-sign-up-form__submit-button">
+    Sign Up
+  </button>
+
+    </form>
+
     <div class="bc-sign-up-form-pane__brickulator-plus-details bc-long-form-text">
       <h2 id="brickulator-plus">Brickulator Plus</h2>
 <p>Sign up for a Brickulator Plus membership to enjoy the following benefits:</p>
@@ -1180,38 +1363,6 @@
 
     </div>
 
-    <form action="" method="POST" id="bc-sign-up-form">
-      <div class="bc-long-form-text">
-        <h3 id="create-your-account">Create your account</h3>
-
-      </div>
-      <div class="bc-field-group">
-        
-  <label for="bc-sign-up-form-email" class="bc-form__label">Email</label>
-
-        <input autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" name="bc-sign-up-form-email" id="bc-sign-up-form-email" type="email" tabindex="-1">
-      </div>
-
-      <div class="bc-field-group">
-        
-  <label for="bc-sign-up-form-password" class="bc-form__label">Create Password</label>
-
-        <input name="bc-sign-up-form-password" id="bc-sign-up-form-password" type="password" tabindex="-1">
-      </div>
-
-      
-  
-  
-
-  <button
-    
-     type="submit" 
-    
-    class="bc-button bc-button--primary bc-sign-up-form__submit-button">
-    Sign Up
-  </button>
-
-    </form>
   </div>
 
     </div>

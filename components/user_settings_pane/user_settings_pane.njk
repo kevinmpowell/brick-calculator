@@ -25,6 +25,16 @@
         {% call form_field_group() %}
           {{ form_label(label="Tax Rate", for="bc-user-settings-taxRate") }}
           {{ form_input(step="0.01", type="number", suffix="%", id="bc-user-settings-taxRate", disabled=true)}}
+        {% endcall %}        
+
+        <div class="bc-long-form-text">
+          <h3>Quantity Multiplier {{ tag() }}</h3>
+          <p>
+            Brickulate your profit when you purchase multiples.
+          </p>
+        </div>
+        {% call form_field_group() %}
+          {{ form_checkbox(label="Show Quantity Multiplier", id="bc-user-settings-enablePurchaseQuantity", disabled=true) }}
         {% endcall %}
 
         <div class="bc-long-form-text">

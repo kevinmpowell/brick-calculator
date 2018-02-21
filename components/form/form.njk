@@ -16,6 +16,7 @@
               autocorrect="off",
               autocapitalize="off",
               spellcheck="false",
+              value,
               pattern,
               step,
               prefix,
@@ -24,7 +25,10 @@
               placeholder,
               wrapper_class,
               tabindex,
-              clear_button) %}
+              clear_button,
+              number_stepper=false,
+              min,
+              max) %}
   
   {% if clear_button %}
     {% if wrapper_class %}
@@ -35,8 +39,8 @@
   {% endif %}
 
 
-  {% if prefix or suffix or clear_button %}
-    <div class="bc-form-input-wrap{{ ' ' + wrapper_class if wrapper_class }}">
+  {% if prefix or suffix or clear_button or number_stepper %}
+    <div class="bc-form-input-wrap{{ ' ' + wrapper_class if wrapper_class }}{{ ' bc-form-input-wrap--with-number-stepper' if number_stepper }}">
   {% endif %}
     {% if prefix %}
       <div class="bc-form-input-prefix">{{ prefix }}</div>
@@ -72,8 +76,21 @@
               {% if tabindex %}
                 tabindex="{{ tabindex }}"
               {% endif %}
+              {% if value %}
+                value="{{ value }}"
+              {% endif %}
+              {% if min %}
+                min="{{ min }}"
+              {% endif %}
+              {% if max %}
+                max="{{ max }}"
+              {% endif %}
               >
-  {% if prefix or suffix or clear_button %}
+    {% if number_stepper %}
+      {{ button(class="bc-form-input__number-stepper-button bc-form-input__number-stepper-button--decrease", text="<span class='bc-form-input__number-stepper-button-text'>-</span>")}}
+      {{ button(class="bc-form-input__number-stepper-button bc-form-input__number-stepper-button--increase", text="<span class='bc-form-input__number-stepper-button-text'>+</span>")}}
+    {% endif %}
+  {% if prefix or suffix or clear_button or number_stepper %}
     </div>
   {% endif %}
 {% endmacro %}

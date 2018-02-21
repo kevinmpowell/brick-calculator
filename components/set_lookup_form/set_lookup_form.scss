@@ -8,7 +8,7 @@
 }
 
 .bc-set-lookup-form__tax-message--visible {
-  display: inline;
+  display: block;
 }
 
 .bc-set-lookup-form__submit-button {
@@ -16,5 +16,28 @@
 }
 
 .bc-set-lookup-form__actions {
+  margin: $brickulator-space-stack-1-x;
   text-align: center;
+}
+
+.bc-set-lookup-form__purchase-inputs {
+  align-items: flex-end;
+  display: flex;
+  justify-content: space-between;
+}
+
+.bc-set-lookup-form__purchase-price-wrap {
+  flex-grow: 1;
+  width: 160px;
+}
+
+.bc-set-lookup-form__purchase-quantity-wrap {
+  display: none;
+  flex-grow: 0;
+  margin-left: $brickulator-space-generic-2-x;
+  width: 130px;
+
+  .bc-set-lookup-form--purchase-quantity-visible & {
+    display: block;
+  }
 }

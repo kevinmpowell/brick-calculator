@@ -2,20 +2,21 @@ $bc-site-menu-max-width: 320px;
 
 .bc-site-menu {
   background: $brickulator-color-background-overlay-transparent;
-  position: fixed;
-  left: 0;
-  top: 0;
-  width: 100%;
   height: 100%;
+  left: 0;
   overflow: hidden;
   pointer-events: none;
+  position: fixed;
+  top: 0;
   transition: background .2s ease-out;
+  width: 100%;
   z-index: $brickulator-z-index-overlay;
-}
 
-.bc-site-menu--visible {
-  background: $brickulator-color-background-overlay-opaque;
-  transition: background .2s ease-in;
+  .bc-site-menu--visible & {
+    background: $brickulator-color-background-overlay-opaque;
+    pointer-events: auto;
+    transition: background .2s ease-in;
+  }
 }
 
 .bc-site-menu__inner {
