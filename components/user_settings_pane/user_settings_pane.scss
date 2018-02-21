@@ -1,9 +1,11 @@
 .bc-user-settings-pane {
+  -webkit-overflow-scrolling: touch;
   background: $brickulator-color-background-light;
   bottom: 0;
   height: 100vh;
   left: 0;
   overflow-y: auto;
+  padding-bottom: 80px; // Ensure the bottom of the pane is visible above the iOS browser chrome
   position: absolute;
   top: 0;
   transform: translateX(100%);

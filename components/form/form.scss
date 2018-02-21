@@ -275,16 +275,18 @@ input {
     // border: $form-border-selected;
 
     &::after {
-      color: $brickulator-color-text-on-brand-primary;
-      content: '\2714';
-      font-size: $brickulator-font-size-m;
-      height: $brickulator-font-size-m;
+      background: transparent;
+      border-bottom: solid 2px $brickulator-color-text-on-brand-primary;
+      border-right: solid 2px $brickulator-color-text-on-brand-primary;
+      content: '';
+      font-size: $brickulator-font-size-xl;
+      height: 10px;
       left: 50%;
       position: absolute;
       text-align: center;
       top: 50%;
-      transform: translate(-50%, -50%);
-      width: $brickulator-font-size-m;
+      transform: translate(-50%, -60%) rotate(45deg);
+      width: 5px;
     }
   }
 }

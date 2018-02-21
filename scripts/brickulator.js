@@ -232,7 +232,7 @@ BC.API = function() {
       }
       xhr.send(params);
     });
-  }
+  };
 
   return {
     makeRequest: makeRequest

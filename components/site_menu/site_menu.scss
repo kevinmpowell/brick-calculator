@@ -2,7 +2,8 @@ $bc-site-menu-max-width: 320px;
 
 .bc-site-menu {
   background: $brickulator-color-background-overlay-transparent;
-  height: 100%;
+  bottom: 0;
+  height: 100vh;
   left: 0;
   overflow: hidden;
   pointer-events: none;
@@ -56,4 +57,14 @@ $bc-site-menu-max-width: 320px;
   display: flex;
   justify-content: flex-end;
   padding: $brickulator-space-inset-squish-2-x;
+}
+
+.bc-site-menu__list-group {
+  font-size: $brickulator-font-size-xl;
+
+  .bc-list-group__link {
+    border-top: $brickulator-border-separator-on-dark-primary;
+    padding: $brickulator-space-inset-squish-2-x;
+    text-decoration: none;
+  }
 }

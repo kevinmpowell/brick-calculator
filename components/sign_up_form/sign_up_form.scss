@@ -1,9 +1,11 @@
 .bc-sign-up-form-pane {
+  -webkit-overflow-scrolling: touch;
   background: $brickulator-color-background-light;
   bottom: 0;
   height: 100vh;
   left: 0;
   overflow-y: scroll;
+  padding-bottom: 80px;
   position: absolute;
   top: 0;
   transform: translateY(100%);
