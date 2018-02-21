@@ -40,6 +40,11 @@ input {
     cursor: not-allowed;
     opacity: $brickulator-opacity-disabled;
   }
+
+  .bc-form-input-wrap--with-number-stepper & {
+    border-radius: 0;
+    text-align: center;
+  }
 }
 
 .bc-form-input-wrap--button-suffix {
@@ -125,6 +130,32 @@ input {
   height: 20px;
   padding: 0;
   width: 20px;
+}
+
+.bc-form-input__number-stepper-button {
+  align-items: center;
+  display: flex;
+  flex-shrink: 0;
+  height: $bc-form-field-height;
+  justify-content: center;
+  text-align: center;
+  width: $bc-form-field-height;
+}
+
+.bc-form-input__number-stepper-button-text {
+  @include bc-text-crop-sans-serif;
+  text-align: center;
+}
+
+.bc-form-input__number-stepper-button--decrease {
+  border-bottom-right-radius: 0;
+  border-top-right-radius: 0;
+  order: -1;
+}
+
+.bc-form-input__number-stepper-button--increase {
+  border-bottom-left-radius: 0;
+  border-top-left-radius: 0;
 }
 
 .bc-form-input__clear-button-text {
@@ -330,12 +361,12 @@ input {
 
 .bc-form__checkbox-group {
   border: 0;
-  padding: 0;
   margin: $brickulator-space-stack-2-x;
+  padding: 0;
 
   .bc-form__checkbox {
-    margin-left: $brickulator-space-generic-2-x;
     margin-bottom: $brickulator-space-generic-1-x;
+    margin-left: $brickulator-space-generic-2-x;
   }
 }
 
