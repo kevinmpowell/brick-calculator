@@ -24,8 +24,16 @@
           (<span class="bc-set-lookup-form__tax-amount"></span>% sales tax will be added)
         </span>
       </label>
-        {{ form_input(step="0.01", type="number", id="bc-set-lookup-form__purchase-price-input", name="purchasePrice", clear_button=true, prefix="$") }}
+      {{ form_input(step="0.01", type="number", id="bc-set-lookup-form__purchase-price-input", name="purchasePrice", clear_button=true, prefix="$") }}
     {% endcall %}
+    
+    {% call form_field_group() %}
+      <label class="bc-form__label" for="bc-set-lookup-form__purchase-quantity-input">
+        How Many?
+      </label>
+      {{ form_input(step="1", type="number", id="bc-set-lookup-form__purchase-quantity-input", name="purchaseQuantity") }}
+    {% endcall %}
+
     
     <div class="bc-set-lookup-form__actions">
       {{ button(text="Brickulate!", type="submit", class="bc-button--primary bc-set-lookup-form__submit-button") }}

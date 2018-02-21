@@ -7,6 +7,7 @@ BC.SetLookupForm = function() {
   const formId = 'bc-set-lookup-form',
         setNumberFieldId = "bc-set-lookup-form__set-number-input",
         purchasePriceFieldId = "bc-set-lookup-form__purchase-price-input",
+        purchaseQuantityFieldId = "bc-set-lookup-form__purchase-quantity-input",
         taxRateSelector = ".bc-set-lookup-form__tax-message",
         taxRateAmountSelector = ".bc-set-lookup-form__tax-amount",
         taxRateVisibleClass = "bc-set-lookup-form__tax-message--visible";
@@ -14,6 +15,7 @@ BC.SetLookupForm = function() {
   let form,
       setNumber,
       purchasePrice,
+      purchaseQuantity,
       taxRateAmount,
       taxRate,
       currencySymbol;
@@ -21,10 +23,19 @@ BC.SetLookupForm = function() {
   function handleFormSubmit(e) {
     e.preventDefault();
     const formattedPurchasePrice = BC.Utils.currencyToFloat(purchasePrice.value);
+    const userSettings = BC.App.getUserSettings();
+    let quantity = 1;
+
+
+    // Retrieve quantity if this is a plus member
+    if (userSettings.plus_member === true) {
+      quantity = parseInt(purchaseQuantity.value, 10);
+    }
+
     if (isNaN(formattedPurchasePrice)) {
       alert("Invalid purchase price. Please use only numbers and periods for decimal points.");
     } else {
-      BC.Values.calculate(setNumber.value, formattedPurchasePrice);
+      BC.Values.calculate(setNumber.value, formattedPurchasePrice, quantity);
       updateUrlWithLookupParams(setNumber.value, formattedPurchasePrice);
       document.activeElement.blur();
     }
@@ -105,6 +116,7 @@ BC.SetLookupForm = function() {
     form = document.getElementById(formId);
     setNumber = document.getElementById(setNumberFieldId);
     purchasePrice = document.getElementById(purchasePriceFieldId);
+    purchaseQuantity = document.getElementById(purchaseQuantityFieldId);
     currencySymbol = purchasePrice.parentNode.querySelector(".bc-form-input-prefix");
     taxRate = form.querySelector(taxRateSelector);
     taxRateAmount = form.querySelector(taxRateAmountSelector);

@@ -1,3 +1,5 @@
+/* globals BC */
+
 'use strict';
 BC.PortletLayout = function() {
   const emptyPortletClass = "bc-portlet--empty",
@@ -433,9 +435,10 @@ BC.PortletLayout = function() {
     }
   }
 
-  function updatePortletValues(p, data, setCost) {
+  function updatePortletValues(p, data, setCost, quantity) {
     const lineItemInputs = Array.from(p.querySelectorAll(".bc-portlet__line-item-input")),
           profitInput = p.querySelector(".bc-portlet__profit-input"),
+          profitEachInput = p.querySelector(".bc-portlet__profit-each-input"),
           portletRetrievedAt = p.querySelector(".bc-portlet__data-retrieved-at"),
           portletNodeLink = p.querySelector(".bc-portlet__external-link"),
           title = p.querySelector(".bc-portlet__title").textContent,
@@ -446,7 +449,8 @@ BC.PortletLayout = function() {
           marketplaceValueKey = liKeys.find(function(k){ return data.hasOwnProperty(k); }),
           marketplaceValue = marketplaceValueKey ? data[marketplaceValueKey] : false,
           marketplaceFeesKey = liKeys.find(function(k){ return k.toLowerCase().includes("fees"); }),
-          marketplaceFees = marketplaceFeesKey && marketplaceValue ? getMarketplaceFees(marketplaceValue, marketplaceFeesKey) : false;
+          marketplaceFees = marketplaceFeesKey && marketplaceValue ? getMarketplaceFees(marketplaceValue, marketplaceFeesKey) : false,
+          quantityMultiplierClass = 'bc-portlet--with-quantity-multiplier';
 
     if (retrievedAtKey && data.hasOwnProperty(retrievedAtKey)) {
       portletRetrievedAt.setAttribute("datetime", data[retrievedAtKey]);
@@ -465,14 +469,14 @@ BC.PortletLayout = function() {
     if (p.dataset['marketplace-url']) {
       const baseUrl = p.dataset['marketplace-url'];
       let href = baseUrl.replace(/!{setNumber}/, data.n);
-      
+
       if (data.boURL) {
         href = href.replace(/!{brickOwlUrl}/, data.boURL);
       }
       portletNodeLink.setAttribute('href', href);
     }
 
-    let profit = Math.abs(setCost) * -1, 
+    let profit = Math.abs(setCost) * -1,
         portletValues = {
           setCost: setCost
         };
@@ -481,7 +485,7 @@ BC.PortletLayout = function() {
       p.classList.remove(emptyPortletClass);
       portletValues[marketplaceValueKey] = marketplaceValue;
       profit += marketplaceValue;
-      
+
       if (marketplaceFees) {
         portletValues[marketplaceFeesKey] = marketplaceFees;
         profit -= marketplaceFees;
@@ -493,6 +497,14 @@ BC.PortletLayout = function() {
         const key = i.getAttribute("data-value-key");
         i.value = BC.Utils.formatCurrency(portletValues[key]);
       });
+
+      if (quantity > 1) {
+        p.classList.add(quantityMultiplierClass);
+        profitEachInput.value = quantity + " @ " + BC.Utils.formatCurrency(profit) + " each";
+        profit = profit * quantity;
+      } else {
+        p.classList.remove(quantityMultiplierClass);
+      }
 
       profitInput.value = BC.Utils.formatCurrency(profit);
     } else {
@@ -518,7 +530,7 @@ BC.PortletLayout = function() {
     document.addEventListener(customEvents.preferencesUpdated, buildLayout);
   }
 
-  const updateAllPortletValues = function updateAllPortletValues(data, setCost) {
+  const updateAllPortletValues = function updateAllPortletValues(data, setCost, quantity) {
     const portlets = document.querySelectorAll(".bc-portlet"),
           cost = getSetCostWithTaxes(setCost);
 
@@ -526,9 +538,9 @@ BC.PortletLayout = function() {
     lastSetLookupCost = setCost;
 
     portlets.forEach(function(p){
-      updatePortletValues(p, data, cost);
+      updatePortletValues(p, data, cost, quantity);
     });
-  }
+  };
 
   const buildLayout = function buildLayout() {
     const layout = getLayout();

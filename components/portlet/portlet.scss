@@ -131,4 +131,25 @@
   }
 }
 
+// Qty multiplier results - profit "each"
+.bc-portlet__profit-each-input {
+  &,
+  &:disabled {
+    background: transparent;
+    border: 0;
+    color: $brickulator-color-text-on-light-secondary;
+    cursor: auto;
+    display: none;
+    font-size: $brickulator-font-size-xs;
+    height: auto;
+    margin: 0;
+    opacity: 1;
+    padding: 0;
+    text-align: center;
+  }
+
+  .bc-portlet--with-quantity-multiplier & {
+    display: block;
+  }
+}
 

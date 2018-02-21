@@ -212,7 +212,7 @@
           (<span class="bc-set-lookup-form__tax-amount"></span>% sales tax will be added)
         </span>
       </label>
-        
+      
   
   
     
@@ -266,6 +266,44 @@
 
     
   </div>
+
+    
+    
+  <div class="bc-form-field-group">
+    
+      <label class="bc-form__label" for="bc-set-lookup-form__purchase-quantity-input">
+        How Many?
+      </label>
+      
+  
+  
+
+
+  
+    
+    
+    
+      <input type="number" 
+              class="bc-form-input"
+              id="bc-set-lookup-form__purchase-quantity-input" 
+              name="bc-set-lookup-form__purchase-quantity-input"
+              autocomplete="off" 
+              autocorrect="off" 
+              autocapitalize="off" 
+              spellcheck="false"
+              
+              
+              step="1"
+              
+              
+              
+              
+              >
+  
+
+    
+  </div>
+
 
     
     <div class="bc-set-lookup-form__actions">
@@ -398,6 +436,7 @@
         </div>
       </div>
       <div class="bc-portlet__profit">
+        <input class="bc-portlet__profit-each-input" value="" type="text" readonly="true" disabled>
         <input class="bc-portlet__profit-input" value="" type="text" readonly="true" disabled>
       </div>
   </div>
@@ -1344,8 +1383,8 @@
 
         
     <script type="text/javascript" src="scripts/dependencies/timeago.min.js"></script>
+    <script type="text/javascript" src="scripts/brickulator.js"></script>
     
-    <script type="text/javascript" src="scripts/brickulator.min.js"></script>
   
     </body>
 </html>
