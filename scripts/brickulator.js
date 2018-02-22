@@ -213,6 +213,7 @@ BC.API = function() {
       };
 
       xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+      xhr.setRequestHeader('Accept-Encoding', 'gzip, deflate');
       if (opts.method === 'POST') {
         xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
       }
