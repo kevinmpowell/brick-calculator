@@ -193,7 +193,7 @@
     </label>
 {% endmacro %}
 
-{% macro form_radio(
+{% macro form_radio_button(
     id="radio-1",
     name,
     value="on",
@@ -227,6 +227,17 @@
       <legend class="bc-form__checkbox-group-label">{{ label }}</legend>
     {% endif %}
     <div class="bc-form__checkbox-group-checkboxes">
+      {{ caller() }}
+    </div>
+  </fieldset>
+{% endmacro %}
+
+{% macro form_radio_button_group(class, label) %}
+  <fieldset class="bc-form__radio-button-group{{ ' ' + class if class }}">
+    {% if label %}
+      <legend class="bc-form__radio-button-group-label">{{ label }}</legend>
+    {% endif %}
+    <div class="bc-form__radio-button-group-checkboxes">
       {{ caller() }}
     </div>
   </fieldset>

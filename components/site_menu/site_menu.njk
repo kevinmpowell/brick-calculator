@@ -1,24 +1,26 @@
 {% macro site_menu() %}
   <div class="bc-site-menu">
-    <div class="bc-site-menu__inner">
-      <div class="bc-site-menu__actions">
-        {{ button(text="&times; Close", class="bc-button--primary bc-button--size-s bc-site-menu-hide-trigger") }}
-      </div>
-      {{ sign_in_form() }}
-      {{ list_group(
-        class="bc-list-group--on-dark bc-site-menu__list-group",
-        items=[
-        {
-          href: "#user-settings",
-          label: "Settings"
-        },
-        {
-          href: "#sign-out",
-          class: "bc-site-menu__list-item--sign-out",
-          label: "Sign Out"
-        }
-        ]) }}
+    <div class="bc-site-menu__column">
+      <div class="bc-site-menu__inner">
+        <div class="bc-site-menu__actions">
+          {{ button(text="&times; Close", class="bc-button--primary bc-button--size-s bc-site-menu-hide-trigger") }}
+        </div>
+        {{ sign_in_form() }}
+        {{ list_group(
+          class="bc-list-group--on-dark bc-site-menu__list-group",
+          items=[
+          {
+            href: "#user-settings",
+            label: "Settings"
+          },
+          {
+            href: "#sign-out",
+            class: "bc-site-menu__list-item--sign-out",
+            label: "Sign Out"
+          }
+          ]) }}
 
+      </div>
       {# These panes are off canvas and slide in over top of the menu #}
       {{ user_settings_pane() }}
       {{ sign_up_form() }}

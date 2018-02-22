@@ -20,26 +20,35 @@ $bc-site-menu-max-width: 320px;
   }
 }
 
-.bc-site-menu__inner {
-  background: $brickulator-color-background-dark;
+.bc-site-menu__column {
   height: 100vh;
-  left: 0;
-  position: absolute;
-  top: 0;
+  left: auto;
   max-width: $bc-site-menu-max-width;
   pointer-events: auto; 
+  position: absolute;
+  right: 0;
   transform: translateX(100vw);
-  // transform: translateX(30vw); //Make menu visible on reload for debugging
   transition: transform .2s ease-out;
-  will-change: transform;
   width: 100vw;
+  will-change: transform;
   z-index: $brickulator-z-index-overlay + 1;
-  
+
   .bc-site-menu--visible & {
-    transform: translateX(0vw);
+    transform: translateX(0);
     transition: transform .2s ease-in;
-  
   }
+}
+
+.bc-site-menu__inner {
+  background: $brickulator-color-background-dark;
+  // height: 100vh;
+  bottom: 0;
+  left: 0;
+  pointer-events: auto; 
+  position: absolute;
+  top: 0;
+  // transform: translateX(30vw); //Make menu visible on reload for debugging
+  width: 100%;
 }
 
 .bc--user-signed-out .bc-site-menu__list-item--sign-out {
@@ -47,8 +56,8 @@ $bc-site-menu-max-width: 320px;
 }
 
 @media screen and (min-width: ($bc-site-menu-max-width / 1)) {
-  .bc-site-menu--visible .bc-site-menu__inner {
-    transform: translateX(calc(100vw - #{$bc-site-menu-max-width}));
+  .bc-site-menu--visible .bc-site-menu__column {
+    // transform: translateX(calc(100vw + #{$bc-site-menu-max-width}));
   }
 }
 

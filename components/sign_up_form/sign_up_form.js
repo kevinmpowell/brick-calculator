@@ -89,8 +89,10 @@ BC.SignUpForm = function() {
   }
 
   const showFormPane = function showFormPane() {
+    formPane.addEventListener('webkitTransitionEnd', BC.Utils.fixSafariScrolling, {once: true});
+    formPane.addEventListener('transitionEnd', BC.Utils.fixSafariScrolling, {once: true});
     formPane.classList.add(formVisibleClass);
-  }
+  };
 
   const hideFormPane = function hideFormPane() {
     formPane.classList.remove(formVisibleClass);

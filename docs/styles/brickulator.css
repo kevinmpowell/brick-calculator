@@ -449,6 +449,18 @@ input {
   clip: rect(1px, 1px, 1px, 1px);
   position: absolute !important;
   left: -10000px; }
+  .bc-form__radio-button-input:checked + .bc-form__radio-button-visual::after,
+  .bc-form__checkbox-input:checked + .bc-form__radio-button-visual::after {
+    background: #FE8A18;
+    border-radius: 50%;
+    content: '';
+    height: 14px;
+    left: 50%;
+    position: absolute;
+    top: 50%;
+    -webkit-transform: translate3d(-50%, -50%, 0);
+            transform: translate3d(-50%, -50%, 0);
+    width: 14px; }
   .bc-form__radio-button-input:disabled ~ .bc-form__radio-button-label-text,
   .bc-form__radio-button-input:disabled ~ .bc-form__radio-button-visual,
   .bc-form__radio-button-input:disabled ~ .bc-form__checkbox-label-text,
@@ -460,14 +472,19 @@ input {
     cursor: not-allowed;
     opacity: 0.3; }
 
+.bc-form__radio-button-group,
 .bc-form__checkbox-group {
   border: 0;
   margin: 0 0 16px;
   padding: 0; }
+  .bc-form__radio-button-group .bc-form__radio-button,
+  .bc-form__radio-button-group .bc-form__checkbox,
+  .bc-form__checkbox-group .bc-form__radio-button,
   .bc-form__checkbox-group .bc-form__checkbox {
     margin-bottom: 8px;
     margin-left: 16px; }
 
+.bc-form__radio-button-group-label,
 .bc-form__checkbox-group-label {
   font-size: 14px;
   margin: 0 0 4px; }
@@ -860,38 +877,41 @@ img {
     -webkit-transition: background .2s ease-in;
     transition: background .2s ease-in; }
 
-.bc-site-menu__inner {
-  background: #535555;
+.bc-site-menu__column {
   height: 100vh;
-  left: 0;
-  position: absolute;
-  top: 0;
+  left: auto;
   max-width: 320px;
   pointer-events: auto;
+  position: absolute;
+  right: 0;
   -webkit-transform: translateX(100vw);
           transform: translateX(100vw);
   -webkit-transition: -webkit-transform .2s ease-out;
   transition: -webkit-transform .2s ease-out;
   transition: transform .2s ease-out;
   transition: transform .2s ease-out, -webkit-transform .2s ease-out;
-  will-change: transform;
   width: 100vw;
+  will-change: transform;
   z-index: 501; }
-  .bc-site-menu--visible .bc-site-menu__inner {
-    -webkit-transform: translateX(0vw);
-            transform: translateX(0vw);
+  .bc-site-menu--visible .bc-site-menu__column {
+    -webkit-transform: translateX(0);
+            transform: translateX(0);
     -webkit-transition: -webkit-transform .2s ease-in;
     transition: -webkit-transform .2s ease-in;
     transition: transform .2s ease-in;
     transition: transform .2s ease-in, -webkit-transform .2s ease-in; }
 
+.bc-site-menu__inner {
+  background: #535555;
+  bottom: 0;
+  left: 0;
+  pointer-events: auto;
+  position: absolute;
+  top: 0;
+  width: 100%; }
+
 .bc--user-signed-out .bc-site-menu__list-item--sign-out {
   display: none; }
-
-@media screen and (min-width: 320px) {
-  .bc-site-menu--visible .bc-site-menu__inner {
-    -webkit-transform: translateX(calc(100vw - 320px));
-            transform: translateX(calc(100vw - 320px)); } }
 
 .bc-site-menu__actions {
   display: -webkit-box;
@@ -999,10 +1019,10 @@ img {
   -webkit-overflow-scrolling: touch;
   background: #EEF5F4;
   bottom: 0;
-  height: 100vh;
   left: 0;
   overflow-y: scroll;
   padding-bottom: 80px;
+  pointer-events: auto;
   position: absolute;
   top: 0;
   -webkit-transform: translateY(100%);
@@ -1013,7 +1033,7 @@ img {
   transition: transform .2s ease-out, -webkit-transform .2s ease-out;
   width: 100%;
   will-change: transform;
-  z-index: 501; }
+  z-index: 510; }
 
 .bc-sign-up-form-pane--visible {
   -webkit-transform: translateY(0);
@@ -1324,12 +1344,13 @@ img {
 
 .bc-user-settings-pane {
   -webkit-overflow-scrolling: touch;
+  overflow-scrolling: touch;
   background: #EEF5F4;
   bottom: 0;
-  height: 100vh;
   left: 0;
-  overflow-y: auto;
+  overflow-y: scroll;
   padding-bottom: 80px;
+  pointer-events: auto;
   position: absolute;
   top: 0;
   -webkit-transform: translateX(100%);
@@ -1340,7 +1361,7 @@ img {
   transition: transform .2s ease-out, -webkit-transform .2s ease-out;
   width: 100%;
   will-change: transform;
-  z-index: 501; }
+  z-index: 600; }
 
 .bc-user-settings-pane--visible {
   -webkit-transform: translateX(0);

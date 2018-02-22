@@ -224,6 +224,8 @@ BC.UserSettingsPane = function() {
 
   const showPane = function showPane() {
     BC.SiteMenu.showMenu();
+    settingsPane.addEventListener('webkitTransitionEnd', BC.Utils.fixSafariScrolling, {once: true});
+    settingsPane.addEventListener('transitionEnd', BC.Utils.fixSafariScrolling, {once: true});
     settingsPane.classList.add(paneVisibleClass);
   };
 
@@ -243,7 +245,6 @@ BC.UserSettingsPane = function() {
     settingsPane = document.querySelector(settingsPaneSelector);
     plusMemberSettingsSection = document.querySelector(plusMemberSettingsSectionSelector);
     portletConfigCheckboxes = Array.from(document.querySelectorAll(portletConfigCheckboxSelector));
-    console.log({portletConfigCheckboxes});
     hidePaneTriggers = Array.from(document.querySelectorAll(hidePaneSelector));
     showPaneTriggers = Array.from(document.querySelectorAll(showPaneSelector));
     settingsForm = document[settingsFormName];
