@@ -691,6 +691,12 @@ BC.Utils = function() {
     updateCurrencyAndCountryCodes();
    }
 
+   function fixSafariScrolling(event) {
+    // Because of the translate CSS property, Safari doesn't know that the div can be scrollable, this "refreshes" the scrollable divs so they are scrolled after animating
+     event.target.style.overflowY = 'hidden';
+     setTimeout(function () { event.target.style.overflowY = 'auto'; });
+   }
+
   return {
     initialize: initialize,
     formatCurrency: formatCurrency,
@@ -714,7 +720,8 @@ BC.Utils = function() {
     ebaySoldListingsNewUrl: ebaySoldListingsNewUrl,
     ebaySoldListingsUsedUrl: ebaySoldListingsUsedUrl,
     brickOwlListingsUrl: brickOwlListingsUrl,
-    getUrlParameterByName: getUrlParameterByName
+    getUrlParameterByName: getUrlParameterByName,
+    fixSafariScrolling: fixSafariScrolling
   };
 }();
 

@@ -313,21 +313,22 @@ input {
   // margin: 0;
   // vertical-align: middle;
 
-  // &:checked + .bc-form__radio-button-visual {
-  //   // border: $form-border-selected;
+  &:checked + .bc-form__radio-button-visual {
+    // border: $form-border-selected;
 
-  //   &::after {
-  //     // background: $form-input-background-selected;
-  //     border-radius: 50%;
-  //     content: '';
-  //     height: 14px;
-  //     left: 50%;
-  //     position: absolute;
-  //     top: 50%;
-  //     transform: translate3d(-50%, -50%, 0);
-  //     width: 14px;
-  //   }
-  // }
+    &::after {
+      background: $brickulator-color-brand;
+      // background: $form-input-background-selected;
+      border-radius: 50%;
+      content: '';
+      height: 14px;
+      left: 50%;
+      position: absolute;
+      top: 50%;
+      transform: translate3d(-50%, -50%, 0);
+      width: 14px;
+    }
+  }
 
 
 
@@ -361,17 +362,20 @@ input {
   }
 }
 
+.bc-form__radio-button-group,
 .bc-form__checkbox-group {
   border: 0;
   margin: $brickulator-space-stack-2-x;
   padding: 0;
 
+  .bc-form__radio-button,
   .bc-form__checkbox {
     margin-bottom: $brickulator-space-generic-1-x;
     margin-left: $brickulator-space-generic-2-x;
   }
 }
 
+.bc-form__radio-button-group-label,
 .bc-form__checkbox-group-label {
   font-size: $brickulator-font-size-m;
   margin: $brickulator-space-stack-1-half-x;

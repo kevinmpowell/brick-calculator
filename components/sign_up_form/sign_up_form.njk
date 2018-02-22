@@ -19,40 +19,33 @@
         <input name="bc-sign-up-form-password" id="bc-sign-up-form-password" type="password" tabindex="-1">
       {% endcall %}
 
-      {{ button(type="submit", text="Sign Up", class="bc-button--primary bc-sign-up-form__submit-button") }}
-    </form>
+      {% call form_field_group() %}
+        {{ form_label(for="bc-sign-up-form-password-confirm", label="Confirm Password") }}
+        <input name="bc-sign-up-form-password-confirm" id="bc-sign-up-form-password-confirm" type="password" tabindex="-1">
+      {% endcall %}
 
-    <div class="bc-sign-up-form-pane__brickulator-plus-details bc-long-form-text">
       {% filter markdown %}
-        ## Brickulator Plus
-
-        Sign up for a Brickulator Plus membership to enjoy the following benefits:
+        ### Interested in More Features?
+        A Brickulator Plus Account includes the following:
         * Remove All Ads
         * Automatically add sales tax to purchase price
-        * Customize results screen
-        * Add eBay sold listing values to results
-        * Add Brick Owl minifig total value to results
-        
+        * Customize the results screen - only see the listings and marketplaces you care about
+
         <p class="bc-long-form-text__cta">
           Special introductory price: 
           <span class="bc-long-form-text__cta-price">
-            <strike>$6.99</strike> $4.99 / mo.
+            <strike>$3.99</strike> $1.99 USD / mo.
           </span>
         </p>
       {% endfilter %}
-      {{ button(text="Join Now", class="bc-button--primary") }}
-    </div>
 
-    <div class="bc-sign-up-form-pane__brickulator-free-details bc-long-form-text">
-      {% filter markdown %}
-        ## Brickulator Free
+      {% call form_radio_button_group() %}
+        {{ form_radio_button(name="bc-account-type", id="bc-account-type-plus", label="Get Brickulator Plus") }}
+        {{ form_radio_button(name="bc-account-type", id="bc-account-type-free", label="No Thanks, just create a FREE Brickulator Account") }}
+        {{ form_radio_button(name="bc-account-type", id="bc-account-type-email", label="Email me about this later", checked=true) }}
+      {% endcall %}
 
-        A free brickulator account features the following benefits:
-        * One ad every 10 lookups (instead of every 3 without an account)
-        * Add Brick Owl minifig total value to results
-      {% endfilter %}
-      {{ button(text="Sign Up", class="bc-button--primary") }}
-    </div>
-
+      {{ button(type="submit", text="Sign Up", class="bc-button--primary bc-sign-up-form__submit-button") }}
+    </form>
   </div>
 {% endmacro %}
