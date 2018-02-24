@@ -1,4 +1,4 @@
-/* globals BC localStorageKeys apiMapping currentDomain */
+/* globals BC localStorageKeys apiMapping currentDomain Stripe */
 
 'use strict';
 BC.SignUpForm = function() {
@@ -115,6 +115,35 @@ BC.SignUpForm = function() {
     });
   }
 
+  function configureStripeSubscriptionFields() {
+    var stripe = Stripe('pk_test_rFBonOYWBSK1R3CkbnLmytIf');
+    var elements = stripe.elements();
+
+    // Custom styling can be passed to options when creating an Element.
+    var style = {
+      base: {
+        // Add your base input styles here. For example:
+        fontSize: '16px',
+        color: "#32325d",
+      }
+    };
+
+    // Create an instance of the card Element.
+    var card = elements.create('card', {style: style});
+
+    // Add an instance of the card Element into the `card-element` <div>.
+    card.mount('#card-element');
+
+    card.addEventListener('change', function(event) {
+      var displayError = document.getElementById('card-errors');
+      if (event.error) {
+        displayError.textContent = event.error.message;
+      } else {
+        displayError.textContent = '';
+      }
+    });
+  }
+
   const showFormPane = function showFormPane() {
     formPane.addEventListener('webkitTransitionEnd', BC.Utils.fixSafariScrolling, {once: true});
     formPane.addEventListener('transitionEnd', BC.Utils.fixSafariScrolling, {once: true});
@@ -134,6 +163,7 @@ BC.SignUpForm = function() {
     passwordConfirmField = document.bcSignUpForm.passwordConfirm;
     accountTypeField = document.bcSignUpForm.accountType;
     submitButton = document.querySelector(submitButtonSelector);
+    configureStripeSubscriptionFields();
     setEventListeners();
   };
 
