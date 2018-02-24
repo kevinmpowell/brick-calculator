@@ -52,12 +52,16 @@ BC.SignInForm = function() {
 
         var decodedData = JSON.parse(BC.Utils.stringDecoder(request.responseText));
         BC.Utils.saveToLocalStorage(localStorageKeys.authToken, decodedData.auth_token);
+        BC.Utils.saveToLocalStorage(localStorageKeys.country, decodedData.preferences.country);
+        BC.Utils.saveToLocalStorage(localStorageKeys.currency, decodedData.preferences.currency);
+        
+        BC.App.setSignedInState();
+        BC.UserSettingsPane.setSelectedCountryAndCurrency();
 
         // TODO: Broadcast event that user settings have been loaded
         BC.Overlay.hide();
         BC.ToastMessage.create("Signed in. Welcome back.", "success");
 
-        BC.App.setSignedInState();
         BC.Utils.broadcastEvent(customEvents.currencyUpdated);
         enableForm();
         resetForm();

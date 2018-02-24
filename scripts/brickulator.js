@@ -172,6 +172,10 @@ BC.App = function() {
     return language;
   };
 
+  const userIsSignedIn = function userIsSignedIn() {
+    return userSignedIn;
+  };
+
   const initialize = function initialize() {
     body = document.body;
     setSignedInState();
@@ -189,7 +193,7 @@ BC.App = function() {
     getUserSettings: getUserSettings,
     getCountry: getCountry,
     storeCookieUsageAuthorization: storeCookieUsageAuthorization,
-    userSignedIn: userSignedIn
+    userIsSignedIn: userIsSignedIn
   };
 }();
 
