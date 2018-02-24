@@ -1,3 +1,4 @@
+/* globals BC localStorageKeys apiMapping currentDomain customEvents */
 'use strict';
 BC.SignInForm = function() {
   const signInFormId = 'bc-sign-in-form',
@@ -37,7 +38,7 @@ BC.SignInForm = function() {
     BC.Overlay.show("Sit tight.", "Signing you in.", true);
     var request = new XMLHttpRequest();
     const apiDomain = apiMapping[currentDomain],
-          params = "email=" + emailField.value + "&password=" + passwordField.value,
+          params = "email=" + encodeURIComponent(emailField.value) + "&password=" + passwordField.value,
           endpointUrl = apiDomain + signInEndpoint;
     request.open('POST', endpointUrl, true);
     request.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
@@ -45,18 +46,23 @@ BC.SignInForm = function() {
     request.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 
     request.onload = function() {
-      console.log(request);
       if (request.status >= 200 && request.status < 400) {
         // Success!
+        BC.Utils.saveToLocalStorage(localStorageKeys.userSettings, request.responseText);
+
         var decodedData = JSON.parse(BC.Utils.stringDecoder(request.responseText));
         BC.Utils.saveToLocalStorage(localStorageKeys.authToken, decodedData.auth_token);
-        BC.Utils.saveToLocalStorage(localStorageKeys.userSettings, request.responseText);
+        BC.Utils.saveToLocalStorage(localStorageKeys.country, decodedData.preferences.country);
+        BC.Utils.saveToLocalStorage(localStorageKeys.currency, decodedData.preferences.currency);
+        
+        BC.App.setSignedInState();
+        BC.UserSettingsPane.setSelectedCountryAndCurrency();
 
         // TODO: Broadcast event that user settings have been loaded
         BC.Overlay.hide();
         BC.ToastMessage.create("Signed in. Welcome back.", "success");
 
-        BC.App.setSignedInState();
+        BC.Utils.broadcastEvent(customEvents.currencyUpdated);
         enableForm();
         resetForm();
       } else {
@@ -98,9 +104,9 @@ BC.SignInForm = function() {
     submitButton = document.querySelector(submitButtonSelector);
     signUpLink = document.querySelector(signUpLinkSelector);
     setEventListeners();
-  }
+  };
 
   return {
     initialize: initialize
-  }
+  };
 }();

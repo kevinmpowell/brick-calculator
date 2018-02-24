@@ -250,7 +250,7 @@ input {
   }
 }
 
-.bc-form__radio,
+.bc-form__radio-button,
 .bc-form__checkbox {
   align-items: center;
   background: none;
@@ -295,7 +295,7 @@ input {
   border-radius: $brickulator-border-radius-control;
 }
 
-.bc-form__radio-label-text,
+.bc-form__radio-button-label-text,
 .bc-form__checkbox-label-text {
   // @include bc-text-crop-sans-serif;
   color: $brickulator-color-text-on-light-primary;
@@ -370,7 +370,7 @@ input {
 
   .bc-form__radio-button,
   .bc-form__checkbox {
-    margin-bottom: $brickulator-space-generic-1-x;
+    margin-bottom: $brickulator-space-generic-2-x;
     margin-left: $brickulator-space-generic-2-x;
   }
 }

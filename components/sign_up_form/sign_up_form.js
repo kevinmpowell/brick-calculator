@@ -1,8 +1,8 @@
+/* globals BC localStorageKeys apiMapping currentDomain */
+
 'use strict';
 BC.SignUpForm = function() {
   const signUpFormId = 'bc-sign-up-form',
-        emailFieldId = 'bc-sign-up-form-email',
-        passwordFieldId = 'bc-sign-up-form-password',
         submitButtonSelector = '.bc-sign-up-form__submit-button',
         signUpEndpoint = '/signup',
         formPaneSelector = '.bc-sign-up-form-pane',
@@ -13,18 +13,23 @@ BC.SignUpForm = function() {
       formPane,
       emailField,
       passwordField,
+      passwordConfirmField,
+      accountTypeField,
       submitButton,
-      hidePaneTriggers;
+      hidePaneTriggers,
+      responseData;
 
   function disableForm() {
     emailField.setAttribute('disabled', true);
     passwordField.setAttribute('disabled', true);
+    passwordConfirmField.setAttribute('disabled', true);
     submitButton.setAttribute('disabled', true);
   }
 
   function enableForm() {
     emailField.removeAttribute('disabled');
     passwordField.removeAttribute('disabled');
+    passwordConfirmField.removeAttribute('disabled');
     submitButton.removeAttribute('disabled');
   }
 
@@ -32,53 +37,75 @@ BC.SignUpForm = function() {
     form.reset();
   }
 
-  function saveAuthToken(authToken) {
-    localStorage.setItem(localStorageKeys.authToken, authToken)
-  }
-
   function handleFormSignup(e) {
     e.preventDefault();
     disableForm();
-    var request = new XMLHttpRequest();
-    const apiDomain = apiMapping[currentDomain],
-          params = "email=" + emailField.value + "&password=" + passwordField.value + "&password_confirmation=" + passwordField.value;
-    request.open('POST', apiDomain + signUpEndpoint, true);
-    request.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
-    //Send the proper header information along with the request for the POST to work
-    request.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 
-    request.onload = function() {
-      if (request.status >= 200 && request.status < 400) {
-        // Success!
-        var data = JSON.parse(request.responseText);
-        saveAuthToken(data.auth_token);
-        BC.Overlay.show("Welcome!", "User account created successfully.", true);
-        enableForm();
-        resetForm();
-      } else if (request.status === 422) {
+    const passwordValue = passwordField.value,
+          passwordConfirmValue = passwordConfirmField.value,
+          emailValue = emailField.value,
+          accountTypeValue = accountTypeField.value,
+          countryCode = BC.Utils.getFromLocalStorage(localStorageKeys.country),
+          currencyCode = BC.Utils.getFromLocalStorage(localStorageKeys.currency);
 
-        var data = JSON.parse(request.responseText);
-        if (data.message && data.message.toLowerCase().includes('already exists')) {
-          BC.Overlay.show("Sorry! Can't create that account.", data.message, true);
-        } else if (data.message && data.message.toLowerCase().includes("password can't be blank")) {
-          BC.Overlay.show("Forget something?", "Please enter a password", true);
-        }
-        // We reached our target server, but it returned an error
-        enableForm();
-      } else {
-        alert("Sign up failed - connection successful, but data failed");
-        enableForm();
-      }
-    };
-
-    request.onerror = function() {
-      // There was a connection error of some sort
-      alert("Could not sign up - connection error");
+    if (emailValue.length === 0 || !BC.Utils.emailValid(emailValue)) {
+      BC.ToastMessage.create("Please enter a real email address.", "error");
       enableForm();
-    };
+    } else if (passwordValue.length === 0 || passwordValue !== passwordConfirmValue) {
+      BC.ToastMessage.create("Password and Password Confirmation must match.", "error");
+      enableForm();
+    } else {
+      var request = new XMLHttpRequest();
+      const apiDomain = apiMapping[currentDomain],
+            params = "email=" + encodeURIComponent(emailValue) +
+                      "&password=" + passwordValue +
+                      "&password_confirmation=" + passwordConfirmValue +
+                      "&account_type=" + accountTypeValue +
+                      "&country=" + countryCode +
+                      "&currency=" + currencyCode;
+      request.open('POST', apiDomain + signUpEndpoint, true);
+      request.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+      //Send the proper header information along with the request for the POST to work
+      request.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 
-    request.send(params); // POST params are sent down here
-    return false; // prevent form submission
+      request.onload = function() {
+        if (request.status >= 200 && request.status < 400) {
+          // Success!
+          BC.Utils.saveToLocalStorage(localStorageKeys.userSettings, request.responseText);
+          
+          var decodedData = JSON.parse(BC.Utils.stringDecoder(request.responseText));
+          BC.Utils.saveToLocalStorage(localStorageKeys.authToken, decodedData.auth_token);
+
+          BC.Overlay.show("Welcome!", "User account created successfully.", true);
+          enableForm();
+          resetForm();
+          hideFormPane(); // Close the sign up form
+          BC.App.setSignedInState(); //Auth token is in local storage, sign them in!
+        } else if (request.status === 422) {
+
+          responseData = JSON.parse(request.responseText);
+          if (responseData.message && responseData.message.toLowerCase().includes('already exists')) {
+            BC.Overlay.show("Sorry! Can't create that account.", responseData.message, true);
+          } else if (responseData.message && responseData.message.toLowerCase().includes("password can't be blank")) {
+            BC.Overlay.show("Forget something?", "Please enter a password", true);
+          }
+          // We reached our target server, but it returned an error
+          enableForm();
+        } else {
+          alert("Sign up failed - connection successful, but data failed");
+          enableForm();
+        }
+      };
+
+      request.onerror = function() {
+        // There was a connection error of some sort
+        alert("Could not sign up - connection error");
+        enableForm();
+      };
+
+      request.send(params); // POST params are sent down here
+
+    }
   }
 
   function setEventListeners() {
@@ -96,21 +123,23 @@ BC.SignUpForm = function() {
 
   const hideFormPane = function hideFormPane() {
     formPane.classList.remove(formVisibleClass);
-  }
+  };
 
   const initialize = function initialize() {
     form = document.getElementById(signUpFormId);
     formPane = document.querySelector(formPaneSelector);
     hidePaneTriggers = Array.from(document.querySelectorAll(hidePaneTriggerSelector));
-    emailField = document.getElementById(emailFieldId);
-    passwordField = document.getElementById(passwordFieldId);
+    emailField = document.bcSignUpForm.email;
+    passwordField = document.bcSignUpForm.password;
+    passwordConfirmField = document.bcSignUpForm.passwordConfirm;
+    accountTypeField = document.bcSignUpForm.accountType;
     submitButton = document.querySelector(submitButtonSelector);
     setEventListeners();
-  }
+  };
 
   return {
     initialize: initialize,
     showFormPane: showFormPane,
     hideFormPane: hideFormPane
-  }
+  };
 }();

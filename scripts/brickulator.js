@@ -41,7 +41,8 @@ BC.App = function() {
         plusMemberTaxesEnabledClass = 'bc--plus-member-taxes-enabled';
   let body,
       country = "US",
-      language = "en"
+      language = "en",
+      userSignedIn = false;
 
   function setBodyClass(userState) {
     const userSettings = BC.App.getUserSettings();
@@ -144,10 +145,12 @@ BC.App = function() {
   const setSignedInState = function setSignedInState() {
     BC.Utils.validateAuthToken()
     .then(function(){
+      userSignedIn = true;
       setBodyClass('signedIn');
       BC.Utils.broadcastEvent(customEvents.userSignedIn);
     })
     .catch(function() {
+      userSignedIn = false;
       setBodyClass('signedOut');
       BC.Utils.broadcastEvent(customEvents.userSignedOut);
       clearAuthToken();
@@ -169,6 +172,10 @@ BC.App = function() {
     return language;
   };
 
+  const userIsSignedIn = function userIsSignedIn() {
+    return userSignedIn;
+  };
+
   const initialize = function initialize() {
     body = document.body;
     setSignedInState();
@@ -185,7 +192,8 @@ BC.App = function() {
     setSignedInState: setSignedInState,
     getUserSettings: getUserSettings,
     getCountry: getCountry,
-    storeCookieUsageAuthorization: storeCookieUsageAuthorization
+    storeCookieUsageAuthorization: storeCookieUsageAuthorization,
+    userIsSignedIn: userIsSignedIn
   };
 }();
 
@@ -213,7 +221,6 @@ BC.API = function() {
       };
 
       xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
-      xhr.setRequestHeader('Accept-Encoding', 'gzip, deflate');
       if (opts.method === 'POST') {
         xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
       }
@@ -237,7 +244,7 @@ BC.API = function() {
 
   return {
     makeRequest: makeRequest
-  }
+  };
 }();
 
 BC.Utils = function() {
@@ -691,11 +698,16 @@ BC.Utils = function() {
     updateCurrencyAndCountryCodes();
    }
 
-   function fixSafariScrolling(event) {
+   const fixSafariScrolling = function fixSafariScrolling(event) {
     // Because of the translate CSS property, Safari doesn't know that the div can be scrollable, this "refreshes" the scrollable divs so they are scrolled after animating
      event.target.style.overflowY = 'hidden';
      setTimeout(function () { event.target.style.overflowY = 'auto'; });
    }
+
+   const emailValid = function emailValid(email) {
+    var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    return re.test(String(email).toLowerCase());
+  };
 
   return {
     initialize: initialize,
@@ -721,7 +733,8 @@ BC.Utils = function() {
     ebaySoldListingsUsedUrl: ebaySoldListingsUsedUrl,
     brickOwlListingsUrl: brickOwlListingsUrl,
     getUrlParameterByName: getUrlParameterByName,
-    fixSafariScrolling: fixSafariScrolling
+    fixSafariScrolling: fixSafariScrolling,
+    emailValid: emailValid,
   };
 }();
 

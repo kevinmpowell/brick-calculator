@@ -145,18 +145,28 @@ BC.UserSettingsPane = function() {
           enablePurchaseQuantityValue = enablePurchaseQuantity.checked,
           portletConfig = getPlusMemberPortletConfig();
 
-    saveAndUpdateCurrencyAndCountry(country, currency);
-    saveAndUpdateUserSettings(enablePurchaseQuantityValue, enableTaxesValue, taxRateValue, country, currency, portletConfig).then(function(data){
+
+    // If the user is signed in, save their settings via the API
+    if (BC.App.userIsSignedIn()) {
+      saveAndUpdateCurrencyAndCountry(country, currency);
+      saveAndUpdateUserSettings(enablePurchaseQuantityValue, enableTaxesValue, taxRateValue, country, currency, portletConfig).then(function(data){
+        BC.ToastMessage.create('Your Settings have been saved.', 'success');
+        BC.Utils.saveToLocalStorage(localStorageKeys.userSettings, data);
+        hidePane(); // Hide user settings
+        BC.SiteMenu.hideMenu(); // Close the Menu
+        BC.Values.hideValues(); // Return to the setLookup Form, since any calculated values will be off until settings are updated
+        BC.Utils.broadcastEvent(customEvents.preferencesUpdated);
+      }, function(error){
+        console.log("ERROR");
+        console.log(error);
+      });
+    } else {
+      saveAndUpdateCurrencyAndCountry(country, currency);
       BC.ToastMessage.create('Your Settings have been saved.', 'success');
-      BC.Utils.saveToLocalStorage(localStorageKeys.userSettings, data);
       hidePane(); // Hide user settings
       BC.SiteMenu.hideMenu(); // Close the Menu
       BC.Values.hideValues(); // Return to the setLookup Form, since any calculated values will be off until settings are updated
-      BC.Utils.broadcastEvent(customEvents.preferencesUpdated);
-    }, function(error){
-      console.log("ERROR");
-      console.log(error);
-    });
+    }
   }
 
   function promptCurrencySwitch() {
@@ -226,6 +236,7 @@ BC.UserSettingsPane = function() {
     BC.SiteMenu.showMenu();
     settingsPane.addEventListener('webkitTransitionEnd', BC.Utils.fixSafariScrolling, {once: true});
     settingsPane.addEventListener('transitionEnd', BC.Utils.fixSafariScrolling, {once: true});
+    settingsPane.scrollTo(0, 0); // Scroll settings pane to top
     settingsPane.classList.add(paneVisibleClass);
   };
 
@@ -262,6 +273,7 @@ BC.UserSettingsPane = function() {
     update: update,
     showPane: showPane,
     hidePane: hidePane,
-    changeCurrencyFromToastMessage: changeCurrencyFromToastMessage
+    changeCurrencyFromToastMessage: changeCurrencyFromToastMessage,
+    setSelectedCountryAndCurrency: setSelectedCountryAndCurrency
   };
 }();
