@@ -391,7 +391,7 @@ input {
             transform: translate(-50%, -25%);
     width: 0; }
 
-.bc-form__radio,
+.bc-form__radio-button,
 .bc-form__checkbox {
   -webkit-box-align: center;
       -ms-flex-align: center;
@@ -436,7 +436,7 @@ input {
 .bc-form__checkbox-visual {
   border-radius: 2px; }
 
-.bc-form__radio-label-text,
+.bc-form__radio-button-label-text,
 .bc-form__checkbox-label-text {
   color: #1E1F1F;
   display: inline;
@@ -481,7 +481,7 @@ input {
   .bc-form__radio-button-group .bc-form__checkbox,
   .bc-form__checkbox-group .bc-form__radio-button,
   .bc-form__checkbox-group .bc-form__checkbox {
-    margin-bottom: 8px;
+    margin-bottom: 16px;
     margin-left: 16px; }
 
 .bc-form__radio-button-group-label,

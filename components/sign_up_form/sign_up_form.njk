@@ -3,7 +3,7 @@
     <div class="bc-sign-up-form-pane__actions">
       {{ button(text="&times; Close", class="bc-button--size-s bc-sign-up-form-pane-hide-trigger") }}
     </div>
-    <form action="" method="POST" id="bc-sign-up-form">
+    <form name="bcSignUpForm" action="" method="POST" id="bc-sign-up-form">
       <div class="bc-long-form-text">
         {% filter markdown %}
           ### Create your account
@@ -11,25 +11,25 @@
       </div>
       {% call form_field_group() %}
         {{ form_label(for="bc-sign-up-form-email", label="Email") }}
-        <input autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" name="bc-sign-up-form-email" id="bc-sign-up-form-email" type="email" tabindex="-1">
+        <input autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" name="email" id="bc-sign-up-form-email" type="email" tabindex="-1">
       {% endcall %}
 
       {% call form_field_group() %}
         {{ form_label(for="bc-sign-up-form-password", label="Create Password") }}
-        <input name="bc-sign-up-form-password" id="bc-sign-up-form-password" type="password" tabindex="-1">
+        <input name="password" id="bc-sign-up-form-password" type="password" tabindex="-1">
       {% endcall %}
 
       {% call form_field_group() %}
         {{ form_label(for="bc-sign-up-form-password-confirm", label="Confirm Password") }}
-        <input name="bc-sign-up-form-password-confirm" id="bc-sign-up-form-password-confirm" type="password" tabindex="-1">
+        <input name="passwordConfirm" id="bc-sign-up-form-password-confirm" type="password" tabindex="-1">
       {% endcall %}
 
       {% filter markdown %}
         ### Interested in More Features?
         A Brickulator Plus Account includes the following:
-        * Remove All Ads
-        * Automatically add sales tax to purchase price
+        * Automatically add your sales tax to purchase price
         * Customize the results screen - only see the listings and marketplaces you care about
+        * Removes All Ads
 
         <p class="bc-long-form-text__cta">
           Special introductory price: 
@@ -39,10 +39,10 @@
         </p>
       {% endfilter %}
 
-      {% call form_radio_button_group() %}
-        {{ form_radio_button(name="bc-account-type", id="bc-account-type-plus", label="Get Brickulator Plus") }}
-        {{ form_radio_button(name="bc-account-type", id="bc-account-type-free", label="No Thanks, just create a FREE Brickulator Account") }}
-        {{ form_radio_button(name="bc-account-type", id="bc-account-type-email", label="Email me about this later", checked=true) }}
+      {% call form_radio_button_group(label="Want Brickulator Plus?") %}
+        {{ form_radio_button(name="accountType", id="bc-account-type-plus", value="plus", label="Yes! Sign Me Up.") }}
+        {{ form_radio_button(name="accountType", id="bc-account-type-free", value="free", label="No Thanks, just create a FREE Brickulator Account") }}
+        {{ form_radio_button(name="accountType", id="bc-account-type-email", value="email", label="Email me more about this later", checked=true) }}
       {% endcall %}
 
       {{ button(type="submit", text="Sign Up", class="bc-button--primary bc-sign-up-form__submit-button") }}

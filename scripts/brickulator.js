@@ -691,11 +691,16 @@ BC.Utils = function() {
     updateCurrencyAndCountryCodes();
    }
 
-   function fixSafariScrolling(event) {
+   const fixSafariScrolling = function fixSafariScrolling(event) {
     // Because of the translate CSS property, Safari doesn't know that the div can be scrollable, this "refreshes" the scrollable divs so they are scrolled after animating
      event.target.style.overflowY = 'hidden';
      setTimeout(function () { event.target.style.overflowY = 'auto'; });
    }
+
+   const emailValid = function emailValid(email) {
+    var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    return re.test(String(email).toLowerCase());
+  };
 
   return {
     initialize: initialize,
@@ -721,7 +726,8 @@ BC.Utils = function() {
     ebaySoldListingsUsedUrl: ebaySoldListingsUsedUrl,
     brickOwlListingsUrl: brickOwlListingsUrl,
     getUrlParameterByName: getUrlParameterByName,
-    fixSafariScrolling: fixSafariScrolling
+    fixSafariScrolling: fixSafariScrolling,
+    emailValid: emailValid,
   };
 }();
 

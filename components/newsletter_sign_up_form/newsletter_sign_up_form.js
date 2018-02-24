@@ -62,7 +62,7 @@ BC.NewsletterSignUpForm = function() {
 
     const email = emailInput.value;
     
-    if (emailValid(email)) {
+    if (BC.Utils.emailValid(email)) {
       addSubscriberToNewsletterList(email);
     } else {
       BC.ToastMessage.create("Please enter a real email address.", "error");
