@@ -22,21 +22,19 @@ BC.SignUpForm = function() {
   function disableForm() {
     emailField.setAttribute('disabled', true);
     passwordField.setAttribute('disabled', true);
+    passwordConfirmField.setAttribute('disabled', true);
     submitButton.setAttribute('disabled', true);
   }
 
   function enableForm() {
     emailField.removeAttribute('disabled');
     passwordField.removeAttribute('disabled');
+    passwordConfirmField.removeAttribute('disabled');
     submitButton.removeAttribute('disabled');
   }
 
   function resetForm() {
     form.reset();
-  }
-
-  function saveAuthToken(authToken) {
-    localStorage.setItem(localStorageKeys.authToken, authToken);
   }
 
   function handleFormSignup(e) {
@@ -46,8 +44,9 @@ BC.SignUpForm = function() {
     const passwordValue = passwordField.value,
           passwordConfirmValue = passwordConfirmField.value,
           emailValue = emailField.value,
-          accountTypeValue = accountTypeField.value;
-    alert(passwordValue.length);
+          accountTypeValue = accountTypeField.value,
+          countryCode = BC.Utils.getFromLocalStorage(localStorageKeys.country),
+          currencyCode = BC.Utils.getFromLocalStorage(localStorageKeys.currency);
 
     if (emailValue.length === 0 || !BC.Utils.emailValid(emailValue)) {
       BC.ToastMessage.create("Please enter a real email address.", "error");
@@ -58,7 +57,12 @@ BC.SignUpForm = function() {
     } else {
       var request = new XMLHttpRequest();
       const apiDomain = apiMapping[currentDomain],
-            params = "email=" + emailValue + "&password=" + passwordValue + "&password_confirmation=" + passwordConfirmValue + "&account_type=" + accountTypeValue;
+            params = "email=" + encodeURIComponent(emailValue) +
+                      "&password=" + passwordValue +
+                      "&password_confirmation=" + passwordConfirmValue +
+                      "&account_type=" + accountTypeValue +
+                      "&country=" + countryCode +
+                      "&currency=" + currencyCode;
       request.open('POST', apiDomain + signUpEndpoint, true);
       request.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
       //Send the proper header information along with the request for the POST to work
@@ -67,11 +71,16 @@ BC.SignUpForm = function() {
       request.onload = function() {
         if (request.status >= 200 && request.status < 400) {
           // Success!
-          responseData = JSON.parse(request.responseText);
-          saveAuthToken(responseData.auth_token);
+          BC.Utils.saveToLocalStorage(localStorageKeys.userSettings, request.responseText);
+          
+          var decodedData = JSON.parse(BC.Utils.stringDecoder(request.responseText));
+          BC.Utils.saveToLocalStorage(localStorageKeys.authToken, decodedData.auth_token);
+
           BC.Overlay.show("Welcome!", "User account created successfully.", true);
           enableForm();
           resetForm();
+          hideFormPane(); // Close the sign up form
+          BC.App.setSignedInState(); //Auth token is in local storage, sign them in!
         } else if (request.status === 422) {
 
           responseData = JSON.parse(request.responseText);

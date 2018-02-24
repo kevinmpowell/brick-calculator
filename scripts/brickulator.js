@@ -41,7 +41,8 @@ BC.App = function() {
         plusMemberTaxesEnabledClass = 'bc--plus-member-taxes-enabled';
   let body,
       country = "US",
-      language = "en"
+      language = "en",
+      userSignedIn = false;
 
   function setBodyClass(userState) {
     const userSettings = BC.App.getUserSettings();
@@ -144,10 +145,12 @@ BC.App = function() {
   const setSignedInState = function setSignedInState() {
     BC.Utils.validateAuthToken()
     .then(function(){
+      userSignedIn = true;
       setBodyClass('signedIn');
       BC.Utils.broadcastEvent(customEvents.userSignedIn);
     })
     .catch(function() {
+      userSignedIn = false;
       setBodyClass('signedOut');
       BC.Utils.broadcastEvent(customEvents.userSignedOut);
       clearAuthToken();
@@ -185,7 +188,8 @@ BC.App = function() {
     setSignedInState: setSignedInState,
     getUserSettings: getUserSettings,
     getCountry: getCountry,
-    storeCookieUsageAuthorization: storeCookieUsageAuthorization
+    storeCookieUsageAuthorization: storeCookieUsageAuthorization,
+    userSignedIn: userSignedIn
   };
 }();
 
@@ -213,7 +217,6 @@ BC.API = function() {
       };
 
       xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
-      xhr.setRequestHeader('Accept-Encoding', 'gzip, deflate');
       if (opts.method === 'POST') {
         xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
       }
@@ -237,7 +240,7 @@ BC.API = function() {
 
   return {
     makeRequest: makeRequest
-  }
+  };
 }();
 
 BC.Utils = function() {

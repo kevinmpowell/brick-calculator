@@ -41,8 +41,7 @@
 
       {% call form_radio_button_group(label="Want Brickulator Plus?") %}
         {{ form_radio_button(name="accountType", id="bc-account-type-plus", value="plus", label="Yes! Sign Me Up.") }}
-        {{ form_radio_button(name="accountType", id="bc-account-type-free", value="free", label="No Thanks, just create a FREE Brickulator Account") }}
-        {{ form_radio_button(name="accountType", id="bc-account-type-email", value="email", label="Email me more about this later", checked=true) }}
+        {{ form_radio_button(name="accountType", id="bc-account-type-free", value="free", label="No Thanks, just create a FREE Brickulator Account", checked=true) }}
       {% endcall %}
 
       {{ button(type="submit", text="Sign Up", class="bc-button--primary bc-sign-up-form__submit-button") }}
