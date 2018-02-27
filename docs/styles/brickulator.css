@@ -163,6 +163,17 @@
   height: auto;
   padding: 4px; }
 
+.StripeElement--focus {
+  -webkit-box-shadow: 0 1px 3px 0 #cfd7df;
+          box-shadow: 0 1px 3px 0 #cfd7df; }
+
+.StripeElement--invalid {
+  border-color: #fa755a; }
+
+.StripeElement--webkit-autofill {
+  background-color: #fefde5 !important; }
+
+.StripeElement,
 input {
   background: #FFFFFF;
   border: solid 1px #C6CDCC;
@@ -172,12 +183,18 @@ input {
   height: 40px;
   margin: 0;
   padding: 4px; }
+  .StripeElement:disabled,
   input:disabled {
     cursor: not-allowed;
     opacity: 0.3; }
-  .bc-form-input-wrap--with-number-stepper input {
+  .bc-form-input-wrap--with-number-stepper .StripeElement, .bc-form-input-wrap--with-number-stepper
+  input {
     border-radius: 0;
     text-align: center; }
+
+.StripeElement {
+  padding-bottom: 12px;
+  padding-top: 12px; }
 
 .bc-form-input-wrap--button-suffix .bc-form-input-suffix {
   padding: 0; }
@@ -580,33 +597,29 @@ input {
 img {
   display: block; }
 
-.bc-long-form-text h1 {
-  font-size: 24px;
-  margin: 0 0 8px; }
-
-.bc-long-form-text h2 {
-  font-size: 20px;
-  margin: 0 0 8px; }
-
-.bc-long-form-text h3 {
-  font-size: 16px;
-  margin: 0 0 8px; }
-
-.bc-long-form-text h4 {
-  font-size: 14px;
-  margin: 0 0 8px; }
-
-.bc-long-form-text p {
-  font-size: 14px;
-  margin: 0 0 16px; }
-
-.bc-long-form-text ul {
-  font-size: 14px;
-  margin: 0 0 16px;
-  padding: 0 0 0 16px; }
-
-.bc-long-form-text li {
-  margin: 0 0 4px; }
+.bc-long-form-text {
+  line-height: 1.35; }
+  .bc-long-form-text h1 {
+    font-size: 24px;
+    margin: 0 0 8px; }
+  .bc-long-form-text h2 {
+    font-size: 20px;
+    margin: 0 0 8px; }
+  .bc-long-form-text h3 {
+    font-size: 16px;
+    margin: 0 0 8px; }
+  .bc-long-form-text h4 {
+    font-size: 14px;
+    margin: 0 0 8px; }
+  .bc-long-form-text p {
+    font-size: 14px;
+    margin: 0 0 16px; }
+  .bc-long-form-text ul {
+    font-size: 14px;
+    margin: 0 0 16px;
+    padding: 0 0 0 16px; }
+  .bc-long-form-text li {
+    margin: 0 0 4px; }
 
 .bc-long-form-text__cta {
   text-align: center; }
@@ -1056,6 +1069,30 @@ img {
 .bc-sign-up-form-pane__brickulator-free-details {
   margin: 0 0 24px;
   padding: 16px; }
+
+.bc-sign-up-form__cc-info {
+  display: none; }
+  .bc-sign-up-form--brickulator-plus-selected .bc-sign-up-form__cc-info {
+    display: block; }
+
+.bc-secure-icon {
+  background: #535555;
+  display: inline-block;
+  height: 8px;
+  position: relative;
+  width: 10px; }
+  .bc-secure-icon:before {
+    background: transparent;
+    border: solid 2px #535555;
+    border-radius: 50%;
+    -webkit-box-sizing: border-box;
+            box-sizing: border-box;
+    content: '';
+    height: 100%;
+    left: 10%;
+    position: absolute;
+    top: -50%;
+    width: 80%; }
 
 #bc-sign-in-form {
   border-bottom: solid 1px #EEF5F4;

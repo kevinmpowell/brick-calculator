@@ -5,13 +5,14 @@
 {% endmacro %}
 
 {% macro form_label(class, for, label) %}
-  <label for="{{ for }}" class="bc-form__label{{ ' ' + class if class }}">{{ label }}</label>
+  <label for="{{ for }}" class="bc-form__label{{ ' ' + class if class }}">{{ label | safe }}</label>
 {% endmacro %}
 
 {% macro form_input(
               class, 
               type="text", 
               id,
+              name,
               autocomplete="off",
               autocorrect="off",
               autocapitalize="off",
@@ -38,6 +39,10 @@
     {% endif %}
   {% endif %}
 
+  {% if name == undefined %}
+    {% set name = id %}
+  {% endif %}
+
 
   {% if prefix or suffix or clear_button or number_stepper %}
     <div class="bc-form-input-wrap{{ ' ' + wrapper_class if wrapper_class }}{{ ' bc-form-input-wrap--with-number-stepper' if number_stepper }}">
@@ -56,7 +61,7 @@
       <input type="{{ type }}" 
               class="bc-form-input{{ ' ' + class if class }}"
               id="{{ id }}" 
-              name="{{ id }}"
+              name="{{ name }}"
               autocomplete="{{ autocomplete }}" 
               autocorrect="{{ autocorrect }}" 
               autocapitalize="{{ autocapitalize }}" 
