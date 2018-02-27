@@ -38,3 +38,32 @@
   margin: $brickulator-space-stack-3-x;
   padding: $brickulator-space-inset-2-x;
 }
+
+.bc-sign-up-form__cc-info {
+  display: none;
+
+  .bc-sign-up-form--brickulator-plus-selected & {
+    display: block;
+  }
+}
+
+.bc-secure-icon {
+  background: $brickulator-color-text-on-light-secondary;
+  display: inline-block;
+  height: 8px;
+  position: relative;
+  width: 10px;
+
+  &:before {
+    background: transparent;
+    border: solid 2px $brickulator-color-text-on-light-secondary;
+    border-radius: 50%;
+    box-sizing: border-box;
+    content: '';
+    height: 100%;
+    left: 10%;
+    position: absolute;
+    top: -50%;
+    width: 80%;
+  }
+}

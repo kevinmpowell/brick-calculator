@@ -141,6 +141,8 @@
     
   
 
+  
+
 
   
     <div class="bc-form-input-wrap bc-form-input-wrap--has-clear-button">
@@ -166,7 +168,7 @@
       <input type="text" 
               class="bc-form-input"
               id="bc-set-lookup-form__set-number-input" 
-              name="bc-set-lookup-form__set-number-input"
+              name="setNumber"
               autocomplete="off" 
               autocorrect="off" 
               autocapitalize="off" 
@@ -225,6 +227,8 @@
     
   
 
+  
+
 
   
     <div class="bc-form-input-wrap bc-form-input-wrap--has-clear-button">
@@ -252,7 +256,7 @@
       <input type="number" 
               class="bc-form-input"
               id="bc-set-lookup-form__purchase-price-input" 
-              name="bc-set-lookup-form__purchase-price-input"
+              name="purchasePrice"
               autocomplete="off" 
               autocorrect="off" 
               autocapitalize="off" 
@@ -287,6 +291,8 @@
   
   
 
+  
+
 
   
     <div class="bc-form-input-wrap bc-form-input-wrap--with-number-stepper">
@@ -297,7 +303,7 @@
       <input type="number" 
               class="bc-form-input"
               id="bc-set-lookup-form__purchase-quantity-input" 
-              name="bc-set-lookup-form__purchase-quantity-input"
+              name="purchaseQuantity"
               autocomplete="off" 
               autocorrect="off" 
               autocapitalize="off" 
@@ -386,6 +392,10 @@
         
         
   
+  
+
+  
+    
   
 
 
@@ -558,6 +568,10 @@
   
   
 
+  
+    
+  
+
 
   
     
@@ -597,6 +611,10 @@
 
       
   
+  
+
+  
+    
   
 
 
@@ -852,6 +870,10 @@
 
           
   
+  
+
+  
+    
   
 
 
@@ -1282,7 +1304,39 @@
         
   <label for="bc-sign-up-form-email" class="bc-form__label">Email</label>
 
-        <input autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" name="email" id="bc-sign-up-form-email" type="email" tabindex="-1">
+        
+  
+  
+
+  
+
+
+  
+    
+    
+    
+      <input type="email" 
+              class="bc-form-input bc-form-input--size-m"
+              id="bc-sign-up-form-email" 
+              name="email"
+              autocomplete="off" 
+              autocorrect="off" 
+              autocapitalize="off" 
+              spellcheck="false"
+              
+              
+              
+              
+              
+                tabindex="-1"
+              
+              
+              
+              
+              >
+    
+  
+
       
   </div>
 
@@ -1293,7 +1347,39 @@
         
   <label for="bc-sign-up-form-password" class="bc-form__label">Create Password</label>
 
-        <input name="password" id="bc-sign-up-form-password" type="password" tabindex="-1">
+        
+  
+  
+
+  
+
+
+  
+    
+    
+    
+      <input type="password" 
+              class="bc-form-input bc-form-input--size-m"
+              id="bc-sign-up-form-password" 
+              name="password"
+              autocomplete="off" 
+              autocorrect="off" 
+              autocapitalize="off" 
+              spellcheck="false"
+              
+              
+              
+              
+              
+                tabindex="-1"
+              
+              
+              
+              
+              >
+    
+  
+
       
   </div>
 
@@ -1304,25 +1390,59 @@
         
   <label for="bc-sign-up-form-password-confirm" class="bc-form__label">Confirm Password</label>
 
-        <input name="passwordConfirm" id="bc-sign-up-form-password-confirm" type="password" tabindex="-1">
+        
+  
+  
+
+  
+
+
+  
+    
+    
+    
+      <input type="password" 
+              class="bc-form-input bc-form-input--size-m"
+              id="bc-sign-up-form-password-confirm" 
+              name="passwordConfirm"
+              autocomplete="off" 
+              autocorrect="off" 
+              autocapitalize="off" 
+              spellcheck="false"
+              
+              
+              
+              
+              
+                tabindex="-1"
+              
+              
+              
+              
+              >
+    
+  
+
       
   </div>
 
 
-      <h3 id="interested-in-more-features-">Interested in More Features?</h3>
+      <div class="bc-long-form-text">
+        <h3 id="interested-in-more-features-">Interested in More Features?</h3>
 <p>A Brickulator Plus Account includes the following:</p>
 <ul>
-<li>Automatically add your sales tax to purchase price</li>
+<li>Automatically add your sales tax to the purchase price</li>
 <li>Customize the results screen - only see the listings and marketplaces you care about</li>
 <li>Removes All Ads</li>
 </ul>
 <p class="bc-long-form-text__cta">
   Special introductory price: 
   <span class="bc-long-form-text__cta-price">
-    <strike>$3.99</strike> $1.99 USD / mo.
+    <strike>$3.99</strike> $2.99 USD / mo.
   </span>
 </p>
 
+      </div>
 
       
   <fieldset class="bc-form__radio-button-group">
@@ -1331,24 +1451,6 @@
     
     <div class="bc-form__radio-button-group-checkboxes">
       
-        
-  <label for="bc-account-type-plus" class="bc-form__radio-button">
-    <input
-      class="bc-form__radio-button-input"
-      type="radio"
-      name="accountType"
-      id="bc-account-type-plus"
-      
-       value="plus" 
-      
-      
-      
-      
-    >
-    <span class="bc-form__radio-button-visual"></span>
-    <span class="bc-form__radio-button-label-text">Yes! Sign Me Up.</span>
-  </label>
-
         
   <label for="bc-account-type-free" class="bc-form__radio-button">
     <input
@@ -1367,10 +1469,46 @@
     <span class="bc-form__radio-button-label-text">No Thanks, just create a FREE Brickulator Account</span>
   </label>
 
+        
+  <label for="bc-account-type-plus" class="bc-form__radio-button">
+    <input
+      class="bc-form__radio-button-input"
+      type="radio"
+      name="accountType"
+      id="bc-account-type-plus"
+      
+       value="plus" 
+      
+      
+      
+      
+    >
+    <span class="bc-form__radio-button-visual"></span>
+    <span class="bc-form__radio-button-label-text">Yes! Sign Me Up.</span>
+  </label>
+
       
     </div>
   </fieldset>
 
+
+      <div class="bc-sign-up-form__cc-info">
+        
+  <div class="bc-form-field-group">
+    
+        
+  <label for="card-element" class="bc-form__label">Credit or debit card <span class='bc-secure-icon'></span></label>
+
+          <div id="card-element">
+            <!-- A Stripe Element will be inserted here. -->
+          </div>
+
+          <!-- Used to display Element errors. -->
+          <div id="card-errors" role="alert"></div>
+        
+  </div>
+
+      </div>
 
       
   
@@ -1516,9 +1654,10 @@
   </div>
 
         
+    <script src="https://js.stripe.com/v3/"></script>
     <script type="text/javascript" src="scripts/dependencies/timeago.min.js"></script>
+    <script type="text/javascript" src="scripts/brickulator.js"></script>
     
-    <script type="text/javascript" src="scripts/brickulator.min.js"></script>
   
     </body>
 </html>

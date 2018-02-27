@@ -1,4 +1,6 @@
 .bc-long-form-text {
+  line-height: $brickulator-line-height-long-form-text;
+
   h1 {
     font-size: $brickulator-font-size-xxl;
     margin: $brickulator-space-stack-1-x;
