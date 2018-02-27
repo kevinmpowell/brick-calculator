@@ -1192,6 +1192,24 @@ img {
   padding: 8px;
   text-align: center; }
 
+.bc-site-footer__legal {
+  margin: 0 0 4px; }
+
+.bc-site-footer__copyright-symbol {
+  font-family: sans-serif;
+  font-size: 1.2em;
+  line-height: 0; }
+
+.bc-site-footer__links {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center; }
+  .bc-site-footer__links a {
+    padding: 4px 8px; }
+
 .bc-set-lookup-form {
   margin: 0 0 32px; }
 

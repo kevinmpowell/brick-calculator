@@ -6,5 +6,21 @@
   text-align: center;
 }
 
+.bc-site-footer__legal {
+  margin: $brickulator-space-stack-1-half-x;
+}
+
+.bc-site-footer__copyright-symbol {
+  font-family: sans-serif;
+  font-size: 1.2em;
+  line-height: 0;
+}
+
 .bc-site-footer__links {
+  display: flex;
+  justify-content: center;
+
+  a {
+    padding: $brickulator-space-inset-squish-1-x;
+  }
 }
