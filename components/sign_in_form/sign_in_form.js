@@ -7,13 +7,18 @@ BC.SignInForm = function() {
         submitButtonSelector = '.bc-sign-in-form__submit-button',
         signInEndpoint = '/auth/signin',
         signInFormHiddenClass = 'bc-sign-in-form--hidden',
-        signUpLinkSelector = '.bc-show-sign-up-form';
+        signUpLinkSelector = '.bc-show-sign-up-form',
+        forgotPasswordLinkSelector = '.bc-sign-in-form__forgot-password-link',
+        forgotPasswordFormSelector = '.bc-forgot-password-form';
 
   let form,
       emailField,
       passwordField,
       submitButton,
-      signUpLink;
+      signUpLink,
+      forgotPasswordLink,
+      forgotPasswordForm,
+      forgotPasswordModal;
 
   function disableForm() {
     emailField.setAttribute('disabled', true);
@@ -82,6 +87,12 @@ BC.SignInForm = function() {
     return false; // prevent form submission
   }
 
+  function showForgotPasswordModal(e) {
+    e.preventDefault();
+    forgotPasswordModal = BC.Modal.create(forgotPasswordForm);
+    BC.ForgotPasswordForm.initialize();
+  }
+
   function hideSignInForm() {
     form.classList.add(signInFormHiddenClass);
   }
@@ -95,6 +106,11 @@ BC.SignInForm = function() {
     signUpLink.addEventListener("click", BC.SignUpForm.showFormPane);
     document.addEventListener(customEvents.userSignedIn, hideSignInForm);
     document.addEventListener(customEvents.userSignedOut, showSignInForm);
+    forgotPasswordLink.addEventListener("click", showForgotPasswordModal);
+  }
+
+  const hideForgotPasswordModal = function hideForgotPasswordModal() {
+    BC.Modal.close(forgotPasswordModal);
   }
 
   const initialize = function initialize() {
@@ -103,10 +119,15 @@ BC.SignInForm = function() {
     passwordField = document.getElementById(passwordFieldId);
     submitButton = document.querySelector(submitButtonSelector);
     signUpLink = document.querySelector(signUpLinkSelector);
+    forgotPasswordLink = document.querySelector(forgotPasswordLinkSelector);
+    forgotPasswordForm = document.querySelector(forgotPasswordFormSelector).outerHTML;
+    const forgotPasswordFormInDom = document.querySelector(forgotPasswordFormSelector);
+    forgotPasswordFormInDom.parentNode.removeChild(forgotPasswordFormInDom);
     setEventListeners();
   };
 
   return {
-    initialize: initialize
+    initialize: initialize,
+    hideForgotPasswordModal: hideForgotPasswordModal
   };
 }();

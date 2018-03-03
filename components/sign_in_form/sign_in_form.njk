@@ -6,7 +6,7 @@
     {% endcall %}
 
     {% call form_field_group() %}
-      {{ form_label(for="bc-sign-in-form-password", label="Password", class="bc-form__label--on-dark bc-form__label--size-m") }}
+      {{ form_label(for="bc-sign-in-form-password", label="Password <a class='bc-sign-in-form__forgot-password-link' href='#'>Forgot Password?</a>", class="bc-form__label--on-dark bc-form__label--size-m bc-sign-in-form__password-label") }}
       {{ form_input(id="bc-sign-in-form-password", type="password", class="bc-form-input--size-m", tabindex="-1")}}
     {% endcall %}
 
@@ -18,4 +18,6 @@
       bc-button--size-m bc-show-sign-up-form") }}
     </div>
   </form>
+
+  {{ forgot_password_form() }}
 {% endmacro %}

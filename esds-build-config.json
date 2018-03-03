@@ -13,6 +13,14 @@
           "node_modules/timeago.js/dist/timeago.min.js"
         ],
         "destination": "docs/scripts/dependencies"
+      },
+      {
+        "name": "subpage-scripts",
+        "sources": [
+          "subpage_scripts/reset_password_form.js"
+        ],
+        "destination": "docs/scripts/subpage_scripts",
+        "watch": true
       }
     ]
 }

@@ -41,6 +41,7 @@
     
   <div class="bc-site-header">
     
+      
   
   
 
@@ -52,7 +53,7 @@
     Back
   </button>
 
-    
+      
   
   
 
@@ -64,7 +65,9 @@
     Sign In
   </button>
 
-    <span class="bc-site-header__signed-in-indicator"></span>
+      <span class="bc-site-header__signed-in-indicator"></span>
+    
+
     <h1 class="bc-site-header__title"><span class="bc-site-header__title-text">BRICKULATOR</span>
   <div class="bc-logo bc-site-header__logo">
     <div class="bc-logo__block bc-logo__block--top">
@@ -85,7 +88,9 @@
     </div>
   </div>
 </h1>
+
     
+      
   
   
 
@@ -97,6 +102,7 @@
     Menu
   </button>
 
+    
   </div>
 
     
@@ -607,7 +613,7 @@
   <div class="bc-form-field-group">
     
       
-  <label for="bc-sign-in-form-password" class="bc-form__label bc-form__label--on-dark bc-form__label--size-m">Password</label>
+  <label for="bc-sign-in-form-password" class="bc-form__label bc-form__label--on-dark bc-form__label--size-m bc-sign-in-form__password-label">Password <a class='bc-sign-in-form__forgot-password-link' href='#'>Forgot Password?</a></label>
 
       
   
@@ -678,6 +684,70 @@
 
     </div>
   </form>
+
+  
+  <form class="bc-forgot-password-form" name="bcForgotPasswordForm" novalidate>
+    <div class="bc-long-form-text">
+      <p>
+        Enter your email address and we'll send you a link to reset your password.
+      </p>
+    </div>
+    
+  <div class="bc-form-field-group">
+    
+      
+  <label for="bc-forgot-password-form__email" class="bc-form__label">Email</label>
+
+      
+  
+  
+
+  
+
+
+  
+    
+    
+    
+      <input type="email" 
+              class="bc-form-input"
+              id="bc-forgot-password-form__email" 
+              name="email"
+              autocomplete="off" 
+              autocorrect="off" 
+              autocapitalize="off" 
+              spellcheck="false"
+              
+              
+              
+              
+              
+              
+              
+              
+              >
+    
+  
+
+    
+  </div>
+
+    
+    
+  
+  
+
+  <button
+    
+     type="submit" 
+    
+    class="bc-button bc-button--primary">
+    Reset Password
+  </button>
+
+  </form>
+  
+
 
         
   <div class="bc-list-group bc-list-group--on-dark bc-site-menu__list-group">
@@ -1555,11 +1625,11 @@
     </div>
   </div>
 
-  
-        
+
+    
   <div class="bc-toast-message-wrapper">
     
-            
+        
   
 
   
@@ -1593,39 +1663,39 @@
     
   </div>
 
-        
+    
   </div>
 
-        
+    
   <div class="bc-modal-wrapper">
     
-            
-            
+        
+        
 
   <div  id="bc-modal-js-template"  
         class="bc-modal">
     <div class="bc-modal__content">
       <div class="bc-modal__content-text">
         
-                <h1>This is a heading</h1>
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nostrum laboriosam voluptas eaque obcaecati, necessitatibus commodi distinctio harum quam fugit aut.</p>
-                <h2>This is another heading</h2>
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Iure, in.</p>
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Iure, in.</p>
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Iure, in.</p>
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Iure, in.</p>
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Iure, in.</p>
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Iure, in.</p>
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Iure, in.</p>
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Iure, in.</p>
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Iure, in.</p>
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Iure, in.</p>
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Iure, in.</p>
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Iure, in.</p>
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Iure, in.</p>
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Iure, in.</p>
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Iure, in.</p>
-            
+            <h1>This is a heading</h1>
+            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nostrum laboriosam voluptas eaque obcaecati, necessitatibus commodi distinctio harum quam fugit aut.</p>
+            <h2>This is another heading</h2>
+            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Iure, in.</p>
+            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Iure, in.</p>
+            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Iure, in.</p>
+            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Iure, in.</p>
+            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Iure, in.</p>
+            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Iure, in.</p>
+            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Iure, in.</p>
+            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Iure, in.</p>
+            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Iure, in.</p>
+            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Iure, in.</p>
+            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Iure, in.</p>
+            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Iure, in.</p>
+            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Iure, in.</p>
+            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Iure, in.</p>
+            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Iure, in.</p>
+        
       </div>
     </div>
     
@@ -1644,9 +1714,10 @@
     
   </div>
 
-        
+    
   </div>
 
+  
         
   <div class="bc-site-footer">
     <p class="bc-site-footer__legal">
@@ -1661,8 +1732,8 @@
         
     <script src="https://js.stripe.com/v3/"></script>
     <script type="text/javascript" src="scripts/dependencies/timeago.min.js"></script>
+    <script type="text/javascript" src="scripts/brickulator.js"></script>
     
-    <script type="text/javascript" src="scripts/brickulator.min.js"></script>
   
     </body>
 </html>

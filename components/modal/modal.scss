@@ -26,6 +26,10 @@
   padding-top: $brickulator-space-generic-4-x; // make space for close button to not collide with scrollbar
   position: relative;
   width: 100%;
+
+  .bc-form-input__clear-button-text {
+    top: -1px;
+  }
 }
 
 .bc-modal__close-button {

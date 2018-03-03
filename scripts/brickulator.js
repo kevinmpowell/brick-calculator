@@ -221,7 +221,7 @@ BC.API = function() {
       };
 
       xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
-      if (opts.method === 'POST') {
+      if (opts.method === 'POST' || opts.method === 'PUT') {
         xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
       }
       if (opts.headers) {
