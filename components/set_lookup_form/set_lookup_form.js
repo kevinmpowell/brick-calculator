@@ -23,6 +23,19 @@ BC.SetLookupForm = function() {
 
   function handleFormSubmit(e) {
     e.preventDefault();
+    const userSettings = BC.App.getUserSettings();
+
+    if (userSettings && userSettings.plus_member) {
+      showResults();
+    } else if (BC.ResultsInterstitial.timeToShowInterstitial()) {
+      BC.ResultsInterstitial.show();
+      document.addEventListener(customEvents.interstitialComplete, showResults, {once: true});
+    } else {
+      showResults();
+    }
+  }
+
+  function showResults() {
     const formattedPurchasePrice = BC.Utils.currencyToFloat(purchasePrice.value);
     const userSettings = BC.App.getUserSettings();
     let quantity = 1;

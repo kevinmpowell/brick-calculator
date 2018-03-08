@@ -1,0 +1,13 @@
+.bc-results-interstitial__brickulator-plus-sign-up {
+  background: $brickulator-color-background-panel;
+  border-radius: $brickulator-border-radius-panel;
+  color: $brickulator-color-text-on-light-primary;
+  padding: $brickulator-space-inset-2-x;
+}
+
+.bc-interstitial--visible {
+  .bc-overlay__title {
+    font-size: $brickulator-font-size-l;
+    text-align: center;
+  }
+}
