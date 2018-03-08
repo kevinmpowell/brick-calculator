@@ -1,9 +1,20 @@
-{% macro site_header() %}
+{% macro site_header(show_actions=true) %}
   <div class="bc-site-header">
-    {{ button(text="Back", class="bc-show-lookup-form bc-button--size-s") }}
-    {{ button(text="Sign In", class="bc-button--size-s bc-button--link-style bc-site-header__sign-in bc-site-menu-show-trigger") }}
-    <span class="bc-site-header__signed-in-indicator"></span>
-    <h1 class="bc-site-header__title"><span class="bc-site-header__title-text">BRICKULATOR</span>{{ logo(class="bc-site-header__logo") }}</h1>
-    {{ button(text="Menu", class="bc-button--size-s bc-site-menu-show-trigger") }}
+    {% if show_actions %}
+      {{ button(text="Back", class="bc-show-lookup-form bc-button--size-s") }}
+      {{ button(text="Sign In", class="bc-button--size-s bc-button--link-style bc-site-header__sign-in bc-site-menu-show-trigger") }}
+      <span class="bc-site-header__signed-in-indicator"></span>
+    {% endif %}
+
+    
+      <h1 class="bc-site-header__title">
+        <a class="bc-site-header__title-link" href="/">
+          <span class="bc-site-header__title-text">BRICKULATOR</span>{{ logo(class="bc-site-header__logo") }}
+        </a>
+      </h1>
+
+    {% if show_actions %}
+      {{ button(text="Menu", class="bc-button--size-s bc-site-menu-show-trigger") }}
+    {% endif %}
   </div>
 {% endmacro %}

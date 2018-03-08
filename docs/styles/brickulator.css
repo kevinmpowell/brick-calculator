@@ -144,6 +144,11 @@
   text-decoration: underline;
   text-transform: none; }
 
+.bc-forgot-password-form {
+  display: none; }
+  .bc-modal .bc-forgot-password-form {
+    display: block; }
+
 .bc-form__label {
   color: #1E1F1F;
   font-size: 14px;
@@ -661,6 +666,8 @@ img {
   padding-top: 32px;
   position: relative;
   width: 100%; }
+  .bc-modal .bc-form-input__clear-button-text {
+    top: -1px; }
 
 .bc-modal__close-button {
   position: absolute;
@@ -672,6 +679,9 @@ img {
   height: 100%;
   max-height: 80vh;
   overflow-y: auto; }
+
+.bc--user-signed-in .bc-newsletter-sign-up-form {
+  display: none; }
 
 .bc-newsletter-sign-up-form--hidden {
   display: none; }
@@ -1119,6 +1129,14 @@ img {
   padding-bottom: 0;
   padding-top: 0; }
 
+.bc-sign-in-form__password-label {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between; }
+
 .bc-site-header {
   -webkit-box-align: center;
       -ms-flex-align: center;
@@ -1140,7 +1158,17 @@ img {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
-  margin: 0; }
+  margin: 0 auto; }
+
+.bc-site-header__title-link {
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  margin: 0 auto;
+  text-decoration: none; }
 
 .bc-site-header__title-text {
   color: #FE8A18;

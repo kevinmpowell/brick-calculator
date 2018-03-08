@@ -1,3 +1,9 @@
+.bc-newsletter-sign-up-form {
+  .bc--user-signed-in & {
+    display: none;
+  }
+}
+
 .bc-newsletter-sign-up-form--hidden {
   display: none;
 }

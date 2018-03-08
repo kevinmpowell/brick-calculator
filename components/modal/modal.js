@@ -19,11 +19,14 @@ BC.Modal = function() {
   //     removeMessage(modal);
   //   }
   // }
+  const close = function close(modal) {
+    modal.parentNode.removeChild(modal);
+    document.body.classList.remove(modalVisibleBodyClass);
+  }
 
   const handleCloseModalClick = function handleCloseModalClick() {
     const modal = this.closest(modalSelector);
-    modal.parentNode.removeChild(modal);
-    document.body.classList.remove(modalVisibleBodyClass);
+    close(modal);
   };
 
   const initialize = function initialize() {
@@ -56,6 +59,7 @@ BC.Modal = function() {
 
   return {
     initialize: initialize,
-    create: create
+    create: create,
+    close: close
   };
 }();

@@ -38,32 +38,6 @@
     </head>
     <body>
         {% block body %}{% endblock body %}
-        {% call bc.toast_message_wrapper() %}
-            {{ bc.toast_message(id="bc-toast-message-js-template", type="warning", text="TEMPLATE") }}
-        {% endcall %}
-        {% call bc.modal_wrapper() %}
-            {% set default_modal_text %}
-                <h1>This is a heading</h1>
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nostrum laboriosam voluptas eaque obcaecati, necessitatibus commodi distinctio harum quam fugit aut.</p>
-                <h2>This is another heading</h2>
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Iure, in.</p>
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Iure, in.</p>
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Iure, in.</p>
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Iure, in.</p>
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Iure, in.</p>
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Iure, in.</p>
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Iure, in.</p>
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Iure, in.</p>
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Iure, in.</p>
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Iure, in.</p>
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Iure, in.</p>
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Iure, in.</p>
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Iure, in.</p>
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Iure, in.</p>
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Iure, in.</p>
-            {% endset %}
-            {{ bc.modal(id="bc-modal-js-template", text=default_modal_text) }}
-        {% endcall %}
         {{ bc.site_footer() }}
         {% block closing_body_assets %}{% endblock closing_body_assets %}
     </body>
