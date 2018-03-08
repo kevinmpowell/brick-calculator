@@ -17,7 +17,8 @@ const ebaySellingFeePercentage = .13, // TODO: Get this from a lookup
         apiVersionNumber: 'BCSetDBVersionNumber',
         cookieConsent: 'BCCookieConsent',
         currency: 'BCCurrency',
-        country: 'BCCountry'
+        country: 'BCCountry',
+        lookupCount: 'BCadfsdfjek'
       },
       apiMapping = {
         'localhost': 'https://localhost:5000',
@@ -30,7 +31,8 @@ const ebaySellingFeePercentage = .13, // TODO: Get this from a lookup
         userSignedOut: 'bc-user-signed-out',
         locationUpdated: 'bc-location-updated',
         currencyUpdated: 'bc-currency-updated',
-        preferencesUpdated: 'bc-preferences-updated'
+        preferencesUpdated: 'bc-preferences-updated',
+        interstitialComplete: 'bc-interstitial-complete'
       },
       EUCountryCodes = ['BE', 'BG', 'CZ', 'DK', 'DE', 'EE', 'IE', 'EL', 'ES', 'FR', 'IT', 'CY', 'LV', 'UK', 'LT', 'LU', 'HU', 'MT', 'NL', 'AT', 'PL', 'PT', 'RO', 'SI', 'SK', 'FI', 'SE', 'GB'];
 
@@ -1008,6 +1010,7 @@ ready(function(){
   BC.FormInput.initialize();
   BC.AdHeader.initialize();
   BC.Modal.initialize();
+  BC.ResultsInterstitial.initialize();
   BC.ToastMessage.initialize();
   BC.NewsletterSignUpForm.initialize();
   BC.Tos.initialize();

@@ -881,6 +881,16 @@ img {
 .bc-portlet--with-quantity-multiplier .bc-portlet__profit-each-input {
   display: block; }
 
+.bc-results-interstitial__brickulator-plus-sign-up {
+  background: #FFFFFF;
+  border-radius: 8px;
+  color: #1E1F1F;
+  padding: 16px; }
+
+.bc-interstitial--visible .bc-overlay__title {
+  font-size: 16px;
+  text-align: center; }
+
 .bc-site-menu {
   background: rgba(83, 85, 85, 0);
   bottom: 0;
