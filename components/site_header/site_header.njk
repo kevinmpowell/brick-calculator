@@ -6,7 +6,12 @@
       <span class="bc-site-header__signed-in-indicator"></span>
     {% endif %}
 
-    <h1 class="bc-site-header__title"><span class="bc-site-header__title-text">BRICKULATOR</span>{{ logo(class="bc-site-header__logo") }}</h1>
+    
+      <h1 class="bc-site-header__title">
+        <a class="bc-site-header__title-link" href="/">
+          <span class="bc-site-header__title-text">BRICKULATOR</span>{{ logo(class="bc-site-header__logo") }}
+        </a>
+      </h1>
 
     {% if show_actions %}
       {{ button(text="Menu", class="bc-button--size-s bc-site-menu-show-trigger") }}

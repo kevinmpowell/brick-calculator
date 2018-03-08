@@ -680,6 +680,9 @@ img {
   max-height: 80vh;
   overflow-y: auto; }
 
+.bc--user-signed-in .bc-newsletter-sign-up-form {
+  display: none; }
+
 .bc-newsletter-sign-up-form--hidden {
   display: none; }
 
@@ -1156,6 +1159,16 @@ img {
   display: -ms-flexbox;
   display: flex;
   margin: 0 auto; }
+
+.bc-site-header__title-link {
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  margin: 0 auto;
+  text-decoration: none; }
 
 .bc-site-header__title-text {
   color: #FE8A18;
