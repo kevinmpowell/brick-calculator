@@ -13,7 +13,9 @@ BC.SignUpForm = function() {
         elements = stripe.elements(),
         stripeFieldStyles = {
           base: {
-            fontFamily: '"Hiragino Sans", Helvetica, sans-serif'
+            fontFamily: '"Hiragino Sans", Helvetica, sans-serif',
+            fontSize: "16px",
+            lineHeight: "32px"
           }
         },
         card = elements.create('card', {style: stripeFieldStyles});
