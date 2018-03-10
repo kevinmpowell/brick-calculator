@@ -8,5 +8,9 @@
   color: $brickulator-color-link;
   display: block;
   padding: $brickulator-space-inset-squish-1-x;
+
+  .bc-list-group--on-dark & {
+    color: $brickulator-color-text-on-dark-primary;
+  }
 }
 

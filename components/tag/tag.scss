@@ -5,7 +5,7 @@
   border-radius: 30px;
   color: $brickulator-color-text-on-brand-primary;
   display: inline-flex;
-  padding: $brickulator-space-inset-squish-1-x;
+  padding: 4px 8px 2px; // going away from space constants to make this look right
   font-size: $brickulator-font-size-xs;
   vertical-align: middle;
   white-space: nowrap;
