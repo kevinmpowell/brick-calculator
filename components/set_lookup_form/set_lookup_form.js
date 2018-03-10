@@ -58,6 +58,7 @@ BC.SetLookupForm = function() {
   function updateUrlWithLookupParams(setNumberValue, purchasePriceValue) {
     const lookupParams = '?' + "setNumber=" + setNumberValue + "&purchasePrice=" + purchasePriceValue;
     window.history.pushState('', '', lookupParams);
+    gtag('config', 'UA-115471679-1', {'page_path': '/' + lookupParams});
   }
 
   function setTaxRateDisplay(userSettings) {
