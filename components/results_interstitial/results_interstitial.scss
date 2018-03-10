@@ -11,3 +11,33 @@
     text-align: center;
   }
 }
+
+.bc-results-interstitial__amazon-deal-of-the-day {
+  background: $brickulator-color-background-panel;
+  border-radius: $brickulator-border-radius-panel;
+  display: block;
+  color: $brickulator-color-text-on-light-primary;
+  padding: $brickulator-space-inset-2-x;
+  text-align: center;
+  text-decoration: none;
+}
+
+.bc-results-interstitial__amazon-deal-of-the-day-title {
+  color: $brickulator-color-link;
+  font-size: $brickulator-font-size-m;
+  text-decoration: underline;
+}
+
+.bc-results-interstitial__amazon-deal-of-the-day-image {
+  margin: 0 auto;
+}
+
+.bc-results-interstitial__amazon-deal-of-the-day-subtitle {
+  font-size: $brickulator-font-size-s;
+  text-decoration: none;
+}
+
+.bc-results-interstitial__disclaimer {
+  font-size: $brickulator-font-size-xs;
+  text-decoration: none;
+}

@@ -902,6 +902,31 @@ img {
   font-size: 16px;
   text-align: center; }
 
+.bc-results-interstitial__amazon-deal-of-the-day {
+  background: #FFFFFF;
+  border-radius: 8px;
+  display: block;
+  color: #1E1F1F;
+  padding: 16px;
+  text-align: center;
+  text-decoration: none; }
+
+.bc-results-interstitial__amazon-deal-of-the-day-title {
+  color: #20b6a1;
+  font-size: 14px;
+  text-decoration: underline; }
+
+.bc-results-interstitial__amazon-deal-of-the-day-image {
+  margin: 0 auto; }
+
+.bc-results-interstitial__amazon-deal-of-the-day-subtitle {
+  font-size: 12px;
+  text-decoration: none; }
+
+.bc-results-interstitial__disclaimer {
+  font-size: 10px;
+  text-decoration: none; }
+
 .bc-site-menu {
   background: rgba(83, 85, 85, 0);
   bottom: 0;

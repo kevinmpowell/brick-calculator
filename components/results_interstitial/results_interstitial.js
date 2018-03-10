@@ -1,16 +1,29 @@
 'use strict';
 BC.ResultsInterstitial = function() {
   const brickulatorPlusInterstitialUrl = 'brickulator-plus-interstitial.html',
+        amazonInterstitialUrl = 'amazon-deal-of-the-day-interstitial.html',
         interstitialVisibleClass = 'bc-interstitial--visible',
         interstitialDuration = 15;
   let interstitialInterval,
-      interstitialContent;
+      interstitialContent = [],
+      interstitialContentIndex = 1;
 
   function getInterstitialContent() {
-    return interstitialContent;
+    interstitialContentIndex = interstitialContentIndex === 0 ? 1 : 0;
+    return interstitialContent[interstitialContentIndex];
   }
 
-  function getInterstitialContentOptions() {
+  function getAmazonInterstitialContentOptions() {
+    return new Promise(function(resolve, reject){
+      const xhr = new XMLHttpRequest();
+      xhr.open("GET", amazonInterstitialUrl);
+      xhr.onload = () => resolve(xhr.responseText);
+      xhr.onerror = () => reject(xhr.statusText);
+      xhr.send();
+    });
+  }
+
+  function getBrickulatorInterstitialContentOptions() {
     return new Promise(function(resolve, reject){
       const xhr = new XMLHttpRequest();
       xhr.open("GET", brickulatorPlusInterstitialUrl);
@@ -30,7 +43,9 @@ BC.ResultsInterstitial = function() {
 
   function addInterstitialEventHandlers() {
     const brickulatorPlusSignUpLink = document.querySelector('.bc-results-interstitial-brickulator-plus-link');
-    brickulatorPlusSignUpLink.addEventListener("click", handleBrickulatorPlusSignUpClick, {once: true});
+    if (brickulatorPlusSignUpLink) {
+      brickulatorPlusSignUpLink.addEventListener("click", handleBrickulatorPlusSignUpClick, {once: true});
+    }
   }
 
   function hideInterstitial() {
@@ -77,9 +92,15 @@ BC.ResultsInterstitial = function() {
   }
 
   const initialize = function initialize() {
-    getInterstitialContentOptions().then(function(results){
-      interstitialContent = results;
+    getBrickulatorInterstitialContentOptions()
+    .then(function(results){
+      interstitialContent.push(results);
+      return getAmazonInterstitialContentOptions();
+    })
+    .then(function(results){
+      interstitialContent.push(results);
     });
+
   }
 
   return {
