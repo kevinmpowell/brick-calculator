@@ -398,7 +398,7 @@ BC.PortletLayout = function() {
 
     if (portlet.lineItems) {
       portlet.lineItems.forEach(function(li){
-        portletLineItems.append(getPortletLineItem(li));
+        portletLineItems.appendChild(getPortletLineItem(li));
       });
     }
     return portletNode;
@@ -408,7 +408,7 @@ BC.PortletLayout = function() {
     let gridNode = gridTemplate.cloneNode(true);
     portlets.forEach(function(portlet){
       if (!portlet.hide) {
-        gridNode.append(getPortlet(portlet));
+        gridNode.appendChild(getPortlet(portlet));
       }
     });
 
@@ -548,8 +548,8 @@ BC.PortletLayout = function() {
     portletWrapper.innerHTML = ''; // Clear the portlet wrapper
     layout.forEach(function(portletSection){
       if (!portletSection.hide) {
-        portletWrapper.append(getSectionHeader(portletSection.header, portletSection.headerClass, sectionClass));
-        portletWrapper.append(getPortletGrid(portletSection.portlets, sectionClass));
+        portletWrapper.appendChild(getSectionHeader(portletSection.header, portletSection.headerClass, sectionClass));
+        portletWrapper.appendChild(getPortletGrid(portletSection.portlets, sectionClass));
         sectionClass = sectionClass ? false : zebraStripedPortletSectionsClass;
       }
     });
