@@ -36,14 +36,34 @@
 
 // Plus Member Settings
 .bc-user-settings__plus-member-settings {
+  position: relative;
+}
 
-  &.bc-user-settings__plus-member-settings--disabled {
+.bc-user-settings__plus-member-settings-inner {
 
+  .bc-user-settings__plus-member-settings--disabled & {
     .bc-form__checkbox-group-label,
     .bc-form__label,
     .bc-form-input-suffix,
     .bc-long-form-text {
       opacity: $brickulator-opacity-disabled;
     }
+  }
+}
+
+// Upsell messaging
+.bc-user-settings__plus-member-settings-signed-out {
+  background: $brickulator-color-background-panel;
+  border-radius: $brickulator-border-radius-panel;
+  display: none;
+  opacity: 1;
+  position: absolute;
+  padding: $brickulator-space-inset-2-x;
+  transform: translate(0, -50%);
+  top: 50%;
+  z-index: 100;
+
+  .bc-user-settings__plus-member-settings--disabled & {
+    display: block;
   }
 }

@@ -30,7 +30,8 @@ BC.UserSettingsPane = function() {
       currencySelect,
       currencyToastMessage,
       plusMemberSettingsSection,
-      portletConfigCheckboxes;
+      portletConfigCheckboxes,
+      signUpCta;
 
   function disableTaxSettings() {
     taxRate.value = '';
@@ -184,10 +185,16 @@ BC.UserSettingsPane = function() {
     promptCurrencySwitch();
   }
 
+  function handleShowSignUpFormClick() {
+    hidePane();
+    BC.SignUpForm.showFormPane();
+  }
+
   function setEventListeners() {
     document.addEventListener(customEvents.userSignedIn, update);
     document.addEventListener(customEvents.userSignedOut, update);
     document.addEventListener(customEvents.locationUpdated, handleLocationUpdate);
+    signUpCta.addEventListener("click", handleShowSignUpFormClick);
     settingsForm.addEventListener("submit", handleSettingsFormSubmit);
     hidePaneTriggers.forEach(function(t){
       t.addEventListener("click", hidePane);
@@ -258,6 +265,7 @@ BC.UserSettingsPane = function() {
     portletConfigCheckboxes = Array.from(document.querySelectorAll(portletConfigCheckboxSelector));
     hidePaneTriggers = Array.from(document.querySelectorAll(hidePaneSelector));
     showPaneTriggers = Array.from(document.querySelectorAll(showPaneSelector));
+    signUpCta = document.querySelector('.bc-user-settings__brickulator-plus-sign-up-link');
     settingsForm = document[settingsFormName];
     countrySelect = settingsForm[countrySelectName];
     currencySelect = settingsForm[currencySelectName];

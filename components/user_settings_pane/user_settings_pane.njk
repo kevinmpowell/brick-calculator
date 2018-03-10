@@ -15,55 +15,70 @@
       {% endcall %}
 
       <div class="bc-user-settings__plus-member-settings bc-user-settings__plus-member-settings--disabled">
-        <div class="bc-long-form-text">
-          <h3>Taxes {{ tag() }}</h3>
+        <div class="bc-user-settings__plus-member-settings-signed-out">
+          <div class="bc-long-form-text">
+            {% filter markdown %}
+              ### Want to unlock all these features?
+              Support Brickulator and unlock all of these and more:
+              * Automatically add your sales tax to the purchase price
+              * Customize the results screen - only see the listings and marketplaces you care about
+              * Removes All Ads
+            {% endfilter %}
+            {{ button(class="bc-user-settings__brickulator-plus-sign-up-link", text="Sign Up Now") }}
+          </div>
         </div>
-        {% call form_field_group() %}
-          {{ form_checkbox(label="Automatically add taxes to purchase price", id="bc-user-settings-enableTaxes", disabled=true) }}
-        {% endcall %}
 
-        {% call form_field_group() %}
-          {{ form_label(label="Tax Rate", for="bc-user-settings-taxRate") }}
-          {{ form_input(step="0.01", type="number", suffix="%", id="bc-user-settings-taxRate", disabled=true)}}
-        {% endcall %}        
+        <div class="bc-user-settings__plus-member-settings-inner">
+          <div class="bc-long-form-text">
+            <h3>Taxes {{ tag() }}</h3>
+          </div>
+          {% call form_field_group() %}
+            {{ form_checkbox(label="Automatically add taxes to purchase price", id="bc-user-settings-enableTaxes", disabled=true) }}
+          {% endcall %}
 
-        <div class="bc-long-form-text">
-          <h3>Quantity Multiplier {{ tag() }}</h3>
-          <p>
-            Brickulate your profit when you purchase multiples.
-          </p>
+          {% call form_field_group() %}
+            {{ form_label(label="Tax Rate", for="bc-user-settings-taxRate") }}
+            {{ form_input(step="0.01", type="number", suffix="%", id="bc-user-settings-taxRate", disabled=true)}}
+          {% endcall %}        
+
+          <div class="bc-long-form-text">
+            <h3>Quantity Multiplier {{ tag() }}</h3>
+            <p>
+              Brickulate your profit when you purchase multiples.
+            </p>
+          </div>
+          {% call form_field_group() %}
+            {{ form_checkbox(label="Show Quantity Multiplier", id="bc-user-settings-enablePurchaseQuantity", disabled=true) }}
+          {% endcall %}
+
+          <div class="bc-long-form-text">
+            <h3>Results Settings {{ tag() }}</h3>
+            <p>Uncheck any results you don't want to display when you lookup set values.</p>
+          </div>
+          {% call form_checkbox_group(label="Current Listings, New") %}
+            {{ form_checkbox(label="Bricklink Listings", id="bc-user-settings-blCLN", disabled=true, attributes="data-portlet-config-checkbox-value='blCLN'") }}
+            {{ form_checkbox(label="Brick Owl Listings", id="bc-user-settings-boCLN", disabled=true, attributes="data-portlet-config-checkbox-value='boCLN'") }}
+            {{ form_checkbox(label="eBay Listings",      id="bc-user-settings-eCLN", disabled=true, attributes="data-portlet-config-checkbox-value='eCLN'") }}
+          {% endcall %}
+
+          {% call form_checkbox_group(label="Current Listings, Used") %}
+            {{ form_checkbox(label="Bricklink Listings", id="bc-user-settings-blCLU", disabled=true, attributes="data-portlet-config-checkbox-value='blCLU'") }}
+            {{ form_checkbox(label="Brick Owl Listings", id="bc-user-settings-boCLU", disabled=true, attributes="data-portlet-config-checkbox-value='boCLU'") }}
+            {{ form_checkbox(label="eBay Listings",      id="bc-user-settings-eCLU", disabled=true, attributes="data-portlet-config-checkbox-value='eCLU'") }}
+          {% endcall %}
+
+          {% call form_checkbox_group(label="Sold Values, New") %}
+            {{ form_checkbox(label="Bricklink Values", id="bc-user-settings-blSVN", disabled=true, attributes="data-portlet-config-checkbox-value='blSVN'") }}
+            {{ form_checkbox(label="Brick Owl Values", id="bc-user-settings-boSVN", disabled=true, attributes="data-portlet-config-checkbox-value='boSVN'") }}
+            {{ form_checkbox(label="eBay Values",      id="bc-user-settings-eSVN", disabled=true, attributes="data-portlet-config-checkbox-value='eSVN'") }}
+          {% endcall %}
+
+          {% call form_checkbox_group(label="Sold Values, Used") %}
+            {{ form_checkbox(label="Bricklink Values", id="bc-user-settings-blSVU", disabled=true, attributes="data-portlet-config-checkbox-value='blSVU'") }}
+            {{ form_checkbox(label="Brick Owl Values", id="bc-user-settings-boSVU", disabled=true, attributes="data-portlet-config-checkbox-value='boSVU'") }}
+            {{ form_checkbox(label="eBay Values",      id="bc-user-settings-eSVU", disabled=true, attributes="data-portlet-config-checkbox-value='eSVU'") }}
+          {% endcall %}
         </div>
-        {% call form_field_group() %}
-          {{ form_checkbox(label="Show Quantity Multiplier", id="bc-user-settings-enablePurchaseQuantity", disabled=true) }}
-        {% endcall %}
-
-        <div class="bc-long-form-text">
-          <h3>Results Settings {{ tag() }}</h3>
-          <p>Uncheck any results you don't want to display when you lookup set values.</p>
-        </div>
-        {% call form_checkbox_group(label="Current Listings, New") %}
-          {{ form_checkbox(label="Bricklink Listings", id="bc-user-settings-blCLN", disabled=true, attributes="data-portlet-config-checkbox-value='blCLN'") }}
-          {{ form_checkbox(label="Brick Owl Listings", id="bc-user-settings-boCLN", disabled=true, attributes="data-portlet-config-checkbox-value='boCLN'") }}
-          {{ form_checkbox(label="eBay Listings",      id="bc-user-settings-eCLN", disabled=true, attributes="data-portlet-config-checkbox-value='eCLN'") }}
-        {% endcall %}
-
-        {% call form_checkbox_group(label="Current Listings, Used") %}
-          {{ form_checkbox(label="Bricklink Listings", id="bc-user-settings-blCLU", disabled=true, attributes="data-portlet-config-checkbox-value='blCLU'") }}
-          {{ form_checkbox(label="Brick Owl Listings", id="bc-user-settings-boCLU", disabled=true, attributes="data-portlet-config-checkbox-value='boCLU'") }}
-          {{ form_checkbox(label="eBay Listings",      id="bc-user-settings-eCLU", disabled=true, attributes="data-portlet-config-checkbox-value='eCLU'") }}
-        {% endcall %}
-
-        {% call form_checkbox_group(label="Sold Values, New") %}
-          {{ form_checkbox(label="Bricklink Values", id="bc-user-settings-blSVN", disabled=true, attributes="data-portlet-config-checkbox-value='blSVN'") }}
-          {{ form_checkbox(label="Brick Owl Values", id="bc-user-settings-boSVN", disabled=true, attributes="data-portlet-config-checkbox-value='boSVN'") }}
-          {{ form_checkbox(label="eBay Values",      id="bc-user-settings-eSVN", disabled=true, attributes="data-portlet-config-checkbox-value='eSVN'") }}
-        {% endcall %}
-
-        {% call form_checkbox_group(label="Sold Values, Used") %}
-          {{ form_checkbox(label="Bricklink Values", id="bc-user-settings-blSVU", disabled=true, attributes="data-portlet-config-checkbox-value='blSVU'") }}
-          {{ form_checkbox(label="Brick Owl Values", id="bc-user-settings-boSVU", disabled=true, attributes="data-portlet-config-checkbox-value='boSVU'") }}
-          {{ form_checkbox(label="eBay Values",      id="bc-user-settings-eSVU", disabled=true, attributes="data-portlet-config-checkbox-value='eSVU'") }}
-        {% endcall %}
       </div>
 
       {{ button(type="submit", name="bcUserSettingsSubmit", text="Save Settings", class="bc-button--primary")}}
