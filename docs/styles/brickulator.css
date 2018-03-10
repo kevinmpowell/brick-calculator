@@ -640,6 +640,9 @@ img {
   .bc-long-form-text__cta-price strike {
     font-size: 12px; }
 
+#bc-modal-js-template {
+  display: none; }
+
 .bc-modal-wrapper {
   -webkit-box-align: center;
       -ms-flex-align: center;
@@ -1353,6 +1356,9 @@ img {
     margin-bottom: calc(-0.24444em + 0px); }
   .bc-tag__text::after {
     margin-top: calc(-0.3em + 0px); }
+
+#bc-toast-message-js-template {
+  display: none; }
 
 .bc-toast-message-wrapper {
   -webkit-box-align: center;
