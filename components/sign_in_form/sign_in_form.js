@@ -66,6 +66,7 @@ BC.SignInForm = function() {
         // TODO: Broadcast event that user settings have been loaded
         BC.Overlay.hide();
         BC.ToastMessage.create("Signed in. Welcome back.", "success");
+        gtag('event', 'login');
 
         BC.Utils.broadcastEvent(customEvents.currencyUpdated);
         enableForm();

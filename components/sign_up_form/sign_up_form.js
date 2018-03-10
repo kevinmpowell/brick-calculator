@@ -128,6 +128,7 @@ BC.SignUpForm = function() {
         BC.Utils.saveToLocalStorage(localStorageKeys.authToken, decodedData.auth_token);
 
         BC.Overlay.show("Welcome!", "User account created successfully.", true);
+        gtag('event', 'sign_up');
         enableForm();
         resetForm();
         hideFormPane(); // Close the sign up form
