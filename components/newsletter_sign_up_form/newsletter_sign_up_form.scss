@@ -1,4 +1,7 @@
 .bc-newsletter-sign-up-form {
+  margin: $brickulator-space-stack-4-x;
+  padding-top: $brickulator-space-generic-2-x;
+
   .bc--user-signed-in & {
     display: none;
   }

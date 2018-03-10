@@ -73,6 +73,7 @@ a {
 #bc-lookup {
   // display: none; // Hide form for debugging
   padding: $brickulator-space-inset-1-x;
+  padding-top: $brickulator-space-generic-2-x;
 }
 
 .bc-show-lookup-form {
@@ -117,6 +118,12 @@ input::-webkit-inner-spin-button {
   justify-content: space-between;
 }
 
+.bc-lookup-set-data-status {
+  display: block;
+  text-align: center;
+  width: 100%;
+}
+
 .bc-lookup-set-data-status-message {
   color: $brickulator-color-text-on-light-secondary;
   font-size: $brickulator-font-size-xs;
@@ -133,4 +140,8 @@ input::-webkit-inner-spin-button {
   .bc-button {
     margin: 0 auto;
   }
+}
+
+.bc-link--on-dark {
+  color: $brickulator-color-text-on-dark-primary;
 }

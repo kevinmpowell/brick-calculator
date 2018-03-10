@@ -1,15 +1,5 @@
 {% macro set_lookup_form() %}
   <form action="" class="bc-set-lookup-form" id="bc-set-lookup-form" novalidate>
-    <div class="bc-set-lookup-form__actions">
-      <div class="bc-lookup-set-data-status">
-        {{ spinner(text="Loading Set Data...", class="bc-spinner--loading-set-data") }}
-        <div class="bc-lookup-set-data-status-message">
-          <span class="bc-lookup-set-data-message">Last updated</span> 
-          <span class="bc-lookup-set-data-timestamp"></span>
-        </div>
-      </div>
-      {# {{ button(text="Reset Form", type="reset", class="bc-button--size-s") }} #}
-    </div>
     {% call form_field_group() %}
       <label class="bc-form__label" for="bc-set-lookup-form__set-number-input">Set Number</label>
       {% call autocomplete() %}
@@ -39,6 +29,16 @@
     
     <div class="bc-set-lookup-form__actions">
       {{ button(text="Brickulate!", type="submit", class="bc-button--primary bc-set-lookup-form__submit-button") }}
+    </div>
+    <div class="bc-set-lookup-form__actions">
+      <div class="bc-lookup-set-data-status">
+        {{ spinner(text="Loading Set Data...", class="bc-spinner--loading-set-data") }}
+        <div class="bc-lookup-set-data-status-message">
+          <span class="bc-lookup-set-data-message">Set data updated</span> 
+          <span class="bc-lookup-set-data-timestamp"></span>
+        </div>
+      </div>
+      {# {{ button(text="Reset Form", type="reset", class="bc-button--size-s") }} #}
     </div>
   </form>
   
