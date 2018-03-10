@@ -23,7 +23,8 @@ const ebaySellingFeePercentage = .13, // TODO: Get this from a lookup
       apiMapping = {
         'localhost': 'https://localhost:5000',
         '10.0.1.15': 'http://10.0.1.15:5000',
-        'kevinmpowell.github.io': 'https://brickulator-api.herokuapp.com'
+        'kevinmpowell.github.io': 'https://brickulator-api.herokuapp.com',
+        'brickulator.com': 'https://brickulator-api.herokuapp.com'
       },
       apiDomain = apiMapping[currentDomain],
       customEvents = {

@@ -243,7 +243,10 @@ BC.UserSettingsPane = function() {
     BC.SiteMenu.showMenu();
     settingsPane.addEventListener('webkitTransitionEnd', BC.Utils.fixSafariScrolling, {once: true});
     settingsPane.addEventListener('transitionEnd', BC.Utils.fixSafariScrolling, {once: true});
-    settingsPane.scrollTo(0, 0); // Scroll settings pane to top
+    if (settingsPane.scrollTo) {
+      // Edge doesn't work with element.scrollTo: https://developer.microsoft.com/en-us/microsoft-edge/platform/issues/15534521/
+      settingsPane.scrollTo(0, 0); // Scroll settings pane to top
+    }
     settingsPane.classList.add(paneVisibleClass);
   };
 
