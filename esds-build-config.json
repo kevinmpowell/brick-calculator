@@ -21,6 +21,13 @@
         ],
         "destination": "docs/scripts/subpage_scripts",
         "watch": true
+      },
+      {
+        "name": "gh-pages-cname",
+        "sources": [
+          "CNAME"
+        ],
+        "destination": "docs"
       }
     ]
 }
