@@ -9,7 +9,7 @@ BC.SignUpForm = function() {
         formVisibleClass = 'bc-sign-up-form-pane--visible',
         hidePaneTriggerSelector = '.bc-sign-up-form-pane-hide-trigger',
         brickulatorPlusSelectedClass = 'bc-sign-up-form--brickulator-plus-selected',
-        stripe = Stripe('pk_test_rFBonOYWBSK1R3CkbnLmytIf'),
+        stripe = Stripe('pk_live_rqMarN9iPbkAnuZa2fYC3iNq'),
         elements = stripe.elements(),
         stripeFieldStyles = {
           base: {
